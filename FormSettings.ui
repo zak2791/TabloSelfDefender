@@ -1,0 +1,689 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FormSettings</class>
+ <widget class="QWidget" name="FormSettings">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>547</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>547</width>
+    <height>600</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>547</width>
+    <height>600</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Настройки</string>
+  </property>
+  <widget class="QLabel" name="lbl1">
+   <property name="geometry">
+    <rect>
+     <x>15</x>
+     <y>80</y>
+     <width>81</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Главный судья</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbl2">
+   <property name="geometry">
+    <rect>
+     <x>15</x>
+     <y>110</y>
+     <width>111</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Главный секретарь</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbl3">
+   <property name="geometry">
+    <rect>
+     <x>15</x>
+     <y>10</y>
+     <width>46</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Город</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbl4">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>185</y>
+     <width>71</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Судья 1 (РК)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbl5">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>215</y>
+     <width>46</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Судья 2</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbl6">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>245</y>
+     <width>46</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Судья 3</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbl7">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>275</y>
+     <width>46</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Судья 4</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbl8">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>305</y>
+     <width>46</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Судья 5</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="cmb_main_judge">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>80</y>
+     <width>391</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <kerning>true</kerning>
+    </font>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="cmb_main_secretary">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>110</y>
+     <width>391</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>MS Shell Dlg 2</family>
+     <pointsize>8</pointsize>
+    </font>
+   </property>
+   <property name="contextMenuPolicy">
+    <enum>Qt::CustomContextMenu</enum>
+   </property>
+   <property name="editable">
+    <bool>false</bool>
+   </property>
+   <property name="frame">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="led_city">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>10</y>
+     <width>246</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::WheelFocus</enum>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="cmb_judge1">
+   <property name="geometry">
+    <rect>
+     <x>155</x>
+     <y>185</y>
+     <width>366</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="cmb_judge2">
+   <property name="geometry">
+    <rect>
+     <x>155</x>
+     <y>215</y>
+     <width>366</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="cmb_judge3">
+   <property name="geometry">
+    <rect>
+     <x>155</x>
+     <y>245</y>
+     <width>366</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="cmb_judge4">
+   <property name="geometry">
+    <rect>
+     <x>155</x>
+     <y>275</y>
+     <width>366</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="cmb_judge5">
+   <property name="geometry">
+    <rect>
+     <x>155</x>
+     <y>305</y>
+     <width>366</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="gbxRateShow">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>370</y>
+     <width>141</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Показ оценок</string>
+   </property>
+   <property name="flat">
+    <bool>false</bool>
+   </property>
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <widget class="QRadioButton" name="rbnTogether">
+    <property name="geometry">
+     <rect>
+      <x>15</x>
+      <y>70</y>
+      <width>81</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Сразу все</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="rbnSeparate">
+    <property name="geometry">
+     <rect>
+      <x>15</x>
+      <y>30</y>
+      <width>106</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>По отдельности</string>
+    </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="checked">
+     <bool>false</bool>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QComboBox" name="cmb_ts">
+   <property name="geometry">
+    <rect>
+     <x>155</x>
+     <y>335</y>
+     <width>366</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbl8_2">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>335</y>
+     <width>121</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Технический секретарь</string>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_2">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>370</y>
+     <width>351</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Вариант отображения</string>
+   </property>
+   <widget class="QRadioButton" name="rbRus">
+    <property name="geometry">
+     <rect>
+      <x>45</x>
+      <y>30</y>
+      <width>82</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Российский</string>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="rbEng">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>195</x>
+      <y>30</y>
+      <width>111</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Международный</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="cbFlag">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>195</x>
+      <y>70</y>
+      <width>161</width>
+      <height>36</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Показывать флаги стран
+вместо номеров судей</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>490</y>
+     <width>511</width>
+     <height>101</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Настройка подключения</string>
+   </property>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>15</x>
+      <y>25</y>
+      <width>96</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Код подключения</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leCode">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>15</x>
+      <y>50</y>
+      <width>91</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="mouseTracking">
+     <bool>false</bool>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
+    <property name="frame">
+     <bool>true</bool>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_3">
+    <property name="geometry">
+     <rect>
+      <x>125</x>
+      <y>25</y>
+      <width>229</width>
+      <height>66</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Судьи</string>
+    </property>
+    <widget class="QPushButton" name="btnReg2">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>25</x>
+       <y>25</y>
+       <width>26</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>2</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnReg3">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>76</x>
+       <y>25</y>
+       <width>26</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>3</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnReg4">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>127</x>
+       <y>25</y>
+       <width>26</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>4</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnReg5">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>178</x>
+       <y>25</y>
+       <width>26</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>5</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QPushButton" name="btnReset">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>55</y>
+      <width>126</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Сброс регистрации</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnReg">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>15</y>
+      <width>126</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Регистрация</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>410</x>
+     <y>15</y>
+     <width>36</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Дата</string>
+   </property>
+  </widget>
+  <widget class="QDateEdit" name="dateEdit">
+   <property name="geometry">
+    <rect>
+     <x>450</x>
+     <y>10</y>
+     <width>81</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="name_competition">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>40</y>
+     <width>391</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>15</x>
+     <y>40</y>
+     <width>126</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Название соревнования</string>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_4">
+   <property name="geometry">
+    <rect>
+     <x>19</x>
+     <y>145</y>
+     <width>511</width>
+     <height>221</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Судейская бригада</string>
+   </property>
+   <widget class="QRadioButton" name="rbnOne">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>13</y>
+      <width>31</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>1</string>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="rbnTwo">
+    <property name="geometry">
+     <rect>
+      <x>405</x>
+      <y>13</y>
+      <width>31</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>2</string>
+    </property>
+   </widget>
+  </widget>
+  <zorder>groupBox_4</zorder>
+  <zorder>lbl1</zorder>
+  <zorder>lbl2</zorder>
+  <zorder>lbl3</zorder>
+  <zorder>lbl4</zorder>
+  <zorder>lbl5</zorder>
+  <zorder>lbl6</zorder>
+  <zorder>lbl7</zorder>
+  <zorder>lbl8</zorder>
+  <zorder>cmb_main_judge</zorder>
+  <zorder>cmb_main_secretary</zorder>
+  <zorder>led_city</zorder>
+  <zorder>cmb_judge1</zorder>
+  <zorder>cmb_judge2</zorder>
+  <zorder>cmb_judge3</zorder>
+  <zorder>cmb_judge4</zorder>
+  <zorder>cmb_judge5</zorder>
+  <zorder>gbxRateShow</zorder>
+  <zorder>cmb_ts</zorder>
+  <zorder>lbl8_2</zorder>
+  <zorder>groupBox_2</zorder>
+  <zorder>groupBox</zorder>
+  <zorder>label</zorder>
+  <zorder>dateEdit</zorder>
+  <zorder>name_competition</zorder>
+  <zorder>label_3</zorder>
+ </widget>
+ <resources/>
+ <connections/>
+ <designerdata>
+  <property name="gridDeltaX">
+   <number>5</number>
+  </property>
+  <property name="gridDeltaY">
+   <number>5</number>
+  </property>
+  <property name="gridSnapX">
+   <bool>true</bool>
+  </property>
+  <property name="gridSnapY">
+   <bool>true</bool>
+  </property>
+  <property name="gridVisible">
+   <bool>true</bool>
+  </property>
+ </designerdata>
+</ui>

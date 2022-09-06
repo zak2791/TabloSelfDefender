@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FormChoice</class>
+ <widget class="QWidget" name="FormChoice">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>540</width>
+    <height>594</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Жеребьёвка</string>
+  </property>
+  <widget class="QGroupBox" name="gbAge">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>20</y>
+     <width>500</width>
+     <height>40</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Возраст</string>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="gbWeight">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>80</y>
+     <width>500</width>
+     <height>40</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Вес</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
