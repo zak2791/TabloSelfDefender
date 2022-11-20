@@ -1,3 +1,5 @@
+#RC_ICONS = appico.ico
+
 QT += \
     widgets \
     sql \
