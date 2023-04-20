@@ -225,6 +225,7 @@ FormMain::FormMain(QWidget *parent) : QWidget(parent)
     Btn_new = btn_new;
 
     BtnChoice = btnChoice;
+    BtnChoice->setVisible(false);
 
     Led1 = led1;
     Led2 = led2;
