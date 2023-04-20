@@ -110,15 +110,15 @@ Settings::Settings(QString _city,
         file.close();
     }
 
-    if(_conn2 != "0\n")
+    if(_conn2 != "0")
         btnReg2->setStyleSheet("color: #ff0000");
     else
         btnReg2->setStyleSheet("color: #000000");
-    if(_conn3 != "0\n")
+    if(_conn3 != "0")
         btnReg3->setStyleSheet("color: #ff0000");
     else
         btnReg3->setStyleSheet("color: #000000");
-    if(_conn4 != "0\n")
+    if(_conn4 != "0")
         btnReg4->setStyleSheet("color: #ff0000");
     else
         btnReg4->setStyleSheet("color: #000000");

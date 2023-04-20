@@ -1,3 +1,5 @@
+RC_ICONS = h2h.ico
+
 QT += \
     widgets \
     sql \

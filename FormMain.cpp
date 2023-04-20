@@ -246,8 +246,13 @@ FormMain::FormMain(QWidget *parent) : QWidget(parent)
             QSqlQuery query;
 
             QString str =   "CREATE TABLE sportsmens "
-                            "(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE COLLATE RTRIM, "
-                            "region TEXT, age TEXT, weight TEXT)";
+                            "(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, "
+                            "region TEXT, age TEXT, weight TEXT, "
+                            "UNIQUE (name, weight, age))";
+
+//            QString str =   "CREATE TABLE sportsmens "
+//                            "(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE COLLATE RTRIM, "
+//                            "region TEXT, age TEXT, weight TEXT";
 
             if(!query.exec(str)) qDebug() << "UnaЫe to create а tаЫе sportsmens";
 
