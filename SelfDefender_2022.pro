@@ -1,8 +1,5 @@
-<<<<<<< HEAD
+
 RC_ICONS = h2h.ico
-=======
-#RC_ICONS = appico.ico
->>>>>>> a40c62cdbae95edf66abb3741b05a8eb2d44c0cc
 
 QT += \
     widgets \
