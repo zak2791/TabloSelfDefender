@@ -1,0 +1,5 @@
+QLabel {
+     background-color: black;
+     color: yellow;
+
+ }

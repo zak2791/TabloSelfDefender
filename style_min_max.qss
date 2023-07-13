@@ -1,0 +1,9 @@
+QLabel {
+	 color: #303030;
+     border-radius: 20px;
+     border-width: 2px;
+     border-style: solid;
+     border-color:#303030;
+     background-color: black;
+
+ }

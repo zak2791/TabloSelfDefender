@@ -224,8 +224,8 @@ FormMain::FormMain(QWidget *parent) : QWidget(parent)
     CmbWeight = cmbWeight;
     Btn_new = btn_new;
 
-    BtnChoice = btnChoice;
-    BtnChoice->setVisible(false);
+    //BtnChoice = btnChoice;
+    //BtnChoice->setVisible(false);
 
     Led1 = led1;
     Led2 = led2;
@@ -709,7 +709,7 @@ FormMain::FormMain(QWidget *parent) : QWidget(parent)
 
     cmb_round->emit currentIndexChanged(0);
 
-    connect(btnChoice, SIGNAL(clicked()), this, SLOT(btnChoice_clicked()));
+    //connect(btnChoice, SIGNAL(clicked()), this, SLOT(btnChoice_clicked()));
 
 }
 

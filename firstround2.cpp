@@ -12,6 +12,7 @@
 FirstRound2::FirstRound2(QWidget* parent):QWidget(parent)
 {
     setWindowFlags(Qt::Window);
+    setWindowTitle("Демонстрация техники");
     p = parent;
     resize(800,600);
     //setCursor(QtCore.Qt.BlankCursor)
