@@ -296,7 +296,9 @@ private slots:
     void weight(void);
     void round_(void);
     virtual void timerEvent(QTimerEvent*);
-    void btnChoice_clicked();
+    void btnChoice_clicked(void);
+    void showWindowCameras(void);
+    void hideWindowCameras(void);
 
     //void on_led1_selectionChanged();
 };

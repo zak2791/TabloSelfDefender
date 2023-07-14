@@ -711,6 +711,17 @@ FormMain::FormMain(QWidget *parent) : QWidget(parent)
 
     //connect(btnChoice, SIGNAL(clicked()), this, SLOT(btnChoice_clicked()));
 
+    connect(btnShowCameras, SIGNAL(clicked()), this, SLOT(showWindowCameras()));
+    connect(btnHideCameras, SIGNAL(clicked()), this, SLOT(hideWindowCameras()));
+    windowCameras->hide();
+}
+
+void FormMain::showWindowCameras(){
+    windowCameras->show();
+}
+
+void FormMain::hideWindowCameras(){;
+    windowCameras->hide();
 }
 
 //////////////////////////////////

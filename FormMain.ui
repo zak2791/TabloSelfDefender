@@ -469,7 +469,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>430</y>
+     <y>410</y>
      <width>991</width>
      <height>461</height>
     </rect>
@@ -1446,7 +1446,7 @@
    <property name="geometry">
     <rect>
      <x>1020</x>
-     <y>540</y>
+     <y>520</y>
      <width>221</width>
      <height>91</height>
     </rect>
@@ -1471,7 +1471,7 @@
    <property name="geometry">
     <rect>
      <x>1020</x>
-     <y>430</y>
+     <y>410</y>
      <width>221</width>
      <height>91</height>
     </rect>
@@ -1493,7 +1493,7 @@
    <property name="geometry">
     <rect>
      <x>1020</x>
-     <y>770</y>
+     <y>750</y>
      <width>221</width>
      <height>121</height>
     </rect>
@@ -1608,7 +1608,7 @@
    <property name="geometry">
     <rect>
      <x>1020</x>
-     <y>640</y>
+     <y>620</y>
      <width>221</width>
      <height>121</height>
     </rect>
@@ -2312,6 +2312,113 @@
     <string>Ошибки</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="btnShowCameras">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>877</y>
+     <width>1234</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>PushButton</string>
+   </property>
+  </widget>
+  <widget class="QFrame" name="windowCameras">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>410</y>
+     <width>1234</width>
+     <height>487</height>
+    </rect>
+   </property>
+   <property name="autoFillBackground">
+    <bool>true</bool>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Box</enum>
+   </property>
+   <widget class="QPushButton" name="btnHideCameras">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>1</y>
+      <width>1234</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PushButton</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QFrame" name="frame_2">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>876</y>
+     <width>1234</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Box</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Plain</enum>
+   </property>
+  </widget>
+  <zorder>frame_2</zorder>
+  <zorder>line</zorder>
+  <zorder>label</zorder>
+  <zorder>label_2</zorder>
+  <zorder>line_3</zorder>
+  <zorder>lbl1</zorder>
+  <zorder>lbl2</zorder>
+  <zorder>lbl3</zorder>
+  <zorder>lbl4</zorder>
+  <zorder>lbl5</zorder>
+  <zorder>label_8</zorder>
+  <zorder>led1</zorder>
+  <zorder>led2</zorder>
+  <zorder>led3</zorder>
+  <zorder>led4</zorder>
+  <zorder>led5</zorder>
+  <zorder>lbl_sum</zorder>
+  <zorder>lbl_q</zorder>
+  <zorder>line_2</zorder>
+  <zorder>label_9</zorder>
+  <zorder>lbl_total</zorder>
+  <zorder>frame</zorder>
+  <zorder>cmb_round</zorder>
+  <zorder>label_15</zorder>
+  <zorder>btn_new</zorder>
+  <zorder>btn_look</zorder>
+  <zorder>btn_enterName</zorder>
+  <zorder>lbl_name</zorder>
+  <zorder>btn_settings</zorder>
+  <zorder>label_3</zorder>
+  <zorder>lblMat</zorder>
+  <zorder>btn_next</zorder>
+  <zorder>btn_enter</zorder>
+  <zorder>groupBox</zorder>
+  <zorder>cmbAge</zorder>
+  <zorder>cmbWeight</zorder>
+  <zorder>label_4</zorder>
+  <zorder>label_5</zorder>
+  <zorder>groupBox_2</zorder>
+  <zorder>lbl_total_red</zorder>
+  <zorder>lbl_total_blue</zorder>
+  <zorder>lbl_name_red</zorder>
+  <zorder>lbl_name_blue</zorder>
+  <zorder>btnErrors</zorder>
+  <zorder>btnShowCameras</zorder>
+  <zorder>windowCameras</zorder>
  </widget>
  <resources/>
  <connections/>
