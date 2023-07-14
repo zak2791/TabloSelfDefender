@@ -2321,8 +2321,15 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
    <property name="text">
-    <string>PushButton</string>
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/images/open.png</normaloff>:/images/open.png</iconset>
    </property>
   </widget>
   <widget class="QFrame" name="windowCameras">
@@ -2353,7 +2360,11 @@
      </rect>
     </property>
     <property name="text">
-     <string>PushButton</string>
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="images.qrc">
+      <normaloff>:/images/close.png</normaloff>:/images/close.png</iconset>
     </property>
    </widget>
   </widget>
@@ -2420,6 +2431,8 @@
   <zorder>btnShowCameras</zorder>
   <zorder>windowCameras</zorder>
  </widget>
- <resources/>
+ <resources>
+  <include location="images.qrc"/>
+ </resources>
  <connections/>
 </ui>

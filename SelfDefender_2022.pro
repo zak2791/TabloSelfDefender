@@ -57,3 +57,10 @@ HEADERS += \
     udp.h \
     xlxs.h
 
+DISTFILES += \
+    images/close.png \
+    images/open.png
+
+RESOURCES += \
+    images.qrc
+
