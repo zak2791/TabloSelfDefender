@@ -64,6 +64,8 @@ HEADERS += \
     xlxs.h
 
 DISTFILES += \
+    images/circle.png \
+    images/circle_green.png \
     images/close.png \
     images/open.png
 

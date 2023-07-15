@@ -730,6 +730,10 @@ FormMain::FormMain(QWidget *parent) : QWidget(parent)
     connect(animOpen, SIGNAL(finished()), this, SLOT(endAnimation()));
     connect(animClose, SIGNAL(finished()), this, SLOT(endAnimation()));
     windowCameras->setGeometry(windowCameras->geometry().x(), 876, windowCameras->geometry().width(), 21);
+
+    //lblStatusCam1->setStyleSheet("background-color: red");
+
+
 }
 
 void FormMain::animation(){

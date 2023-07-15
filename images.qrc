@@ -2,5 +2,7 @@
     <qresource prefix="/">
         <file>images/close.png</file>
         <file>images/open.png</file>
+        <file>images/circle.png</file>
+        <file>images/circle_green.png</file>
     </qresource>
 </RCC>

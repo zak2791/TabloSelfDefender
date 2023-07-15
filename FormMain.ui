@@ -2659,6 +2659,54 @@
      </rect>
     </property>
    </widget>
+   <widget class="QLabel" name="lblStatusCam1">
+    <property name="geometry">
+     <rect>
+      <x>913</x>
+      <y>3</y>
+      <width>15</width>
+      <height>15</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap resource="images.qrc">:/images/circle_green.png</pixmap>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblStatusCam2">
+    <property name="geometry">
+     <rect>
+      <x>1013</x>
+      <y>3</y>
+      <width>15</width>
+      <height>15</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap resource="images.qrc">:/images/circle.png</pixmap>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblStatusCam3">
+    <property name="geometry">
+     <rect>
+      <x>1113</x>
+      <y>3</y>
+      <width>15</width>
+      <height>15</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap resource="images.qrc">:/images/circle.png</pixmap>
+    </property>
+   </widget>
   </widget>
   <widget class="QPushButton" name="btnNewFinal">
    <property name="geometry">
