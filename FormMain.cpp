@@ -11,6 +11,8 @@
 
 #include "xlxs.h"
 
+
+
 void Btn_next_clicked(FormMain*);
 void fix_result(FormMain*);
 int dialog(FormMain*);
@@ -710,6 +712,10 @@ FormMain::FormMain(QWidget *parent) : QWidget(parent)
     cmb_round->emit currentIndexChanged(0);
 
     //connect(btnChoice, SIGNAL(clicked()), this, SLOT(btnChoice_clicked()));
+
+    /////////////////////////////////////////
+    /// Анимация открытия окна с камерами ///
+    /////////////////////////////////////////
     animOpen = new QPropertyAnimation(windowCameras, "geometry", this);
     animOpen->setObjectName("animOpen");
     animClose = new QPropertyAnimation(windowCameras, "geometry", this);
@@ -730,8 +736,54 @@ FormMain::FormMain(QWidget *parent) : QWidget(parent)
     connect(animOpen, SIGNAL(finished()), this, SLOT(endAnimation()));
     connect(animClose, SIGNAL(finished()), this, SLOT(endAnimation()));
     windowCameras->setGeometry(windowCameras->geometry().x(), 876, windowCameras->geometry().width(), 21);
+    ///////////////////////////////////////////////////////////
 
-    //lblStatusCam1->setStyleSheet("background-color: red");
+    leCam1->setObjectName("leCam1");
+    leCam2->setObjectName("leCam2");
+    //leCam3->setObjectName("leCam3");
+    connect(leCam1, SIGNAL(editingFinished()), this, SLOT(setCam()));
+    connect(leCam2, SIGNAL(editingFinished()), this, SLOT(setCam()));
+    connect(leCam3, SIGNAL(editingFinished()), this, SLOT(setCam()));
+
+    connect(cbAutoCam1, SIGNAL(toggled(bool)), this, SLOT(autoCamera(bool)));
+    connect(cbAutoCam2, SIGNAL(toggled(bool)), this, SLOT(autoCamera(bool)));
+    connect(cbAutoCam3, SIGNAL(toggled(bool)), this, SLOT(autoCamera(bool)));
+
+    QFile cam1("cam1.txt");
+    if(!cam1.exists()){
+        cam1.open(QIODevice::WriteOnly);
+        cam1.close();
+    }
+    else{
+        cam1.open(QIODevice::ReadOnly);
+        cam1Url = cam1.readAll();
+        leCam1->setText(cam1Url);
+        cam1.close();
+    }
+
+    QFile cam2("cam2.txt");
+    if(!cam2.exists()){
+        cam2.open(QIODevice::WriteOnly);
+        cam2.close();
+    }
+    else{
+        cam2.open(QIODevice::ReadOnly);
+        cam2Url = cam2.readAll();
+        leCam2->setText(cam2Url);
+        cam2.close();
+    }
+
+    QFile cam3("cam3.txt");
+    if(!cam3.exists()){
+        cam3.open(QIODevice::WriteOnly);
+        cam3.close();
+    }
+    else{
+        cam3.open(QIODevice::ReadOnly);
+        cam3Url = cam3.readAll();
+        leCam3->setText(cam3Url);
+        cam3.close();
+    }
 
 
 }
@@ -748,6 +800,123 @@ void FormMain::endAnimation(){
         btnCameras->setIcon(*icoClose);
     else
         btnCameras->setIcon(*icoOpen);
+}
+
+void FormMain::autoCamera(bool state){
+    qDebug()<<state<<sender()->objectName();
+    if(state){
+        if(sender()->objectName() == "cbAutoCam1"){
+            cbAutoCam2->setEnabled(false);
+            cbAutoCam3->setEnabled(false);
+            camConn = new CameraConnection(this);
+            leCam1->setText("");
+            leCam1->setStyleSheet("background-color: red");
+        }
+        else if(sender()->objectName() == "cbAutoCam2"){
+            cbAutoCam1->setEnabled(false);
+            cbAutoCam3->setEnabled(false);
+            camConn = new CameraConnection(this, 2);
+            leCam2->setText("");
+            leCam2->setStyleSheet("background-color: red");
+        }
+        else{
+            cbAutoCam1->setEnabled(false);
+            cbAutoCam2->setEnabled(false);
+            camConn = new CameraConnection(this, 2);
+            leCam3->setText("");
+            leCam3->setStyleSheet("background-color: red");
+        }
+        connect(camConn, SIGNAL(sigCamera(QString)), this, SLOT(setCamera(QString)));
+    }
+    else{
+        if(sender()->objectName() == "cbAutoCam1"){
+            cbAutoCam2->setEnabled(true);
+            cbAutoCam3->setEnabled(true);
+            leCam1->setStyleSheet("background-color: white");
+            QFile f("cam1.txt");
+            f.open(QIODevice::ReadOnly);
+            leCam1->setText(f.readLine());
+            f.close();
+        }
+        else if(sender()->objectName() == "cbAutoCam2"){
+            cbAutoCam1->setEnabled(true);
+            cbAutoCam3->setEnabled(true);
+            leCam2->setStyleSheet("background-color: white");
+            QFile f("cam2.txt");
+            f.open(QIODevice::ReadOnly);
+            leCam2->setText(f.readLine());
+            f.close();
+        }
+        else{
+            cbAutoCam1->setEnabled(true);
+            cbAutoCam2->setEnabled(true);
+            leCam3->setStyleSheet("background-color: white");
+            QFile f("cam3.txt");
+            f.open(QIODevice::ReadOnly);
+            leCam3->setText(f.readLine());
+            f.close();
+        }
+        if(camConn){
+            disconnect(camConn, SIGNAL(sigCamera(QString)), nullptr, nullptr);
+            camConn->deleteLater();
+        }
+    }
+}
+
+void FormMain::setCamera(QString ip){
+    qDebug()<<"ip = "<<ip;
+    if(cbAutoCam1->isChecked()){
+        QFile f;
+        QTextStream out(&f);
+        f.setFileName("cam1.txt");
+        f.open(QIODevice::WriteOnly);
+        out << "srt://" + ip + ":1111";
+        f.close();
+        cam1Url = "srt://" + ip + ":1111";
+        cbAutoCam1->setChecked(false);
+    }
+    if(cbAutoCam2->isChecked()){
+        QFile f;
+        QTextStream out(&f);
+        f.setFileName("cam2.txt");
+        f.open(QIODevice::WriteOnly);
+        out << "srt://" + ip + ":2222";
+        f.close();
+        cam2Url = "srt://" + ip + ":2222";
+        cbAutoCam2->setChecked(false);
+    }
+    if(cbAutoCam3->isChecked()){
+        QFile f;
+        QTextStream out(&f);
+        f.setFileName("cam3.txt");
+        f.open(QIODevice::WriteOnly);
+        out << "srt://" + ip + ":3333";
+        f.close();
+        cam3Url = "srt://" + ip + ":3333";
+        cbAutoCam3->setChecked(false);
+    }
+}
+
+void FormMain::setCam(){
+    QFile f;
+    QTextStream out(&f);
+    if(sender()->objectName() == "leCam1"){
+        f.setFileName("cam1.txt");
+        f.open(QIODevice::WriteOnly);
+        out << leCam1->text();
+        cam1Url = leCam1->text();
+    }else if(sender()->objectName() == "leCam2"){
+        f.setFileName("cam2.txt");
+        f.open(QIODevice::WriteOnly);
+        out << leCam2->text();
+        cam2Url = leCam2->text();
+    }else{
+        f.setFileName("cam3.txt");
+        f.open(QIODevice::WriteOnly);
+        out << leCam3->text();
+        cam3Url = leCam3->text();
+    }
+    f.close();
 }
 
 //////////////////////////////////

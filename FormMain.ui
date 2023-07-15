@@ -2437,7 +2437,7 @@
    <widget class="QPushButton" name="btnCam1NoSound">
     <property name="geometry">
      <rect>
-      <x>16</x>
+      <x>15</x>
       <y>262</y>
       <width>181</width>
       <height>51</height>
@@ -2456,7 +2456,7 @@
    <widget class="QPushButton" name="btnCam1Sound">
     <property name="geometry">
      <rect>
-      <x>214</x>
+      <x>215</x>
       <y>262</y>
       <width>181</width>
       <height>51</height>
@@ -2475,7 +2475,7 @@
    <widget class="QPushButton" name="btnCam2NoSound">
     <property name="geometry">
      <rect>
-      <x>427</x>
+      <x>426</x>
       <y>262</y>
       <width>181</width>
       <height>51</height>
@@ -2494,7 +2494,7 @@
    <widget class="QPushButton" name="btnCam2Sound">
     <property name="geometry">
      <rect>
-      <x>625</x>
+      <x>626</x>
       <y>262</y>
       <width>181</width>
       <height>51</height>
@@ -2513,7 +2513,7 @@
    <widget class="QPushButton" name="btnCam3NoSound">
     <property name="geometry">
      <rect>
-      <x>838</x>
+      <x>836</x>
       <y>262</y>
       <width>181</width>
       <height>51</height>
@@ -2551,8 +2551,8 @@
    <widget class="QPushButton" name="btnChoice">
     <property name="geometry">
      <rect>
-      <x>115</x>
-      <y>380</y>
+      <x>410</x>
+      <y>419</y>
       <width>181</width>
       <height>51</height>
      </rect>
@@ -2570,8 +2570,8 @@
    <widget class="QPushButton" name="btnStopRecord">
     <property name="geometry">
      <rect>
-      <x>526</x>
-      <y>380</y>
+      <x>642</x>
+      <y>419</y>
       <width>181</width>
       <height>51</height>
      </rect>
@@ -2589,9 +2589,9 @@
     <property name="geometry">
      <rect>
       <x>411</x>
-      <y>24</y>
+      <y>36</y>
       <width>2</width>
-      <height>300</height>
+      <height>363</height>
      </rect>
     </property>
     <property name="orientation">
@@ -2601,32 +2601,14 @@
    <widget class="Line" name="line_9">
     <property name="geometry">
      <rect>
-      <x>822</x>
-      <y>24</y>
+      <x>821</x>
+      <y>36</y>
       <width>2</width>
-      <height>300</height>
+      <height>363</height>
      </rect>
     </property>
     <property name="orientation">
      <enum>Qt::Vertical</enum>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnSettingsCam">
-    <property name="geometry">
-     <rect>
-      <x>937</x>
-      <y>380</y>
-      <width>181</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Настройки</string>
     </property>
    </widget>
    <widget class="CameraViewer" name="camera1">
@@ -2706,6 +2688,261 @@
     <property name="pixmap">
      <pixmap resource="images.qrc">:/images/circle.png</pixmap>
     </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_3">
+    <property name="geometry">
+     <rect>
+      <x>16</x>
+      <y>320</y>
+      <width>379</width>
+      <height>79</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Камера 1</string>
+    </property>
+    <widget class="QCheckBox" name="cbCam1">
+     <property name="geometry">
+      <rect>
+       <x>14</x>
+       <y>20</y>
+       <width>121</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Включение</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="cbAutoCam1">
+     <property name="geometry">
+      <rect>
+       <x>14</x>
+       <y>47</y>
+       <width>121</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Автонастройка</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="leCam1">
+     <property name="geometry">
+      <rect>
+       <x>152</x>
+       <y>39</y>
+       <width>211</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_6">
+     <property name="geometry">
+      <rect>
+       <x>152</x>
+       <y>16</y>
+       <width>211</width>
+       <height>18</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>URL адрес камеры</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_4">
+    <property name="geometry">
+     <rect>
+      <x>428</x>
+      <y>320</y>
+      <width>379</width>
+      <height>79</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Камера 2</string>
+    </property>
+    <widget class="QCheckBox" name="cbCam2">
+     <property name="geometry">
+      <rect>
+       <x>14</x>
+       <y>20</y>
+       <width>121</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Включение</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="cbAutoCam2">
+     <property name="geometry">
+      <rect>
+       <x>14</x>
+       <y>47</y>
+       <width>121</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Автонастройка</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="leCam2">
+     <property name="geometry">
+      <rect>
+       <x>152</x>
+       <y>39</y>
+       <width>211</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_7">
+     <property name="geometry">
+      <rect>
+       <x>152</x>
+       <y>16</y>
+       <width>211</width>
+       <height>18</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>URL адрес камеры</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_5">
+    <property name="geometry">
+     <rect>
+      <x>837</x>
+      <y>320</y>
+      <width>379</width>
+      <height>79</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Камера 3</string>
+    </property>
+    <widget class="QCheckBox" name="cbCam3">
+     <property name="geometry">
+      <rect>
+       <x>14</x>
+       <y>20</y>
+       <width>121</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Включение</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="cbAutoCam3">
+     <property name="geometry">
+      <rect>
+       <x>14</x>
+       <y>47</y>
+       <width>121</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Автонастройка</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="leCam3">
+     <property name="geometry">
+      <rect>
+       <x>152</x>
+       <y>39</y>
+       <width>211</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_10">
+     <property name="geometry">
+      <rect>
+       <x>152</x>
+       <y>16</y>
+       <width>211</width>
+       <height>18</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>URL адрес камеры</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QPushButton" name="btnNewFinal">

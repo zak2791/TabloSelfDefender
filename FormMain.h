@@ -11,6 +11,8 @@
 #include "showreports.h"
 #include <QPropertyAnimation>
 
+#include "cameraconnection.h"
+
 class TabFilter : public QObject {
     Q_OBJECT
 
@@ -307,7 +309,42 @@ private slots:
     virtual void timerEvent(QTimerEvent*);
     void btnChoice_clicked(void);
 
-    //void on_led1_selectionChanged();
+    void setCam(void);
+    //void showView(void);
+
+    //void finishedCamera(void);
+    //void turnCamera(bool);
+
+
+    //void StopRecord(void);
+    //void StartRecord(bool);
+    //void PlayFile(void);
+    //void PlaySlowMotion(void);
+    //void closePlayer(void);
+    //void PlaySelectedFile(void);
+    //void changeSize(void);
+    //void drawTvScreenshot(void);
+
+    void autoCamera(bool);
+    //void closeView(void);
+    void setCamera(QString);
+
+private:
+    QString cam1Url = "";
+    QString cam2Url = "";
+    QString cam3Url = "";
+
+    QThread* cam1Thread;
+    QThread* cam2Thread;
+
+    QPointer<CameraConnection> camConn;
+
+    QString address;
+    QHostAddress* remoteAddress;
+    QUdpSocket* s_udp;
+    QTimer* udpTimer;
+    int flagUdp;    //0 - запрос адреса удаленного компьютера
+                    //1 - отправка данных
 };
 
 #endif // MAIN_H
