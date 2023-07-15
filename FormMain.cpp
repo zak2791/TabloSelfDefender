@@ -710,18 +710,40 @@ FormMain::FormMain(QWidget *parent) : QWidget(parent)
     cmb_round->emit currentIndexChanged(0);
 
     //connect(btnChoice, SIGNAL(clicked()), this, SLOT(btnChoice_clicked()));
+    animOpen = new QPropertyAnimation(windowCameras, "geometry", this);
+    animOpen->setObjectName("animOpen");
+    animClose = new QPropertyAnimation(windowCameras, "geometry", this);
 
-    connect(btnShowCameras, SIGNAL(clicked()), this, SLOT(showWindowCameras()));
-    connect(btnHideCameras, SIGNAL(clicked()), this, SLOT(hideWindowCameras()));
-    windowCameras->hide();
+    icoOpen = new QIcon(":/images/open.png");
+    icoClose = new QIcon(":/images/close.png");
+    btnCameras->setIcon(*icoOpen);
+
+    animOpen->setStartValue(QRect(windowCameras->geometry().x(), 876, windowCameras->geometry().width(), 21));
+    animOpen->setEndValue(QRect(windowCameras->geometry().x(), 410, windowCameras->geometry().width(), 487));
+    animOpen->setDuration(300);
+
+    animClose->setStartValue(QRect(windowCameras->geometry().x(), 410, windowCameras->geometry().width(), 487));
+    animClose->setEndValue(QRect(windowCameras->geometry().x(), 876, windowCameras->geometry().width(), 21));
+    animClose->setDuration(300);
+
+    connect(btnCameras, SIGNAL(clicked()), this, SLOT(animation()));
+    connect(animOpen, SIGNAL(finished()), this, SLOT(endAnimation()));
+    connect(animClose, SIGNAL(finished()), this, SLOT(endAnimation()));
+    windowCameras->setGeometry(windowCameras->geometry().x(), 876, windowCameras->geometry().width(), 21);
 }
 
-void FormMain::showWindowCameras(){
-    windowCameras->show();
+void FormMain::animation(){
+    if(windowCameras->geometry().height() == 21)
+        animOpen->start();
+    else
+        animClose->start();
 }
 
-void FormMain::hideWindowCameras(){;
-    windowCameras->hide();
+void FormMain::endAnimation(){
+    if(sender()->objectName() == "animOpen")
+        btnCameras->setIcon(*icoClose);
+    else
+        btnCameras->setIcon(*icoOpen);
 }
 
 //////////////////////////////////

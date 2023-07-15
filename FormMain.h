@@ -9,6 +9,7 @@
 #include "errors.h"
 #include "udp.h"
 #include "showreports.h"
+#include <QPropertyAnimation>
 
 class TabFilter : public QObject {
     Q_OBJECT
@@ -131,6 +132,11 @@ private:
      void button_num(QString);
      virtual void keyPressEvent(QKeyEvent*);
 
+     QPropertyAnimation *animOpen;
+     QPropertyAnimation *animClose;
+     QIcon* icoOpen;
+     QIcon* icoClose;
+
 private slots:
      void focusSet(void);
      void focusReset(void);
@@ -139,6 +145,9 @@ private slots:
      void set_rate3(QString);
      void set_rate4(QString);
      void set_rate5(QString);
+
+     void animation(void);
+     void endAnimation(void);
 
 public:
      QString Conn2;             //подключение 2-го судьи, 0 - незарегистрирован
@@ -297,8 +306,6 @@ private slots:
     void round_(void);
     virtual void timerEvent(QTimerEvent*);
     void btnChoice_clicked(void);
-    void showWindowCameras(void);
-    void hideWindowCameras(void);
 
     //void on_led1_selectionChanged();
 };
