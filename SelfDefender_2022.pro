@@ -23,6 +23,9 @@ include(./QXlsx.pri)
 SOURCES += \
     Ball.cpp \
     FormMain.cpp \
+    camera.cpp \
+    cameraconnection.cpp \
+    cameraviewer.cpp \
     choice.cpp \
     choice_one_athlete.cpp \
     choice_two_athletes.cpp \
@@ -43,6 +46,9 @@ SOURCES += \
 HEADERS += \
     Ball.h \
     FormMain.h \
+    camera.h \
+    cameraconnection.h \
+    cameraviewer.h \
     choice.h \
     choice_one_athlete.h \
     choice_two_athletes.h \
@@ -60,6 +66,24 @@ HEADERS += \
 DISTFILES += \
     images/close.png \
     images/open.png
+
+win32: LIBS += -L$$PWD/ffmpeg/lib/ -lavformat
+
+INCLUDEPATH += $$PWD/ffmpeg/include
+DEPENDPATH += $$PWD/ffmpeg/include
+
+win32: LIBS += -L$$PWD/ffmpeg/lib/ -lavutil
+
+win32: LIBS += -L$$PWD/ffmpeg/lib/ -lavcodec
+
+win32: LIBS += -L$$PWD/ffmpeg/lib/ -lavdevice
+
+win32: LIBS += -L$$PWD/ffmpeg/lib/ -lavfilter
+
+win32: LIBS += -L$$PWD/ffmpeg/lib/ -lswscale
+
+win32: LIBS += -L$$PWD/ffmpeg/lib/ -lswresample
+
 
 RESOURCES += \
     images.qrc
