@@ -2,18 +2,19 @@
 #include "ui_addcompetition.h"
 #include <QDebug>
 
-AddCompetition::AddCompetition(QWidget *parent) :
+AddCompetition::AddCompetition(bool b, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AddCompetition)
 {
     ui->setupUi(this);
+    state = b;
     setWindowTitle("Новое соревнование");
+    setAttribute(Qt::WA_DeleteOnClose);
     connect(ui->btnCancel, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
 AddCompetition::~AddCompetition()
 {
-    qDebug()<<"delete";
     delete ui;
 
 }

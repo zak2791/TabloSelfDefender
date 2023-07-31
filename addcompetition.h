@@ -12,11 +12,12 @@ class AddCompetition : public QDialog
     Q_OBJECT
 
 public:
-    explicit AddCompetition(QWidget *parent = nullptr);
+    explicit AddCompetition(bool, QWidget *parent = nullptr);
     ~AddCompetition();
 
 private:
     Ui::AddCompetition *ui;
+    bool state; //true - создать, false - редактировать
 };
 
 #endif // ADDCOMPETITION_H

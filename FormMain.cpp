@@ -1983,7 +1983,7 @@ void FormMain::showHelp(){
 /// Создание нового соревнования ///
 ////////////////////////////////////
 void FormMain::createCompetition(){
-    AddCompetition* add = new AddCompetition;
+    AddCompetition* add = new AddCompetition(true);
 
     add->exec();
 }
