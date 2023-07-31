@@ -8,7 +8,7 @@
 #include "choice_one_athlete.h"
 #include "choice_two_athletes.h"
 #include "choice.h"
-
+#include "addcompetition.h"
 #include "xlxs.h"
 
 
@@ -1944,3 +1944,60 @@ void FormMain::on_led1_selectionChanged()
 
 }
 */
+///////////////////////////////////////////////////////////////
+/// Вызов формы добавления спортсмена из меню главного окна ///
+///////////////////////////////////////////////////////////////
+void FormMain::addOneSportsmen(){
+    qDebug()<<"add one";
+}
+
+///////////////////////////////////////////////////////////
+/// Вызов формы добавления спортсменов из буфера обмена ///
+///////////////////////////////////////////////////////////
+void FormMain::addSportsmenFromBuffer(){
+    qDebug()<<"addSportsmenFromBuffer";
+}
+
+/////////////////////
+/// Выбор ковра А ///
+/////////////////////
+void FormMain::choiceMatA(){
+    qDebug()<<"choiceMatA";
+}
+
+/////////////////////
+/// Выбор ковра Б ///
+/////////////////////
+void FormMain::choiceMatB(){
+    qDebug()<<"choiceMatB";
+}
+
+/////////////////////
+/// Вызов справки ///
+/////////////////////
+void FormMain::showHelp(){
+    qDebug()<<"showHelp";
+}
+
+////////////////////////////////////
+/// Создание нового соревнования ///
+////////////////////////////////////
+void FormMain::createCompetition(){
+    AddCompetition* add = new AddCompetition;
+
+    add->exec();
+}
+
+////////////////////////////
+/// Открыть соревнование ///
+////////////////////////////
+void FormMain::openCompetition(){
+    qDebug()<<"openCompetition";
+}
+
+//////////////////////////////////////
+/// Открыть последние соревнования ///
+//////////////////////////////////////
+void FormMain::lastCompetitions(){
+    qDebug()<<"lastCompetitions";
+}

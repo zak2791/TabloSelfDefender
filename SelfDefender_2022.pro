@@ -12,7 +12,9 @@ FORMS += \
     FormCorrection.ui \
     FormErrors.ui \
     FormMain.ui \
-    FormSettings.ui
+    FormSettings.ui \
+    addcompetition.ui \
+    mainwin.ui
 
 # QXlsx code for Application Qt project
 QXLSX_PARENTPATH=./         # current QXlsx path is . (. means curret directory)
@@ -23,6 +25,7 @@ include(./QXlsx.pri)
 SOURCES += \
     Ball.cpp \
     FormMain.cpp \
+    addcompetition.cpp \
     camera.cpp \
     cameraconnection.cpp \
     cameraviewer.cpp \
@@ -36,6 +39,7 @@ SOURCES += \
     fix_result.cpp \
     formcorrection.cpp \
     main.cpp \
+    mainwin.cpp \
     next_question.cpp \
     registration.cpp \
     settings.cpp \
@@ -46,6 +50,7 @@ SOURCES += \
 HEADERS += \
     Ball.h \
     FormMain.h \
+    addcompetition.h \
     camera.h \
     cameraconnection.h \
     cameraviewer.h \
@@ -57,6 +62,7 @@ HEADERS += \
     firstround.h \
     firstround2.h \
     formcorrection.h \
+    mainwin.h \
     registration.h \
     settings.h \
     showreports.h \

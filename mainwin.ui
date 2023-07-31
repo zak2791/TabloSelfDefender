@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWin</class>
+ <widget class="QMainWindow" name="MainWin">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="Competition">
+    <property name="title">
+     <string>Соревнования</string>
+    </property>
+    <addaction name="New"/>
+    <addaction name="Open"/>
+    <addaction name="OpenLast"/>
+   </widget>
+   <widget class="QMenu" name="Mat">
+    <property name="title">
+     <string>Ковёр</string>
+    </property>
+    <addaction name="MatA"/>
+    <addaction name="MatB"/>
+   </widget>
+   <widget class="QMenu" name="Sportsmens">
+    <property name="title">
+     <string>Спортсмены</string>
+    </property>
+    <addaction name="AddOne"/>
+    <addaction name="AddFromBuffer"/>
+   </widget>
+   <widget class="QMenu" name="Help">
+    <property name="title">
+     <string>Справка</string>
+    </property>
+    <addaction name="ShowHelp"/>
+   </widget>
+   <addaction name="Competition"/>
+   <addaction name="Mat"/>
+   <addaction name="Sportsmens"/>
+   <addaction name="Help"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="New">
+   <property name="text">
+    <string>Новое соревнование</string>
+   </property>
+  </action>
+  <action name="Open">
+   <property name="text">
+    <string>Выбрать соревнование</string>
+   </property>
+  </action>
+  <action name="MatA">
+   <property name="text">
+    <string>Ковёр А</string>
+   </property>
+  </action>
+  <action name="MatB">
+   <property name="text">
+    <string>Ковёр Б</string>
+   </property>
+  </action>
+  <action name="AddOne">
+   <property name="text">
+    <string>Добавить спортсмена</string>
+   </property>
+  </action>
+  <action name="AddFromBuffer">
+   <property name="text">
+    <string>Добавить Спортсменов из буфера обмена</string>
+   </property>
+  </action>
+  <action name="ShowHelp">
+   <property name="text">
+    <string>Показать справку</string>
+   </property>
+  </action>
+  <action name="OpenLast">
+   <property name="text">
+    <string>Последние сорревнрвания</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

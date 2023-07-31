@@ -151,6 +151,8 @@ private slots:
      void animation(void);
      void endAnimation(void);
 
+
+
 public:
      QString Conn2;             //подключение 2-го судьи, 0 - незарегистрирован
      QString Conn3;             //подключение 3-го судьи, 0 - незарегистрирован
@@ -296,6 +298,15 @@ public slots:
 
     void pult(int, int);
     void pult_off(int, int);
+
+    void addOneSportsmen(void);
+    void addSportsmenFromBuffer(void);
+    void choiceMatA(void);
+    void choiceMatB(void);
+    void showHelp(void);
+    void createCompetition(void);
+    void openCompetition(void);
+    void lastCompetitions(void);
 
 
 private slots:

@@ -2977,6 +2977,47 @@
     <enum>Qt::Vertical</enum>
    </property>
   </widget>
+  <action name="NewCompetition">
+   <property name="text">
+    <string>Новое соревнование</string>
+   </property>
+  </action>
+  <action name="LastCompetitions">
+   <property name="text">
+    <string>Последние соревнования</string>
+   </property>
+  </action>
+  <action name="ChoiceCompetition">
+   <property name="text">
+    <string>Выбор соревнования</string>
+   </property>
+  </action>
+  <action name="Mat_A">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Ковер А</string>
+   </property>
+  </action>
+  <action name="Mat_B">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Ковер Б</string>
+   </property>
+  </action>
+  <action name="AddOne">
+   <property name="text">
+    <string>Добавить спортсмена</string>
+   </property>
+  </action>
+  <action name="AddBuffer">
+   <property name="text">
+    <string>Добавить из буфера обмена</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
