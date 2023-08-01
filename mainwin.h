@@ -17,15 +17,27 @@ public:
 
     QAction* addOne;
     QAction* AddFromBuffer;
-    QAction* MatA;
-    QAction* MatB;
+    //QAction* MatA;
+    //QAction* MatB;
     QAction* ShowHelp;
     QAction* New;
-    QAction* Open;
-    QAction* OpenLast;
+    //QAction* Open;
+    QAction* Edit;
+    QStatusBar* status;
 
 private:
     Ui::MainWin *ui;
+    QString currentActionText;
+    QString currentActionMat;
+
+private slots:
+    void choiceCompetitions(void);
+    void choiceMats(void);
+
+signals:
+    void sigChoiceCompetitions(QString);
+    void sigChoiceMats(QString);
+
 };
 
 #endif // MAINWIN_H

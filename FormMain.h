@@ -12,6 +12,7 @@
 #include <QPropertyAnimation>
 
 #include "cameraconnection.h"
+#include "mainwin.h"
 
 class TabFilter : public QObject {
     Q_OBJECT
@@ -165,9 +166,11 @@ public:
     int id_correct;              // текущая запись в таблице ошибок для корректировки
     int id_round;                   // текущий круг
 
-    FormMain(QWidget *parent = nullptr);
+    FormMain(MainWin*, QWidget *parent = nullptr);
     Settings* sett;  //(sity, name_competition, date, Conn2, Conn3, Conn4, Conn5, this)
     //QString mask_to_list(int);
+
+    MainWin* mainwin;
 
     int ret_mat;
 
@@ -225,6 +228,7 @@ public:
     QComboBox* CmbAge;
     QComboBox* CmbWeight;
     QPushButton* Btn_new;
+    QPushButton* btnEnterName;
 
     QLabel* Lbl_sum;
     QLabel* Lbl_q;
@@ -301,13 +305,13 @@ public slots:
 
     void addOneSportsmen(void);
     void addSportsmenFromBuffer(void);
-    void choiceMatA(void);
-    void choiceMatB(void);
+    void choiceMats(QString);
+    //void choiceMatB(void);
     void showHelp(void);
     void createCompetition(void);
     void openCompetition(void);
     void lastCompetitions(void);
-
+    void editCompetition(void);
 
 private slots:
     void editSity(void);

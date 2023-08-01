@@ -28,15 +28,12 @@
      <string>Соревнования</string>
     </property>
     <addaction name="New"/>
-    <addaction name="Open"/>
-    <addaction name="OpenLast"/>
+    <addaction name="Edit"/>
    </widget>
    <widget class="QMenu" name="Mat">
     <property name="title">
      <string>Ковёр</string>
     </property>
-    <addaction name="MatA"/>
-    <addaction name="MatB"/>
    </widget>
    <widget class="QMenu" name="Sportsmens">
     <property name="title">
@@ -92,9 +89,14 @@
     <string>Показать справку</string>
    </property>
   </action>
-  <action name="OpenLast">
+  <action name="Edit">
    <property name="text">
-    <string>Последние сорревнрвания</string>
+    <string>Правка соревнования</string>
+   </property>
+  </action>
+  <action name="actionc">
+   <property name="text">
+    <string>c</string>
    </property>
   </action>
  </widget>

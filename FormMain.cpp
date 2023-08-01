@@ -138,9 +138,11 @@ bool TabFilter::eventFilter(QObject* po, QEvent* pe){
 }
 
 
-FormMain::FormMain(QWidget *parent) : QWidget(parent)
+FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
 {
     setupUi(this);
+
+    mainwin = mw;
 
 
 
@@ -225,6 +227,7 @@ FormMain::FormMain(QWidget *parent) : QWidget(parent)
     CmbAge = cmbAge;
     CmbWeight = cmbWeight;
     Btn_new = btn_new;
+    btnEnterName = btn_enterName;
 
     //BtnChoice = btnChoice;
     //BtnChoice->setVisible(false);
@@ -253,9 +256,6 @@ FormMain::FormMain(QWidget *parent) : QWidget(parent)
                             "region TEXT, age TEXT, weight TEXT, "
                             "UNIQUE (name, weight, age))";
 
-//            QString str =   "CREATE TABLE sportsmens "
-//                            "(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE COLLATE RTRIM, "
-//                            "region TEXT, age TEXT, weight TEXT";
 
             if(!query.exec(str)) qDebug() << "UnaЫe to create а tаЫе sportsmens";
 
@@ -1958,18 +1958,24 @@ void FormMain::addSportsmenFromBuffer(){
     qDebug()<<"addSportsmenFromBuffer";
 }
 
-/////////////////////
-/// Выбор ковра А ///
-/////////////////////
-void FormMain::choiceMatA(){
-    qDebug()<<"choiceMatA";
-}
-
-/////////////////////
-/// Выбор ковра Б ///
-/////////////////////
-void FormMain::choiceMatB(){
-    qDebug()<<"choiceMatB";
+///////////////////
+/// Выбор ковра ///
+///////////////////
+void FormMain::choiceMats(QString mat){
+    //qDebug()<<mat;
+    if (mat == "Ковёр А"){
+        port2 = 4120;
+        port3 = 4130;
+        port4 = 4140;
+        port5 = 4150;
+        lblMat->setText("A");
+    }else{
+        port2 = 4220;
+        port3 = 4230;
+        port4 = 4240;
+        port5 = 4250;
+        lblMat->setText("Б");
+    }
 }
 
 /////////////////////
@@ -1983,8 +1989,7 @@ void FormMain::showHelp(){
 /// Создание нового соревнования ///
 ////////////////////////////////////
 void FormMain::createCompetition(){
-    AddCompetition* add = new AddCompetition(true);
-
+    AddCompetition* add = new AddCompetition(true, mainwin, this);
     add->exec();
 }
 
@@ -2000,4 +2005,12 @@ void FormMain::openCompetition(){
 //////////////////////////////////////
 void FormMain::lastCompetitions(){
     qDebug()<<"lastCompetitions";
+}
+
+////////////////////////////
+/// Править соревнование ///
+////////////////////////////
+void FormMain::editCompetition(){
+    AddCompetition* add = new AddCompetition(false);
+    add->exec();
 }
