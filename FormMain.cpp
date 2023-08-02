@@ -143,7 +143,7 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
     setupUi(this);
 
     mainwin = mw;
-
+    connect(mainwin, SIGNAL(sigChoiceCompetitions(QString)), this, SLOT(choiceCompetitions(QString)));
 
 
     flag_mode = 0;
@@ -420,46 +420,46 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
     stateZero = false;
     /*-------Выбор ковра-------*/
 
-    QDialog* kover = new QDialog();
-    QFont font;
-    font.setPointSize(14);
-    font.setBold(true);
+//    QDialog* kover = new QDialog();
+//    QFont font;
+//    font.setPointSize(14);
+//    font.setBold(true);
 
-    kover->setWindowFlags(Qt::SplashScreen);
-    QPushButton* btnMatA = new QPushButton("&Mat A");
-    btnMatA->setFont(font);
-    QPushButton* btnMatB = new QPushButton("&Mat B");
-    btnMatB->setFont(font);
-    QLabel* lbl = new QLabel("Выберите ковер");
+//    kover->setWindowFlags(Qt::SplashScreen);
+//    QPushButton* btnMatA = new QPushButton("&Mat A");
+//    btnMatA->setFont(font);
+//    QPushButton* btnMatB = new QPushButton("&Mat B");
+//    btnMatB->setFont(font);
+//    QLabel* lbl = new QLabel("Выберите ковер");
 
-    lbl->setFont(font);
-    lbl->setAlignment(Qt::AlignHCenter);
-    QHBoxLayout* hbox = new QHBoxLayout();
-    QVBoxLayout* vbox = new QVBoxLayout();
+//    lbl->setFont(font);
+//    lbl->setAlignment(Qt::AlignHCenter);
+//    QHBoxLayout* hbox = new QHBoxLayout();
+//    QVBoxLayout* vbox = new QVBoxLayout();
 
-    hbox->addWidget(btnMatA);
-    hbox->addWidget(btnMatB);
-    vbox->addWidget(lbl);
-    vbox->addLayout(hbox);
-    kover->setLayout(vbox);
+//    hbox->addWidget(btnMatA);
+//    hbox->addWidget(btnMatB);
+//    vbox->addWidget(lbl);
+//    vbox->addLayout(hbox);
+//    kover->setLayout(vbox);
 
-    connect(btnMatA, SIGNAL(clicked()), kover, SLOT(accept()));
-    connect(btnMatB, SIGNAL(clicked()), kover, SLOT(reject()));
+//    connect(btnMatA, SIGNAL(clicked()), kover, SLOT(accept()));
+//    connect(btnMatB, SIGNAL(clicked()), kover, SLOT(reject()));
 
-    ret_mat = kover->exec();               //ковер A или B
-    if (ret_mat == QDialog::Accepted){
-        port2 = 4120;
-        port3 = 4130;
-        port4 = 4140;
-        port5 = 4150;
-        lblMat->setText("A");
-    }else{
-        port2 = 4220;
-        port3 = 4230;
-        port4 = 4240;
-        port5 = 4250;
-        lblMat->setText("B");
-    }
+//    ret_mat = kover->exec();               //ковер A или B
+//    if (ret_mat == QDialog::Accepted){
+//        port2 = 4120;
+//        port3 = 4130;
+//        port4 = 4140;
+//        port5 = 4150;
+//        lblMat->setText("A");
+//    }else{
+//        port2 = 4220;
+//        port3 = 4230;
+//        port4 = 4240;
+//        port5 = 4250;
+//        lblMat->setText("B");
+//    }
 
     //////////////////////////////////////////////////////////
 
@@ -602,7 +602,7 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
     sett->RbEng->setChecked(true);
 
     //QFont font;
-    font.setPixelSize(30);
+    //font.setPixelSize(30);
 
     lbl_total->setText("");
 
@@ -1993,18 +1993,12 @@ void FormMain::createCompetition(){
     add->exec();
 }
 
-////////////////////////////
-/// Открыть соревнование ///
-////////////////////////////
-void FormMain::openCompetition(){
-    qDebug()<<"openCompetition";
-}
-
 //////////////////////////////////////
 /// Открыть последние соревнования ///
 //////////////////////////////////////
-void FormMain::lastCompetitions(){
-    qDebug()<<"lastCompetitions";
+void FormMain::choiceCompetitions(QString s){
+    qDebug()<<s;
+    mainwin->statusBar()->showMessage(s);
 }
 
 ////////////////////////////

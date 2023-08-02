@@ -21,6 +21,9 @@ int main(int argc, char* argv[]){
 
     QObject::connect(mWin->Edit,            SIGNAL(triggered()), form, SLOT(editCompetition()));                //правка соревнования
 
+    //QObject::connect(mWin,            SIGNAL(triggered()), form, SLOT(editCompetition()));                //правка соревнования
+
+
     mWin->setCentralWidget(form);
 
     mWin->show();

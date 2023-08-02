@@ -2724,7 +2724,7 @@
       <rect>
        <x>14</x>
        <y>47</y>
-       <width>121</width>
+       <width>161</width>
        <height>21</height>
       </rect>
      </property>
@@ -2740,9 +2740,9 @@
     <widget class="QLineEdit" name="leCam1">
      <property name="geometry">
       <rect>
-       <x>152</x>
+       <x>182</x>
        <y>39</y>
-       <width>211</width>
+       <width>181</width>
        <height>25</height>
       </rect>
      </property>
@@ -2755,10 +2755,10 @@
     <widget class="QLabel" name="label_6">
      <property name="geometry">
       <rect>
-       <x>152</x>
+       <x>182</x>
        <y>16</y>
-       <width>211</width>
-       <height>18</height>
+       <width>181</width>
+       <height>20</height>
       </rect>
      </property>
      <property name="font">
@@ -2809,7 +2809,7 @@
       <rect>
        <x>14</x>
        <y>47</y>
-       <width>121</width>
+       <width>161</width>
        <height>21</height>
       </rect>
      </property>
@@ -2825,9 +2825,9 @@
     <widget class="QLineEdit" name="leCam2">
      <property name="geometry">
       <rect>
-       <x>152</x>
+       <x>182</x>
        <y>39</y>
-       <width>211</width>
+       <width>181</width>
        <height>25</height>
       </rect>
      </property>
@@ -2840,10 +2840,10 @@
     <widget class="QLabel" name="label_7">
      <property name="geometry">
       <rect>
-       <x>152</x>
+       <x>182</x>
        <y>16</y>
-       <width>211</width>
-       <height>18</height>
+       <width>181</width>
+       <height>20</height>
       </rect>
      </property>
      <property name="font">
@@ -2894,7 +2894,7 @@
       <rect>
        <x>14</x>
        <y>47</y>
-       <width>121</width>
+       <width>161</width>
        <height>21</height>
       </rect>
      </property>
@@ -2910,9 +2910,9 @@
     <widget class="QLineEdit" name="leCam3">
      <property name="geometry">
       <rect>
-       <x>152</x>
+       <x>182</x>
        <y>39</y>
-       <width>211</width>
+       <width>181</width>
        <height>25</height>
       </rect>
      </property>
@@ -2925,10 +2925,10 @@
     <widget class="QLabel" name="label_10">
      <property name="geometry">
       <rect>
-       <x>152</x>
+       <x>182</x>
        <y>16</y>
-       <width>211</width>
-       <height>18</height>
+       <width>181</width>
+       <height>20</height>
       </rect>
      </property>
      <property name="font">
@@ -2977,47 +2977,52 @@
     <enum>Qt::Vertical</enum>
    </property>
   </widget>
-  <action name="NewCompetition">
-   <property name="text">
-    <string>Новое соревнование</string>
-   </property>
-  </action>
-  <action name="LastCompetitions">
-   <property name="text">
-    <string>Последние соревнования</string>
-   </property>
-  </action>
-  <action name="ChoiceCompetition">
-   <property name="text">
-    <string>Выбор соревнования</string>
-   </property>
-  </action>
-  <action name="Mat_A">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Ковер А</string>
-   </property>
-  </action>
-  <action name="Mat_B">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Ковер Б</string>
-   </property>
-  </action>
-  <action name="AddOne">
-   <property name="text">
-    <string>Добавить спортсмена</string>
-   </property>
-  </action>
-  <action name="AddBuffer">
-   <property name="text">
-    <string>Добавить из буфера обмена</string>
-   </property>
-  </action>
+  <zorder>line</zorder>
+  <zorder>label</zorder>
+  <zorder>label_2</zorder>
+  <zorder>line_3</zorder>
+  <zorder>lbl1</zorder>
+  <zorder>lbl2</zorder>
+  <zorder>lbl3</zorder>
+  <zorder>lbl4</zorder>
+  <zorder>lbl5</zorder>
+  <zorder>label_8</zorder>
+  <zorder>led1</zorder>
+  <zorder>led2</zorder>
+  <zorder>led3</zorder>
+  <zorder>led4</zorder>
+  <zorder>led5</zorder>
+  <zorder>lbl_sum</zorder>
+  <zorder>lbl_q</zorder>
+  <zorder>line_2</zorder>
+  <zorder>label_9</zorder>
+  <zorder>lbl_total</zorder>
+  <zorder>frame</zorder>
+  <zorder>cmb_round</zorder>
+  <zorder>label_15</zorder>
+  <zorder>btn_new</zorder>
+  <zorder>btn_look</zorder>
+  <zorder>btn_enterName</zorder>
+  <zorder>lbl_name</zorder>
+  <zorder>btn_settings</zorder>
+  <zorder>label_3</zorder>
+  <zorder>lblMat</zorder>
+  <zorder>btn_next</zorder>
+  <zorder>btn_enter</zorder>
+  <zorder>groupBox</zorder>
+  <zorder>cmbAge</zorder>
+  <zorder>cmbWeight</zorder>
+  <zorder>label_4</zorder>
+  <zorder>label_5</zorder>
+  <zorder>groupBox_2</zorder>
+  <zorder>lbl_total_red</zorder>
+  <zorder>lbl_total_blue</zorder>
+  <zorder>lbl_name_red</zorder>
+  <zorder>lbl_name_blue</zorder>
+  <zorder>btnErrors</zorder>
+  <zorder>btnNewFinal</zorder>
+  <zorder>line_4</zorder>
+  <zorder>windowCameras</zorder>
  </widget>
  <customwidgets>
   <customwidget>

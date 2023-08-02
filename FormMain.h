@@ -309,8 +309,8 @@ public slots:
     //void choiceMatB(void);
     void showHelp(void);
     void createCompetition(void);
-    void openCompetition(void);
-    void lastCompetitions(void);
+    //void openCompetition(void);
+    void choiceCompetitions(QString);
     void editCompetition(void);
 
 private slots:
