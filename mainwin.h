@@ -17,22 +17,26 @@ public:
 
     QAction* addOne;
     QAction* AddFromBuffer;
-    //QAction* MatA;
-    //QAction* MatB;
+
     QAction* ShowHelp;
     QAction* New;
     //QAction* Open;
     QAction* Edit;
     QStatusBar* status;
 
+public slots:
+    void choiceMat(QString);    //выбор ковра из программы
+
 private:
     Ui::MainWin *ui;
     QString currentActionText;
     QString currentActionMat;
+    QAction* actMatA;
+    QAction* actMatB;
 
 private slots:
     void choiceCompetitions(void);
-    void choiceMats(void);
+    void choiceMats(void);  //выбор ковра из меню
 
 signals:
     void sigChoiceCompetitions(QString);

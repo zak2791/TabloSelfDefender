@@ -47,7 +47,7 @@ void AddCompetition::createCompetitions(){
     }
     QString baza_name = name + "_" + city + "_" + start + "_" + finish + ".db";
     if(QFileInfo::exists(baza_name)){
-        msgBox.setText("Соревнования уже существуют!");
+        msgBox.setText("Соревнование уже существует!");
         msgBox.exec();
         return;
     }
@@ -65,7 +65,7 @@ void AddCompetition::createCompetitions(){
     QString str =   "CREATE TABLE sportsmens "
                     "(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, "
                     "region TEXT, age TEXT, weight TEXT, "
-                    "UNIQUE (name, weight, age))";
+                    "UNIQUE (name, region, weight, age))";
 
 
 
@@ -110,12 +110,20 @@ void AddCompetition::createCompetitions(){
         m_db.close();
         return;
     }
-    mainwin->statusBar()->showMessage(baza_name);
+    QList<QLabel*> lL = mainwin->statusBar()->findChildren<QLabel*>();
+    foreach(QLabel* lbl, lL){
+        mainwin->statusBar()->removeWidget(lbl);
+        delete lbl;
+    }
+    QLabel* lblStatus = new QLabel(baza_name);
+    mainwin->statusBar()->addWidget(lblStatus);
     formmain->Cmb_round->clear();
     formmain->CmbAge->clear();
     formmain->CmbWeight->clear();
-    formmain->btnEnterName->setEnabled(false);
+    //formmain->btnEnterName->setEnabled(false);
+
+    formmain->currentDataBase = baza_name;
+
     m_db.close();
     reject();
-
 }

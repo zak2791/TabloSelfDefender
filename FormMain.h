@@ -140,6 +140,8 @@ private:
      QIcon* icoOpen;
      QIcon* icoClose;
 
+     void addSportsmensToBaza(QList<QStringList>);
+
 private slots:
      void focusSet(void);
      void focusReset(void);
@@ -155,6 +157,7 @@ private slots:
 
 
 public:
+     QString currentDataBase;   //текущая база данных
      QString Conn2;             //подключение 2-го судьи, 0 - незарегистрирован
      QString Conn3;             //подключение 3-го судьи, 0 - незарегистрирован
      QString Conn4;             //подключение 4-го судьи, 0 - незарегистрирован

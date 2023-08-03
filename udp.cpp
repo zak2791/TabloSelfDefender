@@ -83,3 +83,8 @@ void Udp::timeout(){
     sendSignal(0);
 }
 
+void Udp::setPort(int p){
+    port = p;
+    s_udp->abort();
+    s_udp->bind(port);
+}

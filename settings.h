@@ -15,10 +15,6 @@ class Settings : public QWidget, private Ui::FormSettings{
 
     QStringListModel mdl;
     QString date;
-    QString conn2;
-    QString conn3;
-    QString conn4;
-    QString conn5;
 
     QString ip;
     QString code;
@@ -26,8 +22,6 @@ class Settings : public QWidget, private Ui::FormSettings{
     boolean regFail;
 
     QWidget* pW;
-
-
 
     QDate qDate;
 
@@ -40,17 +34,16 @@ class Settings : public QWidget, private Ui::FormSettings{
     Registration* reg;
 
 
+
 public:
     Settings(QString _city,
              QString _name_competition,
              QString _date,
-             QString _conn2,
-             QString _conn3,
-             QString _conn4,
-             QString _conn5,
              QWidget *parent = nullptr);
 
     bool getRbEng(void);
+
+    virtual void showEvent(QShowEvent*);
 
     QRadioButton* RbnSeparate;
     QRadioButton* RbnTogether;

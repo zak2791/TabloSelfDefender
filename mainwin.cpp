@@ -26,12 +26,12 @@ MainWin::MainWin(QWidget *parent) :
 
     QActionGroup* grMats = new QActionGroup(this);
 
-    QAction* actMatA = grMats->addAction("Ковёр А");
+    actMatA = grMats->addAction("Ковёр А");
     actMatA->setCheckable(true);
     actMatA->setChecked(true);
     connect(actMatA, SIGNAL(triggered()), this, SLOT(choiceMats()));
 
-    QAction* actMatB = grMats->addAction("Ковёр Б");
+    actMatB = grMats->addAction("Ковёр Б");
     actMatB->setCheckable(true);
     connect(actMatB, SIGNAL(triggered()), this, SLOT(choiceMats()));
 
@@ -70,3 +70,14 @@ void MainWin::choiceMats(){
     currentActionMat = static_cast<QAction*>(sender())->text();
 }
 
+void MainWin::choiceMat(QString mat){
+    if(mat == "А"){
+        currentActionMat = "Ковёр А";
+        actMatA->setChecked(true);
+    }
+    if(mat == "Б"){
+        currentActionMat = "Ковёр Б";
+        actMatB->setChecked(true);
+    }
+    //emit sigChoiceMats(currentActionMat);
+}

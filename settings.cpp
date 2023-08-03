@@ -5,10 +5,6 @@
 Settings::Settings(QString _city,
                    QString _name_competition,
                    QString _date,
-                   QString _conn2,
-                   QString _conn3,
-                   QString _conn4,
-                   QString _conn5,
                    QWidget *parent):QWidget(){
 
     setupUi(this);
@@ -22,10 +18,6 @@ Settings::Settings(QString _city,
     DATEEDIT = dateEdit;
 
     date = _date;
-    conn2 = _conn2;
-    conn3 = _conn3;
-    conn4 = _conn4;
-    conn5 = _conn5;
 
     ip = "";
     code = "";
@@ -110,23 +102,6 @@ Settings::Settings(QString _city,
         file.close();
     }
 
-    if(_conn2 != "0")
-        btnReg2->setStyleSheet("color: #ff0000");
-    else
-        btnReg2->setStyleSheet("color: #000000");
-    if(_conn3 != "0")
-        btnReg3->setStyleSheet("color: #ff0000");
-    else
-        btnReg3->setStyleSheet("color: #000000");
-    if(_conn4 != "0")
-        btnReg4->setStyleSheet("color: #ff0000");
-    else
-        btnReg4->setStyleSheet("color: #000000");
-    if(_conn5 != "0")
-        btnReg5->setStyleSheet("color: #ff0000");
-    else
-        btnReg5->setStyleSheet("color: #000000");
-
     connect(btnReg, SIGNAL(clicked(bool)), SLOT(registration()));
     connect(cmb_main_judge, SIGNAL(activated(int)), SLOT(judge_main(int)));
     connect(cmb_main_secretary, SIGNAL(activated(int)), SLOT(judge_secretary(int)));
@@ -160,12 +135,36 @@ Settings::Settings(QString _city,
     //connect(rbA, SIGNAL("toggled(bool)"), SLOT(choice_mat()));
 
     leCode->setText("1234");
+
+}
+
+void Settings::showEvent(QShowEvent*){
+    QSettings settings ("settings.ini",QSettings::IniFormat);
+    settings.beginGroup("Settings");
+    if(settings.value("pult2").toString() != "0")
+        btnReg2->setStyleSheet("color: #ff0000");
+    else
+        btnReg2->setStyleSheet("color: #000000");
+    if(settings.value("pult3").toString() != "0")
+        btnReg3->setStyleSheet("color: #ff0000");
+    else
+        btnReg3->setStyleSheet("color: #000000");
+    if(settings.value("pult4").toString() != "0")
+        btnReg4->setStyleSheet("color: #ff0000");
+    else
+        btnReg4->setStyleSheet("color: #000000");
+    if(settings.value("pult5").toString() != "0")
+        btnReg5->setStyleSheet("color: #ff0000");
+    else
+        btnReg5->setStyleSheet("color: #000000");
+    settings.endGroup();
 }
 
 void Settings::registration(void){
     FormMain* p = static_cast<FormMain*>(pW);
     //Registration* reg;
     //reg = sock_registration_udp.thread();
+    qDebug()<<"p->ret_mat = "<<p->ret_mat;
     if(p->ret_mat)
         reg = new Registration(4000, this);
     else
@@ -453,28 +452,24 @@ void Settings::ChangeConnect2(void){
 void Settings::registrationReset(void){
     FormMain* p = static_cast<FormMain*>(pW);
 
+    QSettings settings ("settings.ini",QSettings::IniFormat);
+    settings.beginGroup("Settings");
+    settings.setValue("pult2", "0");
+    settings.setValue("pult3", "0");
+    settings.setValue("pult4", "0");
+    settings.setValue("pult5", "0");
+    settings.endGroup();
+
     btnReg2->setStyleSheet("color: #000000");
     btnReg3->setStyleSheet("color: #000000");
     btnReg4->setStyleSheet("color: #000000");
     btnReg5->setStyleSheet("color: #000000");
 
     p->pult2->ID = "0";
-    //p->pult2.IP = "-";
     p->pult3->ID = "0";
-    //p->pult3.IP = "-";
     p->pult4->ID = "0";
-    //p->pult4.IP = "-";
     p->pult5->ID = "0";
-    //p->pult5.IP = "-";
 
-    QFile file;
-    if(static_cast<FormMain*>(pW)->ret_mat)
-        file.setFileName("connectingA.txt");
-    else
-        file.setFileName("connectingB.txt");
-    file.open(QIODevice::WriteOnly | QIODevice::Text);
-    file.write("0\n0\n0\n0");
-    file.close();
 }
 
 void Settings::registrationSuccesfull(QString ID, QString IP, QString PORT){
@@ -486,109 +481,43 @@ void Settings::registrationSuccesfull(QString ID, QString IP, QString PORT){
     btnReset->setEnabled(true);
     leCode->setText("");
     leCode->setEnabled(false);
-    QFile file;
-    if(p->ret_mat)
-        file.setFileName("connectingA.txt");
-    else
-        file.setFileName("connectingB.txt");
-    file.open(QIODevice::ReadOnly);
-    QTextStream stream(&file);
-    QList<QString> lines;
-    while (!stream.atEnd())
-        lines.append(stream.readLine() + '\n');
-    lines[3].truncate(lines[3].length() - 1);
-    file.close();
-    if (PORT[2] == '2'){
-        lines[0] = ID + '\n'; //';' + IP + '\n';
-        //self.p.reg.conn = str(self.p.port2)
+
+    QSettings settings ("settings.ini",QSettings::IniFormat);
+    settings.beginGroup("Settings");
+    if(PORT[2] == '2'){
+        settings.setValue("pult2", ID);
         p->pult2->ID = ID;
-        //self.p.pult2.IP = IP
         btnReg2->setStyleSheet("color: #ff0000");
-        /*
-        if (self.p.ret_mat){
-            self.p.tcp_reg.val = b'4120'
-        else:
-            self.p.tcp_reg.val = b'4220'
-            #self.cbConn2.setEnabled(False)
-        }*/
     }
-    if( PORT[2] == '3'){
-        lines[1] = ID + '\n'; //#';' + IP + '\n'
-        //self.p.reg.conn = str(self.p.port3)
-
+    if(PORT[2] == '3'){
+        settings.setValue("pult3", ID);
         p->pult3->ID = ID;
-        //self.p.pult3.IP = IP
-        btnReg3->setStyleSheet("color: #ff0000");
-        /*
-        if self.p.ret_mat:
-            self.p.tcp_reg.val = b'4130'
-        else:
-            self.p.tcp_reg.val = b'4230'
-            #self.cbConn3.setEnabled(False)
-        */
+        btnReg3->setStyleSheet("color: #ff0000");    
     }
-        //if self.p.ret_num:
-    if(PORT[2] == '4'){
-        lines[2] = ID + '\n'; //#';' + IP + '\n'
-        //#self.p.reg.conn = str(self.p.port4)
 
+    if(PORT[2] == '4'){     
+        settings.setValue("pult4", ID);
         p->pult4->ID = ID;
-        //#self.p.pult4.IP = IP
         btnReg4->setStyleSheet("color: #ff0000");
-        /*'''
-                if self.p.ret_mat:
-                    self.p.tcp_reg.val = b'4140'
-                else:
-                    self.p.tcp_reg.val = b'4240'
-                #self.cbConn4.setEnabled(False)
-        '''*/
     }
     if(PORT[2] == '5'){
-        lines[3] = ID ;//# + ';' + IP
-        //#self.p.reg.conn = str(self.p.port5)
-
+        settings.setValue("pult5", ID);
         p->pult5->ID = ID;
-        //#self.p.pult5.IP = IP
         btnReg5->setStyleSheet("color: #ff0000");
-        /*'''
-                if self.p.ret_mat:
-                    self.p.tcp_reg.val = b'4150'
-                else:
-                    self.p.tcp_reg.val = b'4250'
-                #self.cbConn5.setEnabled(False)
-        '''*/
     }
-    if(p->ret_mat)
-        file.setFileName("connectingA.txt");
-    else
-        file.setFileName("connectingB.txt");
-        //#else:
-    file.open(QIODevice::WriteOnly | QIODevice::Text);
-    QTextStream stream2(&file);
-    foreach(QString each, lines)
-        stream2 << each;
-    file.close();
+    settings.endGroup();
+
     btnReg2->setEnabled(false);
     btnReg3->setEnabled(false);
     btnReg4->setEnabled(false);
     btnReg5->setEnabled(false);
-    //delete reg;
+
 }
 
 void Settings::registrationFailed(void){
     delete reg;
     qDebug() << "registrationFailed";
-        /*
-        '''
-        if not self.regFail:
-            self.leCode.setText('')
-            self.regFail = True
-            self.ip = ''
-            self.code = ''
-            self.id = ''
-            print('f')
-        '''
-        */
+
     btnReg->setEnabled(true);
     btnReset->setEnabled(true);
     leCode->setText("");

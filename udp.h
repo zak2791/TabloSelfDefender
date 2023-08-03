@@ -26,6 +26,9 @@ public:
     int task;
     QString ID;
 
+public slots:
+    void setPort(int);
+
 signals:
     void isConnect(int, int);
     void pultData(int, int);
