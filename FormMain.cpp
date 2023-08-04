@@ -271,165 +271,165 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
     Led4 = led4;
     Led5 = led5;
 
-    QSqlDatabase m_db;
-    m_db = QSqlDatabase::addDatabase("QSQLITE");
-    m_db.setDatabaseName("baza.db");
+//    QSqlDatabase m_db;
+//    m_db = QSqlDatabase::addDatabase("QSQLITE");
+//    m_db.setDatabaseName("baza.db");
 
-    if(!QFileInfo ("baza.db").exists()){
-        qDebug() << "Файл не существует" << endl;
+//    if(!QFileInfo ("baza.db").exists()){
+//        qDebug() << "Файл не существует" << endl;
 
-        if (!m_db.open()) qDebug() << "Error: connection with database failed";
-        else
-        {
-            qDebug() << "Database: connection ok";
-            QSqlQuery query;
+//        if (!m_db.open()) qDebug() << "Error: connection with database failed";
+//        else
+//        {
+//            qDebug() << "Database: connection ok";
+//            QSqlQuery query;
 
-            QString str =   "CREATE TABLE sportsmens "
-                            "(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, "
-                            "region TEXT, age TEXT, weight TEXT, "
-                            "UNIQUE (name, weight, age))";
-
-
-            if(!query.exec(str)) qDebug() << "UnaЫe to create а tаЫе sportsmens";
-
-            str =           "CREATE TABLE errors_and_rates "
-                            "(id INTEGER PRIMARY KEY AUTOINCREMENT, id_sportsmen INTEGER, id_round INTEGER, "
-                            "errors1_1  TEXT, errors2_1 TEXT, errors3_1 TEXT, errors4_1 TEXT, errors5_1 TEXT, "
-                            "errors1_2  TEXT, errors2_2 TEXT, errors3_2 TEXT, errors4_2 TEXT, errors5_2 TEXT, "
-                            "errors1_3  TEXT, errors2_3 TEXT, errors3_3 TEXT, errors4_3 TEXT, errors5_3 TEXT, "
-                            "errors1_4  TEXT, errors2_4 TEXT, errors3_4 TEXT, errors4_4 TEXT, errors5_4 TEXT, "
-                            "errors1_5  TEXT, errors2_5 TEXT, errors3_5 TEXT, errors4_5 TEXT, errors5_5 TEXT, "
-                            "rate1_1  TEXT, rate2_1 TEXT, rate3_1  TEXT, rate4_1 TEXT, rate5_1  TEXT, sum1 TEXT, "
-                            "rate1_2  TEXT, rate2_2 TEXT, rate3_2  TEXT, rate4_2 TEXT, rate5_2  TEXT, sum2 TEXT, "
-                            "rate1_3  TEXT, rate2_3 TEXT, rate3_3  TEXT, rate4_3 TEXT, rate5_3  TEXT, sum3 TEXT, "
-                            "rate1_4  TEXT, rate2_4 TEXT, rate3_4  TEXT, rate4_4 TEXT, rate5_4  TEXT, sum4 TEXT, "
-                            "rate1_5  TEXT, rate2_5 TEXT, rate3_5  TEXT, rate4_5 TEXT, rate5_5  TEXT, sum5 TEXT, "
-                            "total TEXT, "
-                            "UNIQUE (id_sportsmen, id_round))";
-
-            if(!query.exec(str)) qDebug() << "UnaЫe to create а tаЫе errors_and_rates";
-
-            str =           "CREATE TABLE rounds "
-                            "(id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                            "round INTEGER, age  TEXT, weight TEXT, "
-                            "mode INTEGER DEFAULT -1, "
-                            "UNIQUE (round, age, weight))";
-
-            if(!query.exec(str)) qDebug() << "UnaЫe to create а tаЫе rounds";
+//            QString str =   "CREATE TABLE sportsmens "
+//                            "(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, "
+//                            "region TEXT, age TEXT, weight TEXT, "
+//                            "UNIQUE (name, weight, age))";
 
 
-        }
-    }
-    else qDebug().noquote() << QString("Файл существует") << endl;
+//            if(!query.exec(str)) qDebug() << "UnaЫe to create а tаЫе sportsmens";
 
-    if (!m_db.open()) qDebug() << "Error: connection with database failed";
-    else {
-        qDebug() << "Database: connection ok";
-        QSqlQuery query;
+//            str =           "CREATE TABLE errors_and_rates "
+//                            "(id INTEGER PRIMARY KEY AUTOINCREMENT, id_sportsmen INTEGER, id_round INTEGER, "
+//                            "errors1_1  TEXT, errors2_1 TEXT, errors3_1 TEXT, errors4_1 TEXT, errors5_1 TEXT, "
+//                            "errors1_2  TEXT, errors2_2 TEXT, errors3_2 TEXT, errors4_2 TEXT, errors5_2 TEXT, "
+//                            "errors1_3  TEXT, errors2_3 TEXT, errors3_3 TEXT, errors4_3 TEXT, errors5_3 TEXT, "
+//                            "errors1_4  TEXT, errors2_4 TEXT, errors3_4 TEXT, errors4_4 TEXT, errors5_4 TEXT, "
+//                            "errors1_5  TEXT, errors2_5 TEXT, errors3_5 TEXT, errors4_5 TEXT, errors5_5 TEXT, "
+//                            "rate1_1  TEXT, rate2_1 TEXT, rate3_1  TEXT, rate4_1 TEXT, rate5_1  TEXT, sum1 TEXT, "
+//                            "rate1_2  TEXT, rate2_2 TEXT, rate3_2  TEXT, rate4_2 TEXT, rate5_2  TEXT, sum2 TEXT, "
+//                            "rate1_3  TEXT, rate2_3 TEXT, rate3_3  TEXT, rate4_3 TEXT, rate5_3  TEXT, sum3 TEXT, "
+//                            "rate1_4  TEXT, rate2_4 TEXT, rate3_4  TEXT, rate4_4 TEXT, rate5_4  TEXT, sum4 TEXT, "
+//                            "rate1_5  TEXT, rate2_5 TEXT, rate3_5  TEXT, rate4_5 TEXT, rate5_5  TEXT, sum5 TEXT, "
+//                            "total TEXT, "
+//                            "UNIQUE (id_sportsmen, id_round))";
 
-        readSportsmens(&qvStr);     //чтение списка спортсменов из excel-файла
-        int count = 0;
-        QList<QString> qS;
-        foreach(QString s, qvStr){
-            qS.append(s);
-            if(count++ == 3){
-                QString str = "INSERT INTO sportsmens (name, region, age, weight) VALUES ('%1', '%2', '%3', '%4');";
-                QString s;
-                s =  str.arg(qS[0])
-                        .arg(qS[1])
-                        .arg(qS[2])
-                        .arg(qS[3]);
+//            if(!query.exec(str)) qDebug() << "UnaЫe to create а tаЫе errors_and_rates";
 
-                if(query.exec(s)) qDebug() << "Filled sportsmen's table" << s;
-                else qDebug() << "error filled sportsmen's table" << s;
-                count = 0;
-                qS.clear();
-            }
-        }
+//            str =           "CREATE TABLE rounds "
+//                            "(id INTEGER PRIMARY KEY AUTOINCREMENT, "
+//                            "round INTEGER, age  TEXT, weight TEXT, "
+//                            "mode INTEGER DEFAULT -1, "
+//                            "UNIQUE (round, age, weight))";
 
-        QString sql_age =           "SELECT DISTINCT (age) FROM sportsmens";
-        QString sql_weight =        "SELECT DISTINCT weight FROM sportsmens WHERE age LIKE ('%1')";
-        QString sql_round =         "SELECT round FROM rounds WHERE age = '%1' and weight = '%2'";
-        QString sql_round_insert =  "INSERT INTO rounds (round, age, weight) VALUES ('%1', '%2', '%3')";
-        query.exec(sql_age);
+//            if(!query.exec(str)) qDebug() << "UnaЫe to create а tаЫе rounds";
 
-        while(query.next()){
-            qDebug() << endl;
-            QString s = sql_weight.arg(query.value(0).toString());
-            qDebug() << "value 3";
-            QSqlQuery query_weight;
-            query_weight.exec(s);
-            while(query_weight.next()){
-                QSqlQuery query_round;
-                QString s = sql_round.arg(query.value(0).toString())
-                                     .arg(query_weight.value(0).toString());
-                qDebug() << "value 4";
-                query_round.exec(s);
-                int i = 0;
-                while(query_round.next()){
-                    qDebug() << query_round.value(0).toString();
-                    i++;
-                }
-                if(i == 0){
-                    QSqlQuery query_sql_round_insert;
-                    QString s = sql_round_insert.arg("1")
-                                                .arg(query.value(0).toString())
-                                                .arg(query_weight.value(0).toString());
-                    qDebug() << "value 5";
-                    if(query_sql_round_insert.exec(s))
-                        qDebug() << "insert success";
-                    else
-                        qDebug() << "didn't insert";
-                }
-            }
-        }
+
+//        }
+//    }
+//    else qDebug().noquote() << QString("Файл существует") << endl;
+
+//    if (!m_db.open()) qDebug() << "Error: connection with database failed";
+//    else {
+//        qDebug() << "Database: connection ok";
+//        QSqlQuery query;
+
+//        readSportsmens(&qvStr);     //чтение списка спортсменов из excel-файла
+//        int count = 0;
+//        QList<QString> qS;
+//        foreach(QString s, qvStr){
+//            qS.append(s);
+//            if(count++ == 3){
+//                QString str = "INSERT INTO sportsmens (name, region, age, weight) VALUES ('%1', '%2', '%3', '%4');";
+//                QString s;
+//                s =  str.arg(qS[0])
+//                        .arg(qS[1])
+//                        .arg(qS[2])
+//                        .arg(qS[3]);
+
+//                if(query.exec(s)) qDebug() << "Filled sportsmen's table" << s;
+//                else qDebug() << "error filled sportsmen's table" << s;
+//                count = 0;
+//                qS.clear();
+//            }
+//        }
+
+//        QString sql_age =           "SELECT DISTINCT (age) FROM sportsmens";
+//        QString sql_weight =        "SELECT DISTINCT weight FROM sportsmens WHERE age LIKE ('%1')";
+//        QString sql_round =         "SELECT round FROM rounds WHERE age = '%1' and weight = '%2'";
+//        QString sql_round_insert =  "INSERT INTO rounds (round, age, weight) VALUES ('%1', '%2', '%3')";
+//        query.exec(sql_age);
+
+//        while(query.next()){
+//            qDebug() << endl;
+//            QString s = sql_weight.arg(query.value(0).toString());
+//            qDebug() << "value 3";
+//            QSqlQuery query_weight;
+//            query_weight.exec(s);
+//            while(query_weight.next()){
+//                QSqlQuery query_round;
+//                QString s = sql_round.arg(query.value(0).toString())
+//                                     .arg(query_weight.value(0).toString());
+//                qDebug() << "value 4";
+//                query_round.exec(s);
+//                int i = 0;
+//                while(query_round.next()){
+//                    qDebug() << query_round.value(0).toString();
+//                    i++;
+//                }
+//                if(i == 0){
+//                    QSqlQuery query_sql_round_insert;
+//                    QString s = sql_round_insert.arg("1")
+//                                                .arg(query.value(0).toString())
+//                                                .arg(query_weight.value(0).toString());
+//                    qDebug() << "value 5";
+//                    if(query_sql_round_insert.exec(s))
+//                        qDebug() << "insert success";
+//                    else
+//                        qDebug() << "didn't insert";
+//                }
+//            }
+//        }
         //////////////////////////////////////////////////////////
         /*           добавление элементов в комбобоксы          */
         /*               "возраст", "вес" и "круг"              */
         //////////////////////////////////////////////////////////
-        query.exec("SELECT DISTINCT (age) FROM sportsmens");
-        QList<QString> l_age;
-        while(query.next()){
-            l_age.append(query.value(0).toString());
-            qDebug() << "value 6";
-        }
-        //std::sort(l_age.begin(), l_age.end());
-        l_age = f_sort(l_age);
-        foreach(QString sEach, l_age){
-            cmbAge->addItem(sEach);
-        }
-        QString sql = "SELECT DISTINCT weight FROM sportsmens WHERE age = '%1'";
-        sql = sql.arg(l_age[0]);
-        query.exec(sql);
-        QList<QString> l_weight;
-        while(query.next()){
-            l_weight.append(query.value(0).toString());
-            qDebug() << "value 7";
-        }
+//        query.exec("SELECT DISTINCT (age) FROM sportsmens");
+//        QList<QString> l_age;
+//        while(query.next()){
+//            l_age.append(query.value(0).toString());
+//            qDebug() << "value 6";
+//        }
+//        //std::sort(l_age.begin(), l_age.end());
+//        l_age = f_sort(l_age);
+//        foreach(QString sEach, l_age){
+//            cmbAge->addItem(sEach);
+//        }
+//        QString sql = "SELECT DISTINCT weight FROM sportsmens WHERE age = '%1'";
+//        sql = sql.arg(l_age[0]);
+//        query.exec(sql);
+//        QList<QString> l_weight;
+//        while(query.next()){
+//            l_weight.append(query.value(0).toString());
+//            qDebug() << "value 7";
+//        }
 
-        //qDebug() << l_weight;
-        //std::sort(l_weight.begin(), l_weight.end());
-        l_weight = f_sort(l_weight);
-        //qDebug() << l_weight;
-        foreach(QString sEach, l_weight){
-            cmbWeight->addItem(sEach);
-        }
-        sql_round = "SELECT round FROM rounds WHERE age = '%1' and weight = '%2'";
-        sql_round =sql_round.arg(l_age[0])
-                            .arg(l_weight[0]);
-        query.exec(sql_round);
-        QList<QString> l_round;
-        while(query.next()){
-            l_round.append(query.value(0).toString());
-            qDebug() << "value 8";
-        }
-        //std::sort(l_round.begin(), l_round.end());
-        foreach(QString sEach, l_round){
-            cmb_round->addItem("круг " + sEach);
-        }
-        //qDebug() << "l_round.count() = " << l_round.count();
-        cmb_round->setCurrentIndex(l_round.count() - 1);
-    }
+//        //qDebug() << l_weight;
+//        //std::sort(l_weight.begin(), l_weight.end());
+//        l_weight = f_sort(l_weight);
+//        //qDebug() << l_weight;
+//        foreach(QString sEach, l_weight){
+//            cmbWeight->addItem(sEach);
+//        }
+//        sql_round = "SELECT round FROM rounds WHERE age = '%1' and weight = '%2'";
+//        sql_round =sql_round.arg(l_age[0])
+//                            .arg(l_weight[0]);
+//        query.exec(sql_round);
+//        QList<QString> l_round;
+//        while(query.next()){
+//            l_round.append(query.value(0).toString());
+//            qDebug() << "value 8";
+//        }
+//        //std::sort(l_round.begin(), l_round.end());
+//        foreach(QString sEach, l_round){
+//            cmb_round->addItem("круг " + sEach);
+//        }
+//        //qDebug() << "l_round.count() = " << l_round.count();
+//        cmb_round->setCurrentIndex(l_round.count() - 1);
+//    }
 
     keyVariant = true;      //вариант расладки клавиатуры
     rate = 10.0;            //оцена судьи за компьютером
@@ -958,6 +958,17 @@ void FormMain::setCam(){
 //////////////////////////////////
 
 void FormMain::find_id_round(void){
+    QSqlDatabase m_db;
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(currentDataBase);
+    if(!m_db.open()){
+        qDebug() << "Error: connection with database failed";
+        QMessageBox msgBox;
+        msgBox.setText("Ошибка базы данных (find_id_round)!");
+        msgBox.exec();
+        return;
+    }
+
     QString a = cmbAge->currentText();                      // возраст
     QString w = cmbWeight->currentText();                   // вес
     qDebug() << cmb_round->currentText();
@@ -1000,14 +1011,27 @@ void FormMain::find_id_round(void){
         rbFirst->setChecked(true);
         groupBox->setEnabled(true);
     }
+    m_db.close();
 }
 
 ///////////////////////////////
 //   выбор нового возраста   //
 ///////////////////////////////
 void FormMain::age(void){
+    QSqlDatabase m_db;
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(currentDataBase);
+    if(!m_db.open()){
+        qDebug() << "Error: connection with database failed";
+        QMessageBox msgBox;
+        msgBox.setText("Ошибка базы данных (age)!");
+        msgBox.exec();
+        return;
+    }
     QString age = cmbAge->currentText();
     flag_shoise = 1;
+    disconnect(cmbWeight,  SIGNAL(currentIndexChanged(int)), this, SLOT(weight()));
+    disconnect(cmb_round,  SIGNAL(currentIndexChanged(int)), this, SLOT(round_()));
     cmbWeight->clear();
     QString sql = "SELECT DISTINCT weight FROM sportsmens WHERE age = '%1'";
     sql = sql.arg(age);
@@ -1044,12 +1068,25 @@ void FormMain::age(void){
     cmb_round->setCurrentIndex(l.length() - 1);
     find_id_round();
     flag_shoise = 0;
+    m_db.close();
+    connect(cmbWeight,  SIGNAL(currentIndexChanged(int)), this, SLOT(weight()));
+    connect(cmb_round,  SIGNAL(currentIndexChanged(int)), this, SLOT(round_()));
 }
 
 //////////////////////////////////////////
 //          выбор нового веса           //
 //////////////////////////////////////////
 void FormMain::weight(void){
+    QSqlDatabase m_db;
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(currentDataBase);
+    if(!m_db.open()){
+        qDebug() << "Error: connection with database failed";
+        QMessageBox msgBox;
+        msgBox.setText("Ошибка базы данных (weight)!");
+        msgBox.exec();
+        return;
+    }
     QString weight = cmbWeight->currentText();
     if(flag_shoise == 0){
         flag_shoise = 1;
@@ -1065,6 +1102,7 @@ void FormMain::weight(void){
         }
         //std::sort(l.begin(), l.end());
         l = f_sort(l);
+        disconnect(cmb_round,  SIGNAL(currentIndexChanged(int)), this, SLOT(round_()));
         cmb_round->clear();
         foreach(QString sEach, l){
             cmb_round->addItem("круг " + sEach);
@@ -1073,6 +1111,8 @@ void FormMain::weight(void){
         find_id_round();
         flag_shoise = 0;
     }
+    m_db.close();
+    connect(cmb_round,  SIGNAL(currentIndexChanged(int)), this, SLOT(round_()));
 }
 
 //////////////////////////////////////////
@@ -1519,6 +1559,18 @@ void FormMain::btn_errors_clicked(void){
 }
 
 void FormMain::new_round(void){
+    if(cmbWeight->count() == 0 || cmbAge->count() == 0)
+        return;
+    QSqlDatabase m_db;
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(currentDataBase);
+    if(!m_db.open()){
+        qDebug() << "Error: connection with database failed";
+        QMessageBox msgBox;
+        msgBox.setText("Ошибка базы данных (new_round)!");
+        msgBox.exec();
+        return;
+    }
     QSqlQuery query;
     QString sql = "SELECT round FROM rounds WHERE age = '%1' and weight = '%2'";
     sql = sql.arg(cmbAge->currentText()).arg(cmbWeight->currentText());
@@ -1537,6 +1589,7 @@ void FormMain::new_round(void){
         cmb_round->addItem("круг " + QString::number(len_rounds + 1));
         cmb_round->setCurrentIndex(len_rounds);
     }
+    m_db.close();
 }
 
 void FormMain::editSity(void){
@@ -1805,6 +1858,16 @@ void FormMain::btn_enter_clicked(void){
 }
 
 void FormMain::btn_enterName_clicked(){
+    QSqlDatabase m_db;
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(currentDataBase);
+    if(!m_db.open()){
+        qDebug() << "Error: connection with database failed";
+        QMessageBox msgBox;
+        msgBox.setText("Ошибка базы данных (btn_enterName_clicked)!");
+        msgBox.exec();
+        return;
+    }
     if(dialog(this) == 0)
         return;
     QString age = cmbAge->currentText();
@@ -1872,6 +1935,7 @@ void FormMain::btn_enterName_clicked(){
     lbl_sum->setText("");
     lbl_q->setText("");
     flag_priem = 0;
+    m_db.close();
 }
 
 void FormMain::button_num(QString num){
@@ -2108,50 +2172,35 @@ void FormMain::addSportsmensToBaza(QList<QStringList> lSl){
         cmbAge->clear();
         cmbWeight->clear();
         cmb_round->clear();
-        qDebug()<<"cmb_round->count()0"<<cmb_round->count();
         query.exec("SELECT DISTINCT (age) FROM sportsmens");
         QList<QString> l_age;
         while(query.next())
             l_age.append(query.value(0).toString());
         l_age = f_sort(l_age);
-        qDebug()<<"cmb_round->count()-3"<<cmb_round->count();
-        foreach(QString sEach, l_age){
-            qDebug()<<"cmb_round->count()-7"<<cmb_round->count();
+        foreach(QString sEach, l_age)
             cmbAge->addItem(sEach);
-            qDebug()<<"cmb_round->count()-8"<<cmb_round->count();
-        }
-        qDebug()<<"cmb_round->count()-4"<<cmb_round->count();
         QString sql = "SELECT DISTINCT weight FROM sportsmens WHERE age = '%1'";
         sql = sql.arg(l_age[0]);
         query.exec(sql);
-        qDebug()<<"cmb_round->count()-5"<<cmb_round->count();
         QList<QString> l_weight;
         while(query.next())
             l_weight.append(query.value(0).toString());
-        qDebug()<<"cmb_round->count()-6"<<cmb_round->count();
         l_weight = f_sort(l_weight);
-        qDebug()<<"cmb_round->count()-2"<<cmb_round->count();
         foreach(QString sEach, l_weight)
             cmbWeight->addItem(sEach);
         sql_round = "SELECT round FROM rounds WHERE age = '%1' and weight = '%2'";
         sql_round =sql_round.arg(l_age[0]).arg(l_weight[0]);
         query.exec(sql_round);
         QList<QString> l_round;
-        while(query.next()){
+        while(query.next())
             l_round.append(query.value(0).toString());
-        }
-        qDebug()<<l_round<<sql_round;
-        qDebug()<<"cmb_round->count()-1"<<cmb_round->count();
-        foreach(QString sEach, l_round){
+        foreach(QString sEach, l_round)
             cmb_round->addItem("круг " + sEach);
-            qDebug()<<"cmb_round->count()1"<<cmb_round->count();
-        }
-        qDebug()<<"cmb_round->count()2"<<cmb_round->count();
         cmb_round->setCurrentIndex(l_round.count() - 1);
         connect(cmbAge,     SIGNAL(currentIndexChanged(int)), this, SLOT(age()));
         connect(cmbWeight,  SIGNAL(currentIndexChanged(int)), this, SLOT(weight()));
         connect(cmb_round,  SIGNAL(currentIndexChanged(int)), this, SLOT(round_()));
-
+        m_db.close();
     }
 }
 
@@ -2207,7 +2256,71 @@ void FormMain::createCompetition(){
 //////////////////////////////////////
 void FormMain::choiceCompetitions(QString s){
     qDebug()<<s;
-    mainwin->statusBar()->showMessage(s);
+    //mainwin->statusBar()->showMessage(s);
+    currentDataBase = s + ".db";
+    QSqlDatabase m_db;
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(currentDataBase);
+    if (!m_db.open()) qDebug() << "Error: connection with database failed";
+    else {
+        QSqlQuery query;
+        //////////////////////////////////////////////////////////
+        /*           добавление элементов в комбобоксы          */
+        /*               "возраст", "вес" и "круг"              */
+        //////////////////////////////////////////////////////////
+        query.exec("SELECT DISTINCT (age) FROM sportsmens");
+        qDebug()<<"query.size() = "<<query.size();
+        if(!query.next()){
+            disconnect(cmbAge,     SIGNAL(currentIndexChanged(int)), this, SLOT(age()));
+            disconnect(cmbWeight,  SIGNAL(currentIndexChanged(int)), this, SLOT(weight()));
+            disconnect(cmb_round,  SIGNAL(currentIndexChanged(int)), this, SLOT(round_()));
+            cmbAge->clear();
+            cmbWeight->clear();
+            cmb_round->clear();
+            connect(cmbAge,     SIGNAL(currentIndexChanged(int)), this, SLOT(age()));
+            connect(cmbWeight,  SIGNAL(currentIndexChanged(int)), this, SLOT(weight()));
+            connect(cmb_round,  SIGNAL(currentIndexChanged(int)), this, SLOT(round_()));
+            m_db.close();
+            return;
+        }
+        query.previous();
+        disconnect(cmbAge,     SIGNAL(currentIndexChanged(int)), this, SLOT(age()));
+        disconnect(cmbWeight,  SIGNAL(currentIndexChanged(int)), this, SLOT(weight()));
+        disconnect(cmb_round,  SIGNAL(currentIndexChanged(int)), this, SLOT(round_()));
+
+        cmbAge->clear();
+        cmbWeight->clear();
+        cmb_round->clear();
+
+        QList<QString> l_age;
+        while(query.next())
+            l_age.append(query.value(0).toString());
+        l_age = f_sort(l_age);
+        foreach(QString sEach, l_age)
+            cmbAge->addItem(sEach);
+        QString sql = "SELECT DISTINCT weight FROM sportsmens WHERE age = '%1'";
+        sql = sql.arg(l_age[0]);
+        query.exec(sql);
+        QList<QString> l_weight;
+        while(query.next())
+            l_weight.append(query.value(0).toString());
+        l_weight = f_sort(l_weight);
+        foreach(QString sEach, l_weight)
+            cmbWeight->addItem(sEach);
+        QString sql_round = "SELECT round FROM rounds WHERE age = '%1' and weight = '%2'";
+        sql_round =sql_round.arg(l_age[0]).arg(l_weight[0]);
+        query.exec(sql_round);
+        QList<QString> l_round;
+        while(query.next())
+            l_round.append(query.value(0).toString());
+        foreach(QString sEach, l_round)
+            cmb_round->addItem("круг " + sEach);
+        cmb_round->setCurrentIndex(l_round.count() - 1);
+        connect(cmbAge,     SIGNAL(currentIndexChanged(int)), this, SLOT(age()));
+        connect(cmbWeight,  SIGNAL(currentIndexChanged(int)), this, SLOT(weight()));
+        connect(cmb_round,  SIGNAL(currentIndexChanged(int)), this, SLOT(round_()));
+        m_db.close();
+    }
 }
 
 ////////////////////////////

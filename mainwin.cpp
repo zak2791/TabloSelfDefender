@@ -37,23 +37,30 @@ MainWin::MainWin(QWidget *parent) :
 
     ui->Mat->addActions(grMats->actions());
 
-    QDir dir = QDir::current();
-    QFileInfoList lFiles = dir.entryInfoList({"*.db"}, QDir::Files, QDir::Time);
-    if(lFiles.count() > 0){
-        QMenu* menu = ui->Competition->addMenu("Последние соревнования");
-        QActionGroup* gr = new QActionGroup(this);
-        foreach(QFileInfo inf, lFiles){
-            QAction* act = gr->addAction(inf.baseName());
-            act->setCheckable(true);
-            connect(act, SIGNAL(triggered()), this, SLOT(choiceCompetitions()));
-        }
-        menu->addActions(gr->actions());
-    }
+
+    menu = ui->Competition;
+    lastCompetitions = menu->addMenu("Последние соревнования");
+    fillLastCompetitions();
 }
 
 MainWin::~MainWin()
 {
     delete ui;
+}
+
+void MainWin::fillLastCompetitions(){
+    QDir dir = QDir::current();
+    QFileInfoList lFiles = dir.entryInfoList({"*.db"}, QDir::Files, QDir::Time);
+    if(lFiles.count() > 0){
+        QActionGroup* gr = new QActionGroup(this);
+        foreach(QFileInfo inf, lFiles){
+            QAction* act = gr->addAction(inf.completeBaseName());
+            act->setCheckable(true);
+            connect(act, SIGNAL(triggered()), this, SLOT(choiceCompetitions()));
+        }
+        lastCompetitions->clear();
+        lastCompetitions->addActions(gr->actions());
+    }
 }
 
 void MainWin::choiceCompetitions(){

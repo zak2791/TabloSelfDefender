@@ -123,6 +123,7 @@ void AddCompetition::createCompetitions(){
     //formmain->btnEnterName->setEnabled(false);
 
     formmain->currentDataBase = baza_name;
+    formmain->mainwin->fillLastCompetitions();
 
     m_db.close();
     reject();

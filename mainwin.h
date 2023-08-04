@@ -24,6 +24,8 @@ public:
     QAction* Edit;
     QStatusBar* status;
 
+    void fillLastCompetitions(void);
+
 public slots:
     void choiceMat(QString);    //выбор ковра из программы
 
@@ -33,6 +35,9 @@ private:
     QString currentActionMat;
     QAction* actMatA;
     QAction* actMatB;
+
+    QMenu* menu;
+    QMenu* lastCompetitions;
 
 private slots:
     void choiceCompetitions(void);
