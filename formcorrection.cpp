@@ -528,6 +528,15 @@ void FormCorrection::btnCancel_clicked(void){
 }
 
 void FormCorrection::record_to_baza(void){
+    QSqlDatabase m_db;
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(((FormMain*)p)->currentDataBase);
+    QMessageBox msgBox;
+    if(!m_db.open()){
+        msgBox.setText("Ошибка базы данных record_to_baza!");
+        msgBox.exec();
+        return;
+    }
     QList<QString> l;
     l.append(parent_led->text());   // ошибки текущего вопроса и корректируемого судьи
     QString reffery = parent_led->objectName()[parent_led->objectName().length() - 1] + "_";   // текущий судья
@@ -572,9 +581,11 @@ void FormCorrection::record_to_baza(void){
              .arg(l[6])
              .arg(l[7])
              .arg(l[8]);
-    qDebug() << "sql correction" << sql;
     QSqlQuery query;
-    if(!query.exec(sql))
-        qDebug() << "correction error";
+    if(!query.exec(sql)){
+        msgBox.setText("Ошибка базы данных correction error!");
+        msgBox.exec();
+    }
+    m_db.close();
 }
 

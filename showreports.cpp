@@ -1,7 +1,7 @@
 #include "showreports.h"
 #include "FormMain.h"
 
-#include <QtSql>
+
 
 ShowReports::ShowReports(QString _st,
                          QString _name_competition,
@@ -9,8 +9,20 @@ ShowReports::ShowReports(QString _st,
                          int _num_round,
                          QWidget* parent) : QWidget(parent){
 
-    setWindowFlags(Qt::Window);
     p = parent;
+
+    QSqlDatabase m_db;
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(((FormMain*)p)->currentDataBase);
+    if(!m_db.open()){
+        QMessageBox msgBox;
+        msgBox.setText("Ошибка базы данных (btn_enterName_clicked)!");
+        msgBox.exec();
+        return;
+    }
+
+    setWindowFlags(Qt::Window);
+
     setWindowState(Qt::WindowMaximized);
 
     printer = new QPrinter(QPrinter::HighResolution);
@@ -34,6 +46,11 @@ ShowReports::ShowReports(QString _st,
     QSqlQuery query;
     query.exec(sql);
     QStringList ID;
+    if(!query.next()){
+        m_db.close();
+        return;
+    }
+    query.previous();
     while(query.next()){
         ID.append(query.value(0).toString());
     }
@@ -115,6 +132,7 @@ ShowReports::ShowReports(QString _st,
     vbox->addWidget(button);
     setLayout(vbox);
     connect(button, SIGNAL(clicked()), this, SLOT(prt()));
+    m_db.close();
 }
 
 QString ShowReports::createHTML(int mode){

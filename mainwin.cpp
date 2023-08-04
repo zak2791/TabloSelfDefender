@@ -37,6 +37,8 @@ MainWin::MainWin(QWidget *parent) :
 
     ui->Mat->addActions(grMats->actions());
 
+    lblStatus = new QLabel();
+    statusBar()->addWidget(lblStatus);
 
     menu = ui->Competition;
     lastCompetitions = menu->addMenu("Последние соревнования");

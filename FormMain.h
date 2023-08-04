@@ -10,6 +10,7 @@
 #include "udp.h"
 #include "showreports.h"
 #include <QPropertyAnimation>
+#include <QtSql>
 
 #include "cameraconnection.h"
 #include "mainwin.h"
@@ -32,7 +33,7 @@ class FormMain : public QWidget, private Ui::FormMain{
     Q_OBJECT
 
 private:
-
+    //static QSqlDatabase dataBase;
     //////////////////////////////////////////////////////////
     /* флаг режима -- -1 не определено (при создании круга) */
     /*                 0 общий круг                         */
@@ -157,6 +158,8 @@ private slots:
 
 
 public:
+     //static QSqlDatabase m_db(void) { return dataBase; }
+
      QString currentDataBase;   //текущая база данных
      QString Conn2;             //подключение 2-го судьи, 0 - незарегистрирован
      QString Conn3;             //подключение 3-го судьи, 0 - незарегистрирован

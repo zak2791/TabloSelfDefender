@@ -110,13 +110,13 @@ void AddCompetition::createCompetitions(){
         m_db.close();
         return;
     }
-    QList<QLabel*> lL = mainwin->statusBar()->findChildren<QLabel*>();
-    foreach(QLabel* lbl, lL){
-        mainwin->statusBar()->removeWidget(lbl);
-        delete lbl;
-    }
-    QLabel* lblStatus = new QLabel(baza_name);
-    mainwin->statusBar()->addWidget(lblStatus);
+//    QList<QLabel*> lL = mainwin->statusBar()->findChildren<QLabel*>();
+//    foreach(QLabel* lbl, lL){
+//        mainwin->statusBar()->removeWidget(lbl);
+//        delete lbl;
+//    }
+    //QLabel* lblStatus = new QLabel(baza_name);
+    mainwin->lblStatus->setText(baza_name);
     formmain->Cmb_round->clear();
     formmain->CmbAge->clear();
     formmain->CmbWeight->clear();

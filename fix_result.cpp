@@ -109,6 +109,15 @@ void F1(FormMain* p){
 //                                 F2                                      //
 /////////////////////////////////////////////////////////////////////////////
 void F2(FormMain* p){
+    QSqlDatabase m_db;
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(((FormMain*)p)->currentDataBase);
+    QMessageBox msgBox;
+    if(!m_db.open()){
+        msgBox.setText("Ошибка базы данных F2!");
+        msgBox.exec();
+        return;
+    }
     p->fr->rate_1->setText(p->Led1->text());
     p->fr->rate_2->setText(p->Led2->text());
     p->fr->rate_3->setText(p->Led3->text());
@@ -196,13 +205,22 @@ void F2(FormMain* p){
              .arg(l[12]);
     QSqlQuery query;
     if(!query.exec(sql)) qDebug() << "error insert rate";
-
+    m_db.close();
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //                  основная функция фиксации результата                   //
 /////////////////////////////////////////////////////////////////////////////
 void fix_result(FormMain* p){
+    QSqlDatabase m_db;
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(((FormMain*)p)->currentDataBase);
+    QMessageBox msgBox;
+    if(!m_db.open()){
+        msgBox.setText("Ошибка базы данных fix_result!");
+        msgBox.exec();
+        return;
+    }
     if(p->flag_priem == 1){       // если приём № 1
         if(p->current_mode == -1){
          //////////////////////////////////////////////////////
@@ -299,6 +317,7 @@ void fix_result(FormMain* p){
         else
             F1(p);
     }
+    m_db.close();
 }
 
 int dialog(FormMain* p){

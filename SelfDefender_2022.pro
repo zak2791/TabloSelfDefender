@@ -13,6 +13,7 @@ FORMS += \
     FormErrors.ui \
     FormMain.ui \
     FormSettings.ui \
+    addOneSportsmen.ui \
     addcompetition.ui \
     mainwin.ui
 

@@ -78,6 +78,16 @@ void Errors::showEvent(QShowEvent*){
     ////////////////////////////////////////////////////////////////////////////////////
     //           Получение списка спортсменов из таблицы errors_and_rates             //
     ////////////////////////////////////////////////////////////////////////////////////
+    QSqlDatabase m_db;
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(((FormMain*)p)->currentDataBase);
+    if(!m_db.open()){
+        QMessageBox msgBox;
+        msgBox.setText("Ошибка базы данных (btn_enterName_clicked)!");
+        msgBox.exec();
+        return;
+    }
+
     QString sql = "SELECT id, id_sportsmen FROM errors_and_rates WHERE id_round = '%1' ORDER BY id";
     int id_round = static_cast<FormMain*>(p)->id_round;
     sql = sql.arg(id_round);
@@ -129,12 +139,22 @@ void Errors::showEvent(QShowEvent*){
         }
     }
     lblTotalSum->setText("");
+    m_db.close();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //                       выбор спортсмена в списке                           //
 ///////////////////////////////////////////////////////////////////////////////
 void Errors::selection(QItemSelection a, QItemSelection){
+    QSqlDatabase m_db;
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(((FormMain*)p)->currentDataBase);
+    if(!m_db.open()){
+        QMessageBox msgBox;
+        msgBox.setText("Ошибка базы данных (selection)!");
+        msgBox.exec();
+        return;
+    }
     sel_data = a.indexes()[0].data().toString();           // фамилия, регион
     row = a.indexes()[0].row();                 // строка
     // выбор оценок
@@ -222,6 +242,7 @@ void Errors::selection(QItemSelection a, QItemSelection){
         lblTotalSum->setText(_data);
     else
         lblTotalSum->setText("");
+    m_db.close();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////

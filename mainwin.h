@@ -2,6 +2,7 @@
 #define MAINWIN_H
 
 #include <QMainWindow>
+#include <QLabel>
 
 namespace Ui {
 class MainWin;
@@ -23,6 +24,8 @@ public:
     //QAction* Open;
     QAction* Edit;
     QStatusBar* status;
+
+    QLabel* lblStatus;
 
     void fillLastCompetitions(void);
 
