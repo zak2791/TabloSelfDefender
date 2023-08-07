@@ -16,8 +16,11 @@ public:
     explicit MainWin(QWidget *parent = nullptr);
     ~MainWin();
 
-    QAction* addOne;
+    QAction* AddOne;
     QAction* AddFromBuffer;
+
+    QAction* AddOneRef;
+    QAction* AddRefFromBuffer;
 
     QAction* ShowHelp;
     QAction* New;
@@ -26,6 +29,10 @@ public:
     QStatusBar* status;
 
     QLabel* lblStatus;
+
+    QMenu* lastCompetitions;
+    QMenu* Sportsmens;
+    QMenu* Referees;
 
     void fillLastCompetitions(void);
 
@@ -38,9 +45,7 @@ private:
     QString currentActionMat;
     QAction* actMatA;
     QAction* actMatB;
-
     QMenu* menu;
-    QMenu* lastCompetitions;
 
 private slots:
     void choiceCompetitions(void);

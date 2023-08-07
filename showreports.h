@@ -27,11 +27,7 @@ private slots:
     void prt(void);
 
 public:
-    ShowReports(QString st = "-",
-                QString name_competition = "-",
-                QString date = "-",
-                int _num_round = 5,
-                QWidget* parent = nullptr);
+    ShowReports(int _num_round = 5, QWidget* parent = nullptr);
 
 };
 

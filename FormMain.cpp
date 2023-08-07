@@ -9,9 +9,11 @@
 #include "choice_two_athletes.h"
 #include "choice.h"
 #include "addcompetition.h"
-#include "xlxs.h"
+//#include "xlxs.h"
 #include "ui_addOneSportsmen.h"
+#include "ui_addcompetition.h"
 
+#include "protocol.h"
 
 void Btn_next_clicked(FormMain*);
 void fix_result(FormMain*);
@@ -159,6 +161,14 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
         settings.setValue( "pult5", "0");
     }
     settings.endGroup();
+//    settings.beginGroup("Ref");
+//    judge1 = settings.value("ref1").toString();
+//    judge2 = settings.value("ref2").toString();
+//    judge3 = settings.value("ref3").toString();
+//    judge4 = settings.value("ref4").toString();
+//    judge5 = settings.value("ref5").toString();
+
+//    settings.beginGroup("Ref");
 
     mainwin->choiceMat(mat);
     lblMat->setText(mat);
@@ -260,6 +270,7 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
     CmbAge = cmbAge;
     CmbWeight = cmbWeight;
     Btn_new = btn_new;
+    BtnNewFinal = btnNewFinal;
     btnEnterName = btn_enterName;
 
     //BtnChoice = btnChoice;
@@ -271,165 +282,7 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
     Led4 = led4;
     Led5 = led5;
 
-//    QSqlDatabase m_db;
-//    m_db = QSqlDatabase::addDatabase("QSQLITE");
-//    m_db.setDatabaseName("baza.db");
 
-//    if(!QFileInfo ("baza.db").exists()){
-//        qDebug() << "Файл не существует" << endl;
-
-//        if (!m_db.open()) qDebug() << "Error: connection with database failed";
-//        else
-//        {
-//            qDebug() << "Database: connection ok";
-//            QSqlQuery query;
-
-//            QString str =   "CREATE TABLE sportsmens "
-//                            "(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, "
-//                            "region TEXT, age TEXT, weight TEXT, "
-//                            "UNIQUE (name, weight, age))";
-
-
-//            if(!query.exec(str)) qDebug() << "UnaЫe to create а tаЫе sportsmens";
-
-//            str =           "CREATE TABLE errors_and_rates "
-//                            "(id INTEGER PRIMARY KEY AUTOINCREMENT, id_sportsmen INTEGER, id_round INTEGER, "
-//                            "errors1_1  TEXT, errors2_1 TEXT, errors3_1 TEXT, errors4_1 TEXT, errors5_1 TEXT, "
-//                            "errors1_2  TEXT, errors2_2 TEXT, errors3_2 TEXT, errors4_2 TEXT, errors5_2 TEXT, "
-//                            "errors1_3  TEXT, errors2_3 TEXT, errors3_3 TEXT, errors4_3 TEXT, errors5_3 TEXT, "
-//                            "errors1_4  TEXT, errors2_4 TEXT, errors3_4 TEXT, errors4_4 TEXT, errors5_4 TEXT, "
-//                            "errors1_5  TEXT, errors2_5 TEXT, errors3_5 TEXT, errors4_5 TEXT, errors5_5 TEXT, "
-//                            "rate1_1  TEXT, rate2_1 TEXT, rate3_1  TEXT, rate4_1 TEXT, rate5_1  TEXT, sum1 TEXT, "
-//                            "rate1_2  TEXT, rate2_2 TEXT, rate3_2  TEXT, rate4_2 TEXT, rate5_2  TEXT, sum2 TEXT, "
-//                            "rate1_3  TEXT, rate2_3 TEXT, rate3_3  TEXT, rate4_3 TEXT, rate5_3  TEXT, sum3 TEXT, "
-//                            "rate1_4  TEXT, rate2_4 TEXT, rate3_4  TEXT, rate4_4 TEXT, rate5_4  TEXT, sum4 TEXT, "
-//                            "rate1_5  TEXT, rate2_5 TEXT, rate3_5  TEXT, rate4_5 TEXT, rate5_5  TEXT, sum5 TEXT, "
-//                            "total TEXT, "
-//                            "UNIQUE (id_sportsmen, id_round))";
-
-//            if(!query.exec(str)) qDebug() << "UnaЫe to create а tаЫе errors_and_rates";
-
-//            str =           "CREATE TABLE rounds "
-//                            "(id INTEGER PRIMARY KEY AUTOINCREMENT, "
-//                            "round INTEGER, age  TEXT, weight TEXT, "
-//                            "mode INTEGER DEFAULT -1, "
-//                            "UNIQUE (round, age, weight))";
-
-//            if(!query.exec(str)) qDebug() << "UnaЫe to create а tаЫе rounds";
-
-
-//        }
-//    }
-//    else qDebug().noquote() << QString("Файл существует") << endl;
-
-//    if (!m_db.open()) qDebug() << "Error: connection with database failed";
-//    else {
-//        qDebug() << "Database: connection ok";
-//        QSqlQuery query;
-
-//        readSportsmens(&qvStr);     //чтение списка спортсменов из excel-файла
-//        int count = 0;
-//        QList<QString> qS;
-//        foreach(QString s, qvStr){
-//            qS.append(s);
-//            if(count++ == 3){
-//                QString str = "INSERT INTO sportsmens (name, region, age, weight) VALUES ('%1', '%2', '%3', '%4');";
-//                QString s;
-//                s =  str.arg(qS[0])
-//                        .arg(qS[1])
-//                        .arg(qS[2])
-//                        .arg(qS[3]);
-
-//                if(query.exec(s)) qDebug() << "Filled sportsmen's table" << s;
-//                else qDebug() << "error filled sportsmen's table" << s;
-//                count = 0;
-//                qS.clear();
-//            }
-//        }
-
-//        QString sql_age =           "SELECT DISTINCT (age) FROM sportsmens";
-//        QString sql_weight =        "SELECT DISTINCT weight FROM sportsmens WHERE age LIKE ('%1')";
-//        QString sql_round =         "SELECT round FROM rounds WHERE age = '%1' and weight = '%2'";
-//        QString sql_round_insert =  "INSERT INTO rounds (round, age, weight) VALUES ('%1', '%2', '%3')";
-//        query.exec(sql_age);
-
-//        while(query.next()){
-//            qDebug() << endl;
-//            QString s = sql_weight.arg(query.value(0).toString());
-//            qDebug() << "value 3";
-//            QSqlQuery query_weight;
-//            query_weight.exec(s);
-//            while(query_weight.next()){
-//                QSqlQuery query_round;
-//                QString s = sql_round.arg(query.value(0).toString())
-//                                     .arg(query_weight.value(0).toString());
-//                qDebug() << "value 4";
-//                query_round.exec(s);
-//                int i = 0;
-//                while(query_round.next()){
-//                    qDebug() << query_round.value(0).toString();
-//                    i++;
-//                }
-//                if(i == 0){
-//                    QSqlQuery query_sql_round_insert;
-//                    QString s = sql_round_insert.arg("1")
-//                                                .arg(query.value(0).toString())
-//                                                .arg(query_weight.value(0).toString());
-//                    qDebug() << "value 5";
-//                    if(query_sql_round_insert.exec(s))
-//                        qDebug() << "insert success";
-//                    else
-//                        qDebug() << "didn't insert";
-//                }
-//            }
-//        }
-        //////////////////////////////////////////////////////////
-        /*           добавление элементов в комбобоксы          */
-        /*               "возраст", "вес" и "круг"              */
-        //////////////////////////////////////////////////////////
-//        query.exec("SELECT DISTINCT (age) FROM sportsmens");
-//        QList<QString> l_age;
-//        while(query.next()){
-//            l_age.append(query.value(0).toString());
-//            qDebug() << "value 6";
-//        }
-//        //std::sort(l_age.begin(), l_age.end());
-//        l_age = f_sort(l_age);
-//        foreach(QString sEach, l_age){
-//            cmbAge->addItem(sEach);
-//        }
-//        QString sql = "SELECT DISTINCT weight FROM sportsmens WHERE age = '%1'";
-//        sql = sql.arg(l_age[0]);
-//        query.exec(sql);
-//        QList<QString> l_weight;
-//        while(query.next()){
-//            l_weight.append(query.value(0).toString());
-//            qDebug() << "value 7";
-//        }
-
-//        //qDebug() << l_weight;
-//        //std::sort(l_weight.begin(), l_weight.end());
-//        l_weight = f_sort(l_weight);
-//        //qDebug() << l_weight;
-//        foreach(QString sEach, l_weight){
-//            cmbWeight->addItem(sEach);
-//        }
-//        sql_round = "SELECT round FROM rounds WHERE age = '%1' and weight = '%2'";
-//        sql_round =sql_round.arg(l_age[0])
-//                            .arg(l_weight[0]);
-//        query.exec(sql_round);
-//        QList<QString> l_round;
-//        while(query.next()){
-//            l_round.append(query.value(0).toString());
-//            qDebug() << "value 8";
-//        }
-//        //std::sort(l_round.begin(), l_round.end());
-//        foreach(QString sEach, l_round){
-//            cmb_round->addItem("круг " + sEach);
-//        }
-//        //qDebug() << "l_round.count() = " << l_round.count();
-//        cmb_round->setCurrentIndex(l_round.count() - 1);
-//    }
 
     keyVariant = true;      //вариант расладки клавиатуры
     rate = 10.0;            //оцена судьи за компьютером
@@ -451,48 +304,6 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
     stateErr15 = false;
     statePlusOne = false;
     stateZero = false;
-    /*-------Выбор ковра-------*/
-
-//    QDialog* kover = new QDialog();
-//    QFont font;
-//    font.setPointSize(14);
-//    font.setBold(true);
-
-//    kover->setWindowFlags(Qt::SplashScreen);
-//    QPushButton* btnMatA = new QPushButton("&Mat A");
-//    btnMatA->setFont(font);
-//    QPushButton* btnMatB = new QPushButton("&Mat B");
-//    btnMatB->setFont(font);
-//    QLabel* lbl = new QLabel("Выберите ковер");
-
-//    lbl->setFont(font);
-//    lbl->setAlignment(Qt::AlignHCenter);
-//    QHBoxLayout* hbox = new QHBoxLayout();
-//    QVBoxLayout* vbox = new QVBoxLayout();
-
-//    hbox->addWidget(btnMatA);
-//    hbox->addWidget(btnMatB);
-//    vbox->addWidget(lbl);
-//    vbox->addLayout(hbox);
-//    kover->setLayout(vbox);
-
-//    connect(btnMatA, SIGNAL(clicked()), kover, SLOT(accept()));
-//    connect(btnMatB, SIGNAL(clicked()), kover, SLOT(reject()));
-
-//    ret_mat = kover->exec();               //ковер A или B
-//    if (ret_mat == QDialog::Accepted){
-//        port2 = 4120;
-//        port3 = 4130;
-//        port4 = 4140;
-//        port5 = 4150;
-//        lblMat->setText("A");
-//    }else{
-//        port2 = 4220;
-//        port3 = 4230;
-//        port4 = 4240;
-//        port5 = 4250;
-//        lblMat->setText("B");
-//    }
 
 
     //флаг подключения пульта: 0->2-отключен, 2->0-включен
@@ -523,69 +334,54 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
     judge5 = "-";
     ts = "-";
 
-    file.setFileName("settings.txt");
-    if(!file.exists()){
-        file.open(QIODevice::WriteOnly | QIODevice::Text);
-        file.write("-\n");
-        file.write("-\n");
-        file.write("01.01.2021\n");
-        file.write("1\n");
-        file.write("0");
-        file.close();
-    }
-
-    if(file.open(QIODevice::ReadOnly)){
-        QTextStream stream(&file);
-        sity               = stream.readLine();
-        name_competition   = stream.readLine();
-        date               = stream.readLine();
-        team_referees      = stream.readLine();
-        RateShow           = stream.readLine();
-        file.close();
-    }
+//       if(file.open(QIODevice::ReadOnly)){
+//        QTextStream stream(&file);
+//        sity               = stream.readLine();
+//        name_competition   = stream.readLine();
+//        date               = stream.readLine();
+//        team_referees      = stream.readLine();
+//        RateShow           = stream.readLine();
+//        file.close();
+//    }
 
     //qDebug() << sity << name_competition << date << team_referees << RateShow;
 
-    file.setFileName("round_referees.txt");
-    if(!file.exists()){
-        file.open(QIODevice::WriteOnly | QIODevice::Text);
-        file.write("0\n");
-        file.write("0\n");
-        file.write("0\n");
-        file.write("0\n");
-        file.write("0\n");
-        file.write("0\n");
-        file.close();
-    }
+//    file.setFileName("round_referees.txt");
+//    if(!file.exists()){
+//        file.open(QIODevice::WriteOnly | QIODevice::Text);
+//        file.write("0\n");
+//        file.write("0\n");
+//        file.write("0\n");
+//        file.write("0\n");
+//        file.write("0\n");
+//        file.write("0\n");
+//        file.close();
+//    }
 
-    file.setFileName("round_referees2.txt");
-    if(!file.exists()){
-        file.open(QIODevice::WriteOnly | QIODevice::Text);
-        file.write("0\n");
-        file.write("0\n");
-        file.write("0\n");
-        file.write("0\n");
-        file.write("0\n");
-        file.write("0\n");
-        file.close();
-    }
-    file.setFileName("main_referees.txt");
-    if(!file.exists()){
-        file.open(QIODevice::WriteOnly | QIODevice::Text);
-        file.write("0\n");
-        file.write("0\n");
-        file.close();
-    }
+//    file.setFileName("round_referees2.txt");
+//    if(!file.exists()){
+//        file.open(QIODevice::WriteOnly | QIODevice::Text);
+//        file.write("0\n");
+//        file.write("0\n");
+//        file.write("0\n");
+//        file.write("0\n");
+//        file.write("0\n");
+//        file.write("0\n");
+//        file.close();
+//    }
+//    file.setFileName("main_referees.txt");
+//    if(!file.exists()){
+//        file.open(QIODevice::WriteOnly | QIODevice::Text);
+//        file.write("0\n");
+//        file.write("0\n");
+//        file.close();
+//    }
 
-    if(mat == "А")
-        file.setFileName("connectingA.txt");
-    if(mat == "Б")
-        file.setFileName("connectingB.txt");
-
-//    if(ret_mat)
+//    if(mat == "А")
 //        file.setFileName("connectingA.txt");
-//    else
+//    if(mat == "Б")
 //        file.setFileName("connectingB.txt");
+
 
     settings.beginGroup("Settings");
     Conn2 = settings.value("pult2").toString();
@@ -594,26 +390,8 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
     Conn5 = settings.value("pult5").toString();
     settings.endGroup();
 
-//    if(!file.exists()){
-//     file.open(QIODevice::WriteOnly | QIODevice::Text);
-//     file.write("0\n");
-//     file.write("0\n");
-//     file.write("0\n");
-//     file.write("0");
-//     file.close();
-//     }
 
-
-//    if(file.open(QIODevice::ReadOnly)){
-//        QTextStream stream(&file);
-//        Conn2 = stream.readLine();
-//        Conn3 = stream.readLine();
-//        Conn4 = stream.readLine();
-//        Conn5 = stream.readLine();
-//        file.close();
-//    }
-
-    sett = new Settings(sity, name_competition, date, this);
+    sett = new Settings(this);
 
     err = new Errors(this);
 
@@ -625,19 +403,13 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
     else
         sett->RbnTogether->setChecked(true);
 
-    /*
-            if self.team_referees == '1':
-                self.sett.rbnOne.setChecked(True)
-            else:
-                self.sett.rbnTwo.setChecked(True)
-    */
-
-    sett->RbEng->setChecked(true);
-
-    //QFont font;
-    //font.setPixelSize(30);
+    //sett->RbEng->setChecked(true);
 
     lbl_total->setText("");
+
+    Protocol* p = new Protocol;
+    QPushButton* BtnNewFinal = btnNewFinal;
+    connect(BtnNewFinal,       SIGNAL(clicked()), p, SLOT(show()));
 
     connect(btn_next,       SIGNAL(clicked()), this, SLOT(btn_next_clicked()));
     connect(btn_enter,      SIGNAL(clicked()), this, SLOT(btn_enter_clicked()));
@@ -696,16 +468,6 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
     pult3->ID = Conn3;
     pult4->ID = Conn4;
     pult5->ID = Conn5;
-    /*
-    if(!(Conn2 == "0\n")){
-        pult2.ID = self.Conn2[:-1];  //.split(';')[0]
-        //pult2.IP = self.Conn2.split(';')[1][:-1]
-     }
-    */
-
-
-    //tcp_reg = tcp.registration(self)
-    //tcp_reg.start()
 
     connect(pult2, SIGNAL(pultData(int, int)),  this, SLOT(pult(int, int)));
     connect(pult2, SIGNAL(isConnect(int, int)), this, SLOT(pult_off(int, int)));
@@ -719,9 +481,9 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
     connect(pult5, SIGNAL(pultData(int, int)),  this, SLOT(pult(int, int)));
     connect(pult5, SIGNAL(isConnect(int, int)), this, SLOT(pult_off(int, int)));
 
-    connect(sett->LED_CITY,          SIGNAL(editingFinished()), this, SLOT(editSity()));
-    connect(sett->NAME_COMPETITION,  SIGNAL(editingFinished()), this, SLOT(editSity()));
-    connect(sett->DATEEDIT,          SIGNAL(editingFinished()), this, SLOT(editSity()));
+//    connect(sett->LED_CITY,          SIGNAL(editingFinished()), this, SLOT(editSity()));
+//    connect(sett->NAME_COMPETITION,  SIGNAL(editingFinished()), this, SLOT(editSity()));
+//    connect(sett->DATEEDIT,          SIGNAL(editingFinished()), this, SLOT(editSity()));
 
     connect(btn_new, SIGNAL(clicked()), this, SLOT(new_round()));
 
@@ -1022,7 +784,6 @@ void FormMain::age(void){
     m_db = QSqlDatabase::addDatabase("QSQLITE");
     m_db.setDatabaseName(currentDataBase);
     if(!m_db.open()){
-        qDebug() << "Error: connection with database failed";
         QMessageBox msgBox;
         msgBox.setText("Ошибка базы данных (age)!");
         msgBox.exec();
@@ -1592,21 +1353,6 @@ void FormMain::new_round(void){
     m_db.close();
 }
 
-void FormMain::editSity(void){
-    sity = sett->LED_CITY->text();
-    name_competition = sett->NAME_COMPETITION->text();
-    date = sett->DATEEDIT->text();
-    QFile file("settings.txt");
-    file.open(QIODevice::WriteOnly);
-    QTextStream stream(&file);
-    stream << sity << "\n"
-           << name_competition << "\n"
-           << date << "\n"
-           << team_referees << "\n"
-           << RateShow;
-    file.close();
-}
-
 void FormMain::pult_off(int on_off, int port){
     if(port == port2){
         if(on_off){
@@ -1933,6 +1679,7 @@ void FormMain::btn_enterName_clicked(){
     }
     lbl_sum->setText("");
     lbl_q->setText("");
+    mainwin->menuBar()->setEnabled(true);
     flag_priem = 0;
     m_db.close();
 }
@@ -2011,7 +1758,7 @@ void FormMain::keyPressEvent(QKeyEvent* e){
 }
 
 void FormMain::btn_look_clicked(){
-    ShowReports* shR = new ShowReports(sity, name_competition, date, num_round, this);
+    ShowReports* shR = new ShowReports(num_round, this);
     shR->show();
 }
 
@@ -2094,6 +1841,51 @@ void FormMain::addOneSportsmen(){
     }
 }
 
+///////////////////////////////////////////////////////////////
+/// Вызов формы добавления спортсмена из меню главного окна ///
+///////////////////////////////////////////////////////////////
+void FormMain::addOneReferee(){
+    QSqlDatabase m_db;
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(currentDataBase);
+    QMessageBox msgBox;
+    if(!m_db.open()){
+        msgBox.setText("Ошибка базы данных addOneReferee!");
+        msgBox.exec();
+        return;
+    }
+    QDialog* dlg = new QDialog;
+    Ui::dlgAddOne ui;
+    ui.setupUi(dlg);
+    ui.lblRegion->setText("Регион");
+    ui.cbAge->setEnabled(false);
+    ui.cbWeight->setEnabled(false);
+    QString sql_region     = "SELECT DISTINCT (region) FROM sportsmens";
+    QSqlQuery query;
+    query.exec(sql_region);
+    if(query.next()){
+        query.previous();
+        while(query.next()){
+            //qDebug()<<query.value(0).toString();
+            ui.cbTeam->addItem(query.value(0).toString());
+        }
+    }
+    m_db.close();
+    int ret = dlg->exec();
+    if(ret){
+        if(ui.leName->text().trimmed() == "" ||
+           ui.cbTeam->currentText().trimmed() == ""){
+            QMessageBox msgBox;
+            msgBox.setText("Все поля должны быть заполнены!");
+            msgBox.exec();
+            return;
+        }
+        QClipboard* pcb = QApplication::clipboard();
+        pcb->setText(ui.leName->text() + "\t" + ui.cbTeam->currentText());
+        addRefereesFromBuffer();
+    }
+}
+
 ///////////////////////////////////////////////////////////
 /// Вызов формы добавления спортсменов из буфера обмена ///
 ///////////////////////////////////////////////////////////
@@ -2119,9 +1911,9 @@ void FormMain::addSportsmenFromBuffer(){
         }
     }
     QDialog addSportsmens;
-    addSportsmens.setGeometry(100, 100, 600, 800);
+    addSportsmens.setGeometry(100, 100, 600, 700);
     QTableWidget tbl(listStringList.count(), 4, &addSportsmens);
-    tbl.setGeometry(0, 0, 600, 600);
+    tbl.setGeometry(0, 0, 600, 620);
     tbl.setHorizontalHeaderLabels({"Фамилия Имя", "Команда", "Возраст", "Вес"});
     tbl.horizontalHeader()->resizeSection(0, 200);
     tbl.horizontalHeader()->resizeSection(1, 200);
@@ -2141,8 +1933,67 @@ void FormMain::addSportsmenFromBuffer(){
         tbl.setItem(row, 3, newItem3);
         row++;
     }
-    addSportsmens.exec();
-    addSportsmensToBaza(listStringList);
+
+    QPushButton *btnAdd = new QPushButton("Добавить", &addSportsmens);
+    QPushButton *btnCancel = new QPushButton("Отмена", &addSportsmens);
+    btnCancel->move(500, 650);
+    btnAdd->move(400, 650);
+    connect(btnCancel, SIGNAL(clicked()), &addSportsmens, SLOT(reject()));
+    connect(btnAdd, SIGNAL(clicked()), &addSportsmens, SLOT(accept()));
+
+    if(addSportsmens.exec())
+        addSportsmensToBaza(listStringList);
+}
+
+/////////////////////////////////////////////////////
+/// Вызов формы добавления судей из буфера обмена ///
+/////////////////////////////////////////////////////
+void FormMain::addRefereesFromBuffer(){
+    QClipboard* pcb = QApplication::clipboard();
+    QList<QString> rowsFromExcel = pcb->text().split("\n");
+    QMessageBox msgBox;
+    if(rowsFromExcel.count() < 1){
+        msgBox.setText("Неверные данные в буфере обмена!");
+        msgBox.exec();
+        return;
+    }
+    if(rowsFromExcel.at(0).split("\t").count() < 2){
+        msgBox.setText("Неверные данные в буфере обмена!");
+        msgBox.exec();
+        return;
+    }
+    QList<QStringList> listStringList;
+    foreach(QString str, rowsFromExcel){
+        QList<QString> listString = str.split("\t");
+        if(listString.count() == 2){
+            listStringList.append(listString);
+        }
+    }
+    QDialog addReferees;
+    addReferees.setGeometry(100, 100, 300, 700);
+    QTableWidget tbl(listStringList.count(), 2, &addReferees);
+    tbl.setGeometry(0, 0, 300, 620);
+    tbl.setHorizontalHeaderLabels({"Фамилия Имя", "Регион"});
+    tbl.horizontalHeader()->resizeSection(0, 150);
+    tbl.horizontalHeader()->resizeSection(1, 120);
+    int row = 0;
+    foreach(QList<QString> listString, listStringList){
+        QTableWidgetItem *newItem0 = new QTableWidgetItem(listString.at(0));
+        tbl.setItem(row, 0, newItem0);
+        QTableWidgetItem *newItem1 = new QTableWidgetItem(listString.at(1));
+        tbl.setItem(row, 1, newItem1);
+        row++;
+    }
+
+    QPushButton *btnAdd = new QPushButton("Добавить", &addReferees);
+    QPushButton *btnCancel = new QPushButton("Отмена", &addReferees);
+    btnCancel->move(200, 650);
+    btnAdd->move(100, 650);
+    connect(btnCancel, SIGNAL(clicked()), &addReferees, SLOT(reject()));
+    connect(btnAdd, SIGNAL(clicked()), &addReferees, SLOT(accept()));
+
+    if(addReferees.exec())
+        addRefereesToBaza(listStringList);
 }
 
 ////////////////////////////////////////////
@@ -2162,11 +2013,7 @@ void FormMain::addSportsmensToBaza(QList<QStringList> lSl){
     foreach(QStringList sL, lSl){
         QString str = "INSERT INTO sportsmens (name, region, age, weight) VALUES ('%1', '%2', '%3', '%4');";
         QString s;
-        s =  str.arg(sL[0])
-                .arg(sL[1])
-                .arg(sL[2])
-                .arg(sL[3]);
-
+        s =  str.arg(sL[0], sL[1], sL[2], sL[3]);
         if(query.exec(s)) qDebug() << "Filled sportsmen's table" << s;
         else qDebug() << "error filled sportsmen's table" << s;
     }
@@ -2186,8 +2033,7 @@ void FormMain::addSportsmensToBaza(QList<QStringList> lSl){
         query_weight.exec(s);
         while(query_weight.next()){
             QSqlQuery query_round;
-            QString s = sql_round.arg(query.value(0).toString())
-                    .arg(query_weight.value(0).toString());
+            QString s = sql_round.arg(query.value(0).toString(),query_weight.value(0).toString());
             query_round.exec(s);
             int i = 0;
             while(query_round.next()){
@@ -2246,6 +2092,58 @@ void FormMain::addSportsmensToBaza(QList<QStringList> lSl){
     connect(cmbAge,     SIGNAL(currentIndexChanged(int)), this, SLOT(age()));
     connect(cmbWeight,  SIGNAL(currentIndexChanged(int)), this, SLOT(weight()));
     connect(cmb_round,  SIGNAL(currentIndexChanged(int)), this, SLOT(round_()));
+    m_db.close();
+}
+
+//////////////////////////////////////
+/// Добавление судей в базу данных ///
+//////////////////////////////////////
+void FormMain::addRefereesToBaza(QList<QStringList> lSl){
+    QSqlDatabase m_db;
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(currentDataBase);
+    QMessageBox msgBox;
+    if(!m_db.open()){
+        msgBox.setText("Ошибка базы данных addRefereesToBaza!");
+        msgBox.exec();
+        return;
+    }
+    QSqlQuery query;
+    foreach(QStringList sL, lSl){
+        QString str = "INSERT INTO referee (name, region) VALUES ('%1', '%2');";
+        QString s;
+        s =  str.arg(sL[0], sL[1]);
+        if(query.exec(s)) qDebug() << "Filled referee's table" << s;
+        else qDebug() << "error filled referee's table" << s;
+    }
+
+    m_db.close();
+
+    updateReferee();
+
+}
+
+void FormMain::updateReferee(){
+    QSqlDatabase m_db;
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(currentDataBase);
+    QMessageBox msgBox;
+    if(!m_db.open()){
+        msgBox.setText("Ошибка базы данных addRefereesToBaza!");
+        msgBox.exec();
+        return;
+    }
+    QSqlQuery query;
+    query.exec("SELECT * FROM referee");
+    listReferees.clear();
+    while(query.next()){
+        listReferees.append({query.value(0).toString(),
+                             query.value(1).toString(),
+                             query.value(2).toString(),
+                             query.value(3).toString(),
+                             query.value(4).toString()});
+    }
+
     m_db.close();
 }
 
@@ -2312,6 +2210,9 @@ void FormMain::choiceCompetitions(QString s){
     QSqlDatabase m_db;
     m_db = QSqlDatabase::addDatabase("QSQLITE");
     m_db.setDatabaseName(currentDataBase);
+    mainwin->Edit->setEnabled(true);
+    mainwin->Sportsmens->setEnabled(true);
+    mainwin->Referees->setEnabled(true);
     QMessageBox msgBox;
     if(!m_db.open()){
         msgBox.setText("Ошибка базы данных choiceCompetitions!");
@@ -2319,6 +2220,13 @@ void FormMain::choiceCompetitions(QString s){
         return;
     }
     QSqlQuery query;
+
+    query.exec("SELECT id, name, region FROM referee");
+    listReferees.clear();
+    while(query.next()){
+        listReferees.append({query.value(0).toString(), query.value(1).toString(), query.value(2).toString()});
+    }
+
     //////////////////////////////////////////////////////////
     /*           добавление элементов в комбобоксы          */
     /*               "возраст", "вес" и "круг"              */
@@ -2373,6 +2281,7 @@ void FormMain::choiceCompetitions(QString s){
     connect(cmbAge,     SIGNAL(currentIndexChanged(int)), this, SLOT(age()));
     connect(cmbWeight,  SIGNAL(currentIndexChanged(int)), this, SLOT(weight()));
     connect(cmb_round,  SIGNAL(currentIndexChanged(int)), this, SLOT(round_()));
+
     m_db.close();
 }
 
@@ -2380,6 +2289,32 @@ void FormMain::choiceCompetitions(QString s){
 /// Править соревнование ///
 ////////////////////////////
 void FormMain::editCompetition(){
-    AddCompetition* add = new AddCompetition(false);
-    add->exec();
+    QDialog* add = new QDialog();
+    Ui::AddCompetition ui;
+    ui.setupUi(add);
+    ui.btnCreate->setText("Изменить");
+    connect(ui.btnCancel, SIGNAL(clicked()), add, SLOT(reject()));
+    connect(ui.btnCreate, SIGNAL(clicked()), add, SLOT(accept()));
+    QStringList s = currentDataBase.split("_");
+    ui.leName->setText(s.at(0));
+    ui.leCity->setText(s.at(1));
+    ui.deStart->setDate(QDate::fromString(s.at(2), "dd.MM.yyyy"));
+    QString fin = s.at(3);
+    fin.remove(s.at(3).lastIndexOf('.'), 3);
+    ui.deFinish->setDate(QDate::fromString(fin, "dd.MM.yyyy"));
+    QList<QAction*> lA = mainwin->lastCompetitions->actions();
+    if(add->exec()){
+        QString oldNameDataBase = currentDataBase;
+        QFile file(currentDataBase);
+        currentDataBase = ui.leName->text() + "_" + ui.leCity->text() + "_" + ui.deStart->text() + "_" + ui.deFinish->text() + ".db";
+        file.rename(currentDataBase);
+        QString newNameDataBase = currentDataBase;
+        newNameDataBase = newNameDataBase.remove(newNameDataBase.lastIndexOf('.'), 3);
+        oldNameDataBase = oldNameDataBase.remove(oldNameDataBase.lastIndexOf('.'), 3);
+        mainwin->lblStatus->setText(newNameDataBase);
+        foreach(QAction* act, lA){
+            if(act->text() == oldNameDataBase)
+                act->setText(newNameDataBase);
+        }
+    }
 }

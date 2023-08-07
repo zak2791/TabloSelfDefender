@@ -8,13 +8,12 @@
 #include <ui_FormSettings.h>
 #include "registration.h"
 
-//#include "FormMain.h"
+
 
 class Settings : public QWidget, private Ui::FormSettings{
     Q_OBJECT
 
     QStringListModel mdl;
-    QString date;
 
     QString ip;
     QString code;
@@ -23,23 +22,22 @@ class Settings : public QWidget, private Ui::FormSettings{
 
     QWidget* pW;
 
-    QDate qDate;
 
     QList<QString> l;
 
     void writeReferees(void);
     virtual void closeEvent(QCloseEvent* e);
     void flag_set(QLabel*, QString);
+    void setCombo(void);
 
     Registration* reg;
 
+    QRadioButton* RbOne;
 
+    bool updateBase(QString);
 
 public:
-    Settings(QString _city,
-             QString _name_competition,
-             QString _date,
-             QWidget *parent = nullptr);
+    Settings(QWidget *parent = nullptr);
 
     bool getRbEng(void);
 

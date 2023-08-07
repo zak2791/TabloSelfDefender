@@ -11,9 +11,15 @@ int main(int argc, char* argv[]){
 
     FormMain* form = new FormMain(mWin);
 
-    QObject::connect(mWin->addOne,          SIGNAL(triggered()), form, SLOT(addOneSportsmen()));                //добавить спортсмена
-    QObject::connect(mWin->AddFromBuffer,   SIGNAL(triggered()), form, SLOT(addSportsmenFromBuffer()));         //добавить спортсменов
-                                                                                                                //из буфера обмена
+    QObject::connect(mWin->AddOne,              SIGNAL(triggered()), form, SLOT(addOneSportsmen()));        //добавить спортсмена
+    QObject::connect(mWin->AddFromBuffer,       SIGNAL(triggered()), form, SLOT(addSportsmenFromBuffer())); //добавить спортсменов
+                                                                                                            //из буфера обмена
+
+    QObject::connect(mWin->AddOneRef,           SIGNAL(triggered()), form, SLOT(addOneReferee()));          //добавить судью
+    QObject::connect(mWin->AddRefFromBuffer,    SIGNAL(triggered()), form, SLOT(addRefereesFromBuffer()));  //добавить судей
+                                                                                                            //из буфера обмена
+
+
 
     QObject::connect(mWin,                  SIGNAL(sigChoiceMats(QString)), form, SLOT(choiceMats(QString)));   //выбор ковра
     QObject::connect(mWin->ShowHelp,        SIGNAL(triggered()), form, SLOT(showHelp()));                       //вызов справки

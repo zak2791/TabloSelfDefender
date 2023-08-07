@@ -75,6 +75,8 @@ private:
 
      QPushButton* BtnChoice;
 
+     QList<QStringList> listReferees;   //список судей
+
      /////////////////////
      /*   выбор ковра   */
      /////////////////////
@@ -142,6 +144,7 @@ private:
      QIcon* icoClose;
 
      void addSportsmensToBaza(QList<QStringList>);
+     void addRefereesToBaza(QList<QStringList>);
 
 private slots:
      void focusSet(void);
@@ -234,6 +237,7 @@ public:
     QComboBox* CmbAge;
     QComboBox* CmbWeight;
     QPushButton* Btn_new;
+    QPushButton* BtnNewFinal;
     QPushButton* btnEnterName;
 
     QLabel* Lbl_sum;
@@ -265,6 +269,9 @@ public:
     QPixmap flag_red;
     QPixmap flag_blue;
 
+    QList<QStringList> getReferees(void) {return listReferees;}
+    //void setReferees(QList<QStringList> lSl) {listReferees = lSl;}
+    void updateReferee(void);
 
 public slots:
     void btn_settings_clicked(void);
@@ -310,7 +317,9 @@ public slots:
     void pult_off(int, int);
 
     void addOneSportsmen(void);
+    void addOneReferee(void);
     void addSportsmenFromBuffer(void);
+    void addRefereesFromBuffer(void);
     void choiceMats(QString);
     //void choiceMatB(void);
     void showHelp(void);
@@ -320,7 +329,7 @@ public slots:
     void editCompetition(void);
 
 private slots:
-    void editSity(void);
+    //void editSity(void);
     void new_round(void);
     void find_id_round(void);
     void switch_variant(bool);

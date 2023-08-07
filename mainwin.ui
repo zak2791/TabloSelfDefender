@@ -42,36 +42,29 @@
     <addaction name="AddOne"/>
     <addaction name="AddFromBuffer"/>
    </widget>
+   <widget class="QMenu" name="Referees">
+    <property name="title">
+     <string>Судьи</string>
+    </property>
+    <addaction name="addOneRef"/>
+    <addaction name="addRefFromBuffer"/>
+   </widget>
    <widget class="QMenu" name="Help">
     <property name="title">
-     <string>Справка</string>
+     <string>Помощь</string>
     </property>
     <addaction name="ShowHelp"/>
    </widget>
    <addaction name="Competition"/>
    <addaction name="Mat"/>
    <addaction name="Sportsmens"/>
+   <addaction name="Referees"/>
    <addaction name="Help"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="New">
    <property name="text">
     <string>Новое соревнование</string>
-   </property>
-  </action>
-  <action name="Open">
-   <property name="text">
-    <string>Выбрать соревнование</string>
-   </property>
-  </action>
-  <action name="MatA">
-   <property name="text">
-    <string>Ковёр А</string>
-   </property>
-  </action>
-  <action name="MatB">
-   <property name="text">
-    <string>Ковёр Б</string>
    </property>
   </action>
   <action name="AddOne">
@@ -84,19 +77,24 @@
     <string>Добавить Спортсменов из буфера обмена</string>
    </property>
   </action>
-  <action name="ShowHelp">
-   <property name="text">
-    <string>Показать справку</string>
-   </property>
-  </action>
   <action name="Edit">
    <property name="text">
     <string>Правка соревнования</string>
    </property>
   </action>
-  <action name="actionc">
+  <action name="ShowHelp">
    <property name="text">
-    <string>c</string>
+    <string>Показать справку</string>
+   </property>
+  </action>
+  <action name="addOneRef">
+   <property name="text">
+    <string>Добавить судью</string>
+   </property>
+  </action>
+  <action name="addRefFromBuffer">
+   <property name="text">
+    <string>Добавить судей из буфера обмена</string>
    </property>
   </action>
  </widget>

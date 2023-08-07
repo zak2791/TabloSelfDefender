@@ -1,11 +1,8 @@
 #include "settings.h"
-#include "xlxs.h"
+
 #include "FormMain.h"
 
-Settings::Settings(QString _city,
-                   QString _name_competition,
-                   QString _date,
-                   QWidget *parent):QWidget(){
+Settings::Settings(QWidget *parent):QWidget(){
 
     setupUi(this);
 
@@ -13,94 +10,16 @@ Settings::Settings(QString _city,
     RbnTogether = rbnTogether;
     RbEng = rbEng;
 
-    LED_CITY = led_city;
-    NAME_COMPETITION = name_competition;
-    DATEEDIT = dateEdit;
 
-    date = _date;
 
     ip = "";
     code = "";
     id = "";
     regFail = true;
-    //pW = static_cast<FormMain*>(parent);
+
     pW = parent;
-    FormMain* p = static_cast<FormMain*>(pW);
 
-    led_city->setText(_city);
-    name_competition->setText(_name_competition);
-
-    qDate.fromString(_date, "dd.MM.YYYY");
-    dateEdit->setDate(qDate);
-    QList<QString> l;
-    readReferees(&l);
-    //qDebug() << l;
-    mdl.setStringList(l);
-    mdl.insertRows(0,1);        //вставка пустой строки
-    mdl.sort(0);
-    cmb_main_secretary->setModel(&mdl);
-    cmb_main_judge->setModel(&mdl);
-    cmb_judge1->setModel(&mdl);
-    cmb_judge2->setModel(&mdl);
-    cmb_judge3->setModel(&mdl);
-    cmb_judge4->setModel(&mdl);
-    cmb_judge5->setModel(&mdl);
-    cmb_ts->setModel(&mdl);
-
-    QFile file;
-
-    file.setFileName("main_referees.txt");
-    if(file.open(QIODevice::ReadOnly)){
-        QTextStream stream(&file);
-
-        int i = stream.readLine().toInt();
-        cmb_main_judge->setCurrentIndex(i);
-        p->main_refery = cmb_main_judge->itemText(i);
-
-        i = stream.readLine().toInt();
-        cmb_main_secretary->setCurrentIndex(i);
-        p->main_secretary = cmb_main_secretary->itemText(i);
-
-        file.close();
-    }
-
-    if(static_cast<FormMain*>(pW)->team_referees == "1"){
-        file.setFileName("round_referees.txt");
-        rbnOne->setChecked(true);
-    }else{
-        file.setFileName("round_referees2.txt");
-        rbnTwo->setChecked(true);
-    }
-
-    if(file.open(QIODevice::ReadOnly)){
-        QTextStream stream(&file);
-
-        int i = stream.readLine().toInt();
-        cmb_judge1->setCurrentIndex(i);
-        p->judge1 = cmb_judge1->itemText(i);
-
-        i = stream.readLine().toInt();
-        cmb_judge2->setCurrentIndex(i);
-        p->judge2 = cmb_judge2->itemText(i);
-
-        i = stream.readLine().toInt();
-        cmb_judge3->setCurrentIndex(i);
-        p->judge3 = cmb_judge3->itemText(i);
-
-        i = stream.readLine().toInt();
-        cmb_judge4->setCurrentIndex(i);
-        p->judge4 = cmb_judge4->itemText(i);
-
-        i = stream.readLine().toInt();
-        cmb_judge5->setCurrentIndex(i);
-        p->judge5 = cmb_judge5->itemText(i);
-
-        i = stream.readLine().toInt();
-        cmb_ts->setCurrentIndex(i);
-        p->ts = cmb_ts->itemText(i);
-
-        file.close();
-    }
+    RbOne = rbnOne;
 
     connect(btnReg, SIGNAL(clicked(bool)), SLOT(registration()));
     connect(cmb_main_judge, SIGNAL(activated(int)), SLOT(judge_main(int)));
@@ -115,6 +34,7 @@ Settings::Settings(QString _city,
 
     connect(rbnSeparate, SIGNAL(toggled(bool)), SLOT(separate(bool)));
     connect(rbnOne, SIGNAL(toggled(bool)), SLOT(team_referees(bool)));
+    connect(rbnTwo, SIGNAL(toggled(bool)), SLOT(team_referees(bool)));
     connect(rbRus, SIGNAL(toggled(bool)), SLOT(rus_to_eng(bool)));
     connect(cbFlag, SIGNAL(stateChanged(int)), SLOT(showFlag(int)));
     connect(btnReg2, SIGNAL(clicked(bool)), SLOT(ChangeConnect2()));
@@ -122,17 +42,6 @@ Settings::Settings(QString _city,
     connect(btnReg4, SIGNAL(clicked(bool)), SLOT(ChangeConnect2()));
     connect(btnReg5, SIGNAL(clicked(bool)), SLOT(ChangeConnect2()));
     connect(btnReset, SIGNAL(clicked(bool)), SLOT(registrationReset()));
-
-    //connect(p->reg, SIGNAL(registration(QVariant, QVariant, QVariant)),
-    //                                        SLOT(registration()));
-    //connect(p->reg, SIGNAL(registrationStart(QString)),
-    //                                        SLOT(registrationStart()), Qt::QueuedConnection);
-    //connect(p->reg, SIGNAL(registrationFailed()),
-    //                                        SLOT(registrationFailed()), Qt::QueuedConnection);
-    //connect(reg, SIGNAL(registrationSuccesfull(QString, QString, QString)), this,
-    //                                        SLOT(registrationSuccesfull()));
-
-    //connect(rbA, SIGNAL("toggled(bool)"), SLOT(choice_mat()));
 
     leCode->setText("1234");
 
@@ -158,6 +67,115 @@ void Settings::showEvent(QShowEvent*){
     else
         btnReg5->setStyleSheet("color: #000000");
     settings.endGroup();
+
+
+
+    setCombo();
+
+}
+
+void Settings::setCombo(){
+    QSqlDatabase m_db;
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(static_cast<FormMain*>(pW)->currentDataBase);
+    QMessageBox msgBox;
+    if(!m_db.open()){
+        msgBox.setText("Ошибка базы данных showEvent!");
+        msgBox.exec();
+        return;
+    }
+
+    QStringList l;
+    foreach(QStringList sL, static_cast<FormMain*>(pW)->getReferees()){
+        l.append(sL.at(1));
+    }
+    //mdl.removeRows(0, mdl.rowCount());
+
+    mdl.setStringList(l);
+    mdl.insertRows(0,1);        //вставка пустой строки
+    mdl.sort(0);
+    cmb_main_secretary->setModel(&mdl);
+    cmb_main_judge->setModel(&mdl);
+    cmb_judge1->setModel(&mdl);
+    cmb_judge2->setModel(&mdl);
+    cmb_judge3->setModel(&mdl);
+    cmb_judge4->setModel(&mdl);
+    cmb_judge5->setModel(&mdl);
+    cmb_ts->setModel(&mdl);
+
+    QSqlQuery query;
+
+    cmb_main_judge->setCurrentIndex(0);
+    cmb_main_secretary->setCurrentIndex(0);
+    cmb_judge1->setCurrentIndex(0);
+    cmb_judge2->setCurrentIndex(0);
+    cmb_judge3->setCurrentIndex(0);
+    cmb_judge4->setCurrentIndex(0);
+    cmb_judge5->setCurrentIndex(0);
+    cmb_ts->setCurrentIndex(0);
+
+    if(RbOne->isChecked()){
+        query.exec("SELECT name FROM referee WHERE role1 = 1");
+        if(query.next())
+            cmb_main_judge->setCurrentText(query.value(0).toString());
+        query.exec("SELECT name FROM referee WHERE role1 = 2");
+        if(query.next())
+            cmb_main_secretary->setCurrentText(query.value(0).toString());
+        query.exec("SELECT name FROM referee WHERE role1 = 3");
+        if(query.next())
+            cmb_judge1->setCurrentText(query.value(0).toString());
+        query.exec("SELECT name FROM referee WHERE role1 = 4");
+        if(query.next())
+            cmb_judge2->setCurrentText(query.value(0).toString());
+        query.exec("SELECT name FROM referee WHERE role1 = 5");
+        if(query.next())
+            cmb_judge3->setCurrentText(query.value(0).toString());
+        query.exec("SELECT name FROM referee WHERE role1 = 6");
+        if(query.next())
+            cmb_judge4->setCurrentText(query.value(0).toString());
+        query.exec("SELECT name FROM referee WHERE role1 = 7");
+        if(query.next())
+            cmb_judge5->setCurrentText(query.value(0).toString());
+        query.exec("SELECT name FROM referee WHERE role1 = 8");
+        if(query.next())
+            cmb_ts->setCurrentText(query.value(0).toString());
+    }else{
+        query.exec("SELECT name FROM referee WHERE role2 = 1");
+        if(query.next())
+            cmb_main_judge->setCurrentText(query.value(0).toString());
+        query.exec("SELECT name FROM referee WHERE role2 = 2");
+        if(query.next())
+            cmb_main_secretary->setCurrentText(query.value(0).toString());
+        query.exec("SELECT name FROM referee WHERE role2 = 3");
+        if(query.next())
+            cmb_judge1->setCurrentText(query.value(0).toString());
+        query.exec("SELECT name FROM referee WHERE role2 = 4");
+        if(query.next())
+            cmb_judge2->setCurrentText(query.value(0).toString());
+        query.exec("SELECT name FROM referee WHERE role2 = 5");
+        if(query.next())
+            cmb_judge3->setCurrentText(query.value(0).toString());
+        query.exec("SELECT name FROM referee WHERE role2 = 6");
+        if(query.next())
+            cmb_judge4->setCurrentText(query.value(0).toString());
+        query.exec("SELECT name FROM referee WHERE role2 = 7");
+        if(query.next())
+            cmb_judge5->setCurrentText(query.value(0).toString());
+        query.exec("SELECT name FROM referee WHERE role2 = 8");
+        if(query.next())
+            cmb_ts->setCurrentText(query.value(0).toString());
+    }
+
+    static_cast<FormMain*>(pW)->main_refery = cmb_main_judge->currentText();
+    static_cast<FormMain*>(pW)->main_secretary = cmb_main_secretary->currentText();
+    static_cast<FormMain*>(pW)->judge1 = cmb_judge1->currentText();
+    static_cast<FormMain*>(pW)->judge2 = cmb_judge2->currentText();
+    static_cast<FormMain*>(pW)->judge3 = cmb_judge3->currentText();
+    static_cast<FormMain*>(pW)->judge4 = cmb_judge4->currentText();
+    static_cast<FormMain*>(pW)->judge5 = cmb_judge5->currentText();
+    static_cast<FormMain*>(pW)->ts = cmb_ts->currentText();
+
+    m_db.close();
 }
 
 void Settings::registration(void){
@@ -182,157 +200,229 @@ void Settings::registration(void){
     btnReset->setEnabled(false);
 }
 
-void Settings::judge_main(int index){
-    FormMain* p = static_cast<FormMain*>(pW);
-    p->main_refery = cmb_main_judge->itemText(index);
-    QFile file("main_referees.txt");
-    file.open(QIODevice::WriteOnly | QIODevice::Text);
-    QTextStream stream(&file);
-    stream << QString::number(cmb_main_judge->currentIndex()) << endl;
-    stream << QString::number(cmb_main_secretary->currentIndex()) << endl;
-    file.close();
+void Settings::judge_main(int){
+    QSqlDatabase m_db;
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(static_cast<FormMain*>(pW)->currentDataBase);
+    QMessageBox msgBox;
+    if(!m_db.open()){
+        msgBox.setText("Ошибка базы данных judge_1!");
+        msgBox.exec();
+        return;
+    }
+
+    QSqlQuery query;
+
+    query.exec("UPDATE referee SET role1 = 0 WHERE role1 = 1");
+    query.exec("UPDATE referee SET role2 = 0 WHERE role2 = 1");
+
+    query.exec("UPDATE referee SET role1 = 1 WHERE name = '" + cmb_main_judge->currentText() + "'");
+    query.exec("UPDATE referee SET role2 = 1 WHERE name = '" + cmb_main_judge->currentText() + "'");
+
+    (static_cast<FormMain*>(pW))->updateReferee();
+    setCombo();
 }
 
-void Settings::judge_secretary(int index){
-    FormMain* p = static_cast<FormMain*>(pW);
-    p->main_secretary = cmb_main_secretary->itemText(index);
-    QFile file("main_referees.txt");
-    file.open(QIODevice::WriteOnly | QIODevice::Text);
-    QTextStream stream(&file);
-    stream << QString::number(cmb_main_judge->currentIndex()) << endl;
-    stream << QString::number(cmb_main_secretary->currentIndex()) << endl;
-    file.close();
+void Settings::judge_secretary(int){
+    QSqlDatabase m_db;
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(static_cast<FormMain*>(pW)->currentDataBase);
+    QMessageBox msgBox;
+    if(!m_db.open()){
+        msgBox.setText("Ошибка базы данных judge_1!");
+        msgBox.exec();
+        return;
+    }
+
+    QSqlQuery query;
+
+    query.exec("UPDATE referee SET role1 = 0 WHERE role1 = 2");
+    query.exec("UPDATE referee SET role2 = 0 WHERE role2 = 2");
+
+    query.exec("UPDATE referee SET role1 = 2 WHERE name = '" + cmb_main_secretary->currentText() + "'");
+    query.exec("UPDATE referee SET role2 = 2 WHERE name = '" + cmb_main_secretary->currentText() + "'");
+
+    (static_cast<FormMain*>(pW))->updateReferee();
+    setCombo();
 }
 
-void Settings::judge_1(int index){
-    FormMain* p = static_cast<FormMain*>(pW);
-    p->judge1 = cmb_judge1->itemText(index);
-    writeReferees();
-    if(cbFlag->isChecked())
-        flag_set(p->fr->judge_flag1, cmb_judge1->itemText(index));
+void Settings::judge_1(int){
+    QSqlDatabase m_db;
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(static_cast<FormMain*>(pW)->currentDataBase);
+    QMessageBox msgBox;
+    if(!m_db.open()){
+        msgBox.setText("Ошибка базы данных judge_1!");
+        msgBox.exec();
+        return;
+    }
+
+    QSqlQuery query;
+    if(RbOne->isChecked()){
+        query.exec("UPDATE referee SET role1 = 0 WHERE role1 = 3");
+        query.exec("UPDATE referee SET role1 = 3 WHERE name = '" + cmb_judge1->currentText() + "'");
+    }else{
+        query.exec("UPDATE referee SET role2 = 0 WHERE role2 = 3");
+        query.exec("UPDATE referee SET role2 = 3 WHERE name = '" + cmb_judge1->currentText() + "'");
+    }
+    (static_cast<FormMain*>(pW))->updateReferee();
+    setCombo();
+
+
+//    if(cbFlag->isChecked())
+//        flag_set(p->fr->judge_flag1, cmb_judge1->itemText(index));
 }
 
-void Settings::judge_2(int index){
-    FormMain* p = static_cast<FormMain*>(pW);
-    p->judge2 = cmb_judge2->itemText(index);
-    writeReferees();
-    if(cbFlag->isChecked())
-        flag_set(p->fr->judge_flag2, cmb_judge2->itemText(index));
+void Settings::judge_2(int){
+    QSqlDatabase m_db;
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(static_cast<FormMain*>(pW)->currentDataBase);
+    QMessageBox msgBox;
+    if(!m_db.open()){
+        msgBox.setText("Ошибка базы данных judge_2!");
+        msgBox.exec();
+        return;
+    }
+
+    QSqlQuery query;
+    if(RbOne->isChecked()){
+        query.exec("UPDATE referee SET role1 = 0 WHERE role1 = 4");
+        query.exec("UPDATE referee SET role1 = 4 WHERE name = '" + cmb_judge2->currentText() + "'");
+    }else{
+        query.exec("UPDATE referee SET role2 = 0 WHERE role2 = 4");
+        query.exec("UPDATE referee SET role2 = 4 WHERE name = '" + cmb_judge2->currentText() + "'");
+    }
+    (static_cast<FormMain*>(pW))->updateReferee();
+    setCombo();
+
+//    if(cbFlag->isChecked())
+//        flag_set(p->fr->judge_flag2, cmb_judge2->itemText(index));
 }
 
-void Settings::judge_3(int index){
-    FormMain* p = static_cast<FormMain*>(pW);
-    p->judge3 = cmb_judge3->itemText(index);
-    writeReferees();
-    if(cbFlag->isChecked())
-        flag_set(p->fr->judge_flag3, cmb_judge3->itemText(index));
+void Settings::judge_3(int){
+    QSqlDatabase m_db;
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(static_cast<FormMain*>(pW)->currentDataBase);
+    QMessageBox msgBox;
+    if(!m_db.open()){
+        msgBox.setText("Ошибка базы данных judge_3!");
+        msgBox.exec();
+        return;
+    }
+
+    QSqlQuery query;
+    if(RbOne->isChecked()){
+        query.exec("UPDATE referee SET role1 = 0 WHERE role1 = 5");
+        query.exec("UPDATE referee SET role1 = 5 WHERE name = '" + cmb_judge3->currentText() + "'");
+    }else{
+        query.exec("UPDATE referee SET role2 = 0 WHERE role2 = 5");
+        query.exec("UPDATE referee SET role2 = 5 WHERE name = '" + cmb_judge3->currentText() + "'");
+    }
+    (static_cast<FormMain*>(pW))->updateReferee();
+    setCombo();
+
+//    qDebug()<<sql;
+//    if(cbFlag->isChecked())
+//        flag_set(p->fr->judge_flag3, cmb_judge3->itemText(index));
 }
 
-void Settings::judge_4(int index){
-    FormMain* p = static_cast<FormMain*>(pW);
-    p->judge4 = cmb_judge4->itemText(index);
-    writeReferees();
-    if(cbFlag->isChecked())
-        flag_set(p->fr->judge_flag4, cmb_judge4->itemText(index));
+void Settings::judge_4(int){
+    QSqlDatabase m_db;
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(static_cast<FormMain*>(pW)->currentDataBase);
+    QMessageBox msgBox;
+    if(!m_db.open()){
+        msgBox.setText("Ошибка базы данных judge_4!");
+        msgBox.exec();
+        return;
+    }
+
+    QSqlQuery query;
+    if(RbOne->isChecked()){
+        query.exec("UPDATE referee SET role1 = 0 WHERE role1 = 6");
+        query.exec("UPDATE referee SET role1 = 6 WHERE name = '" + cmb_judge4->currentText() + "'");
+    }else{
+        query.exec("UPDATE referee SET role2 = 0 WHERE role2 = 6");
+        query.exec("UPDATE referee SET role2 = 6 WHERE name = '" + cmb_judge4->currentText() + "'");
+    }
+    (static_cast<FormMain*>(pW))->updateReferee();
+    setCombo();
+
+//    if(cbFlag->isChecked())
+//        flag_set(p->fr->judge_flag4, cmb_judge4->itemText(index));
 }
 
-void Settings::judge_5(int index){
-    FormMain* p = static_cast<FormMain*>(pW);
-    p->judge5 = cmb_judge5->itemText(index);
-    writeReferees();
-    if(cbFlag->isChecked())
-        flag_set(p->fr->judge_flag5, cmb_judge5->itemText(index));
+void Settings::judge_5(int){
+    QSqlDatabase m_db;
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(static_cast<FormMain*>(pW)->currentDataBase);
+    QMessageBox msgBox;
+    if(!m_db.open()){
+        msgBox.setText("Ошибка базы данных judge_5!");
+        msgBox.exec();
+        return;
+    }
+
+    QSqlQuery query;
+    if(RbOne->isChecked()){
+        query.exec("UPDATE referee SET role1 = 0 WHERE role1 = 7");
+        query.exec("UPDATE referee SET role1 = 7 WHERE name = '" + cmb_judge5->currentText() + "'");
+    }else{
+        query.exec("UPDATE referee SET role2 = 0 WHERE role2 = 7");
+        query.exec("UPDATE referee SET role2 = 7 WHERE name = '" + cmb_judge5->currentText() + "'");
+    }
+    (static_cast<FormMain*>(pW))->updateReferee();
+    setCombo();
+
+//    if(cbFlag->isChecked())
+//        flag_set(p->fr->judge_flag5, cmb_judge5->itemText(index));
 }
 
-void Settings::ts(int index){
-    static_cast<FormMain*>(pW)->ts = cmb_ts->itemText(index);
-    writeReferees();
+void Settings::ts(int){
+    QSqlDatabase m_db;
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(static_cast<FormMain*>(pW)->currentDataBase);
+    QMessageBox msgBox;
+    if(!m_db.open()){
+        msgBox.setText("Ошибка базы данных TS!");
+        msgBox.exec();
+        return;
+    }
+
+    QSqlQuery query;
+    if(RbOne->isChecked()){
+        query.exec("UPDATE referee SET role1 = 0 WHERE role1 = 8");
+        query.exec("UPDATE referee SET role1 = 8 WHERE name = '" + cmb_ts->currentText() + "'");
+    }else{
+        query.exec("UPDATE referee SET role2 = 0 WHERE role2 = 8");
+        query.exec("UPDATE referee SET role2 = 8 WHERE name = '" + cmb_ts->currentText() + "'");
+    }
+    (static_cast<FormMain*>(pW))->updateReferee();
+    setCombo();
 }
 
 void Settings::writeReferees(void){
-    QFile file;
-    if(rbnOne->isChecked())
-        file.setFileName("round_referees.txt");
-    else
-        file.setFileName("round_referees2.txt");
-    file.open(QIODevice::WriteOnly | QIODevice::Text);
-    QTextStream stream(&file);
-    stream << QString::number(cmb_judge1->currentIndex()) << endl;
-    stream << QString::number(cmb_judge2->currentIndex()) << endl;
-    stream << QString::number(cmb_judge3->currentIndex()) << endl;
-    stream << QString::number(cmb_judge4->currentIndex()) << endl;
-    stream << QString::number(cmb_judge5->currentIndex()) << endl;
-    stream << QString::number(cmb_ts->currentIndex()) << endl;
-    file.close();
+
+}
+
+bool Settings::updateBase(QString sql){
+
 }
 
 void Settings::separate(bool state){
-    QFile file("settings.txt");
-    file.open(QIODevice::WriteOnly | QIODevice::Text);
-    QTextStream stream(&file);
-    stream << led_city->text() << endl;
-    stream << name_competition->text() << endl;
-    stream << dateEdit->text() << endl;
-    if(rbnOne->isChecked())
-        stream << "1" << endl;
-    else
-        stream << "2" << endl;
+    QSettings settings ("settings.ini",QSettings::IniFormat);
+    settings.beginGroup("Settings");
     if(state)
-        stream << "0" << endl;
+        settings.setValue("sep", "0");
     else
-        stream << "1" << endl;
-    file.close();
+        settings.setValue("sep", "1");
+
+    settings.endGroup();
 }
 
 void Settings::team_referees(bool state){
-    FormMain* p = static_cast<FormMain*>(pW);
-    QFile file("settings.txt");
-    file.open(QIODevice::WriteOnly | QIODevice::Text);
-    QTextStream stream(&file);
-    stream << led_city->text() << endl;
-    stream << name_competition->text() << endl;
-    stream << dateEdit->text() << endl;
-    if(state)
-        stream << "1" << endl;
-    else
-        stream << "2" << endl;
-    if(rbnSeparate->isChecked())
-        stream << "0";
-    else
-        stream << "1";
-    file.close();
-    if(state)
-        file.setFileName("round_referees.txt");
-    else
-        file.setFileName("round_referees2.txt");
-    file.open(QIODevice::ReadOnly);
-    QTextStream stream2(&file);
+    setCombo();
 
-    int i = stream2.readLine().toInt();
-    cmb_judge1->setCurrentIndex(i);
-    p->judge1 = cmb_judge1->itemText(i);
-
-    i = stream2.readLine().toInt();
-    cmb_judge2->setCurrentIndex(i);
-    p->judge2 = cmb_judge2->itemText(i);
-
-    i = stream2.readLine().toInt();
-    cmb_judge3->setCurrentIndex(i);
-    p->judge3 = cmb_judge3->itemText(i);
-
-    i = stream2.readLine().toInt();
-    cmb_judge4->setCurrentIndex(i);
-    p->judge4 = cmb_judge4->itemText(i);
-
-    i = stream2.readLine().toInt();
-    cmb_judge5->setCurrentIndex(i);
-    p->judge5 = cmb_judge5->itemText(i);
-
-    i = stream2.readLine().toInt();
-    cmb_ts->setCurrentIndex(i);
-    p->ts = cmb_ts->itemText(i);
-
-    file.close();
 }
 
 void Settings::rus_to_eng(bool state){
@@ -560,24 +650,7 @@ void Settings::flag_set(QLabel* obj, QString sJudge){
 }
 
 void Settings::closeEvent(QCloseEvent* e){
-    /*
-    QFile file;
-    if ((static_cast<FormMain*>(pW)->team_referees) == "1")
-        file.setFileName("round_referees.txt");
-    else
-        file.setFileName("round_referees2.txt");
-    file.open((QIODevice::WriteOnly | QIODevice::Text));
-    QTextStream stream(&file);
-    //stream << QString::number(cmb_main_judge->currentIndex()) << endl;
-    //stream << QString::number(cmb_main_secretary->currentIndex()) << endl;
-    stream << QString::number(cmb_judge1->currentIndex()) << endl;
-    stream << QString::number(cmb_judge2->currentIndex()) << endl;
-    stream << QString::number(cmb_judge3->currentIndex()) << endl;
-    stream << QString::number(cmb_judge4->currentIndex()) << endl;
-    stream << QString::number(cmb_judge5->currentIndex()) << endl;
-    stream << QString::number(cmb_ts->currentIndex()) << endl;
-    file.close();
-    */
+
 }
 
 bool Settings::getRbEng(void){

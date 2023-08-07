@@ -116,6 +116,19 @@ void AddCompetition::createCompetitions(){
 //        delete lbl;
 //    }
     //QLabel* lblStatus = new QLabel(baza_name);
+
+    str =           "CREATE TABLE referee "
+                    "(id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    "name TEXT, region TEXT, role1 INTEGER DEFAULT 0, role2 INTEGER DEFAULT 0, "
+                    "UNIQUE (name))";
+
+    if(!query.exec(str)){
+        msgBox.setText("Ошибка создания таблицы referee " + m_db.lastError().text());
+        msgBox.exec();
+        m_db.close();
+        return;
+    }
+
     mainwin->lblStatus->setText(baza_name);
     formmain->Cmb_round->clear();
     formmain->CmbAge->clear();

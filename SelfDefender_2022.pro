@@ -42,11 +42,11 @@ SOURCES += \
     main.cpp \
     mainwin.cpp \
     next_question.cpp \
+    protocol.cpp \
     registration.cpp \
     settings.cpp \
     showreports.cpp \
-    udp.cpp \
-    xlxs.cpp
+    udp.cpp
 
 HEADERS += \
     Ball.h \
@@ -64,11 +64,11 @@ HEADERS += \
     firstround2.h \
     formcorrection.h \
     mainwin.h \
+    protocol.h \
     registration.h \
     settings.h \
     showreports.h \
-    udp.h \
-    xlxs.h
+    udp.h
 
 DISTFILES += \
     images/circle.png \

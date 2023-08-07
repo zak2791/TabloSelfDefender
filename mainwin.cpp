@@ -9,8 +9,11 @@ MainWin::MainWin(QWidget *parent) :
     ui(new Ui::MainWin)
 {
     ui->setupUi(this);
-    addOne          = ui->AddOne;
-    AddFromBuffer   = ui->AddFromBuffer;
+    AddOne              = ui->AddOne;
+    AddFromBuffer       = ui->AddFromBuffer;
+
+    AddOneRef           = ui->addOneRef;
+    AddRefFromBuffer    = ui->addRefFromBuffer;
     //MatA            = ui->MatA;
     //MatB            = ui->MatB;
     ShowHelp        = ui->ShowHelp;
@@ -42,6 +45,14 @@ MainWin::MainWin(QWidget *parent) :
 
     menu = ui->Competition;
     lastCompetitions = menu->addMenu("Последние соревнования");
+
+    ui->Edit->setEnabled(false);
+
+    Sportsmens = ui->Sportsmens;
+    Referees = ui->Referees;
+    ui->Sportsmens->setEnabled(false);
+    ui->Referees->setEnabled(false);
+
     fillLastCompetitions();
 }
 

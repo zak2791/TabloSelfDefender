@@ -145,12 +145,16 @@ void Choice_one_athlete::closeEvent(QCloseEvent*){
         p->CmbAge->setEnabled(false);
         p->CmbWeight->setEnabled(false);
         p->Btn_new->setEnabled(false);
+        p->BtnNewFinal->setEnabled(false);
+        p->mainwin->menuBar()->setEnabled(false);
     }else{
         p->Btn_next->setEnabled(false);
         p->Cmb_round->setEnabled(true);
         p->CmbAge->setEnabled(true);
         p->CmbWeight->setEnabled(true);
         p->Btn_new->setEnabled(true);
+        p->BtnNewFinal->setEnabled(true);
+        p->mainwin->menuBar()->setEnabled(true);
         if(p->current_mode == -1){
             p->GroupBox->setEnabled(true);
         }

@@ -3,11 +3,8 @@
 
 
 
-ShowReports::ShowReports(QString _st,
-                         QString _name_competition,
-                         QString _date,
-                         int _num_round,
-                         QWidget* parent) : QWidget(parent){
+ShowReports::ShowReports(int _num_round,
+ QWidget* parent) : QWidget(parent){
 
     p = parent;
 
@@ -118,10 +115,17 @@ ShowReports::ShowReports(QString _st,
     }
 
 
-    st = _st;        //"Брянск"
+    st = static_cast<FormMain*>(p)->currentDataBase.split("_").at(1); //_st;        //"Брянск"
 
-    name_competition = _name_competition;
-    date = _date;
+    name_competition = static_cast<FormMain*>(p)->currentDataBase.split("_").at(0); //_name_competition;
+    QString ds = static_cast<FormMain*>(p)->currentDataBase.split("_").at(2);       //дата начала соревнований
+    QString df = static_cast<FormMain*>(p)->currentDataBase.split("_").at(3);       //дата окончания соревнований
+    df.remove(df.length() - 3, 3);
+    if(ds == df)
+        date = ds;
+    else
+        date = ds + " - " + df;
+    //date = _date;
     __num_round = _num_round;
 
     QString html = createHTML(0);
