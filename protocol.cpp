@@ -75,9 +75,12 @@ Protocol::Protocol(QWidget *parent) : QTableWidget(parent){
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     show();
 
+    QPixmap pixmap(size());
+    render(&pixmap);
+
     printer = new QPrinter;
     render(printer);
-    QPrintPreviewDialog  *prDialog = new QPrintPreviewDialog(printer, this);
+    QPrintPreviewDialog  *prDialog = new QPrintPreviewDialog(&pixmap, this);
 
 
 
