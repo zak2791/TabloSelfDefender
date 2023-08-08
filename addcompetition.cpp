@@ -88,7 +88,7 @@ void AddCompetition::createCompetitions(){
                     "rate1_3  TEXT, rate2_3 TEXT, rate3_3  TEXT, rate4_3 TEXT, rate5_3  TEXT, sum3 TEXT, "
                     "rate1_4  TEXT, rate2_4 TEXT, rate3_4  TEXT, rate4_4 TEXT, rate5_4  TEXT, sum4 TEXT, "
                     "rate1_5  TEXT, rate2_5 TEXT, rate3_5  TEXT, rate4_5 TEXT, rate5_5  TEXT, sum5 TEXT, "
-                    "total TEXT, "
+                    "total TEXT, place TEXT, "
                     "UNIQUE (id_sportsmen, id_round))";
 
     if(!query.exec(str)){

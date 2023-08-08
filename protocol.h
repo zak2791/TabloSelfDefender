@@ -1,17 +1,25 @@
 #ifndef PROTOCOL_H
 #define PROTOCOL_H
 
-#include <QTableWidget>
-#include <QPrinter>
 
-class Protocol : public QTableWidget {
+#include "FormMain.h"
+
+class Protocol : public QTableView {
     Q_OBJECT
 
-    void printPreviewNeeds(QPrinter*);
+    FormMain* p;
     QPrinter* printer;
+    //virtual void showEvent(QShowEvent*);
 
 public:
-    Protocol(QWidget* parent = nullptr);
+    Protocol(FormMain* parent = nullptr);
+
+private slots:
+    void placeChanged(QStandardItem*);
+
+public slots:
+    void updateProtocol(void);
+
 };
 
 #endif // PROTOCOL_H

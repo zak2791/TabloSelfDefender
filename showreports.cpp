@@ -3,6 +3,7 @@
 
 
 
+
 ShowReports::ShowReports(int _num_round,
  QWidget* parent) : QWidget(parent){
 
@@ -137,6 +138,16 @@ ShowReports::ShowReports(int _num_round,
     setLayout(vbox);
     connect(button, SIGNAL(clicked()), this, SLOT(prt()));
     m_db.close();
+
+
+
+    QStringList list;
+    for(int i=0; i<name.count(); i++){
+        list.append(name[i] + rates[i]);
+    }
+
+    //Protocol protocol(list);
+
 }
 
 QString ShowReports::createHTML(int mode){

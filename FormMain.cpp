@@ -407,9 +407,9 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
 
     lbl_total->setText("");
 
-    Protocol* p = new Protocol;
+    Protocol* prt = new Protocol(this);
     QPushButton* BtnNewFinal = btnNewFinal;
-    connect(BtnNewFinal,       SIGNAL(clicked()), p, SLOT(show()));
+    connect(BtnNewFinal,       SIGNAL(clicked()), prt, SLOT(updateProtocol()));
 
     connect(btn_next,       SIGNAL(clicked()), this, SLOT(btn_next_clicked()));
     connect(btn_enter,      SIGNAL(clicked()), this, SLOT(btn_enter_clicked()));
