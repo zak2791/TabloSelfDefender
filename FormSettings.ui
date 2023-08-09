@@ -146,6 +146,9 @@ p, li { white-space: pre-wrap; }
      <kerning>true</kerning>
     </font>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
   </widget>
   <widget class="QComboBox" name="cmb_main_secretary">
    <property name="geometry">
@@ -161,6 +164,9 @@ p, li { white-space: pre-wrap; }
      <family>MS Shell Dlg 2</family>
      <pointsize>8</pointsize>
     </font>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
    </property>
    <property name="contextMenuPolicy">
     <enum>Qt::CustomContextMenu</enum>
@@ -181,6 +187,9 @@ p, li { white-space: pre-wrap; }
      <height>22</height>
     </rect>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
   </widget>
   <widget class="QComboBox" name="cmb_judge2">
    <property name="geometry">
@@ -190,6 +199,9 @@ p, li { white-space: pre-wrap; }
      <width>366</width>
      <height>22</height>
     </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
    </property>
   </widget>
   <widget class="QComboBox" name="cmb_judge3">
@@ -201,6 +213,9 @@ p, li { white-space: pre-wrap; }
      <height>22</height>
     </rect>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
   </widget>
   <widget class="QComboBox" name="cmb_judge4">
    <property name="geometry">
@@ -211,6 +226,9 @@ p, li { white-space: pre-wrap; }
      <height>22</height>
     </rect>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
   </widget>
   <widget class="QComboBox" name="cmb_judge5">
    <property name="geometry">
@@ -220,6 +238,9 @@ p, li { white-space: pre-wrap; }
      <width>366</width>
      <height>22</height>
     </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
    </property>
   </widget>
   <widget class="QGroupBox" name="gbxRateShow">
@@ -281,6 +302,9 @@ p, li { white-space: pre-wrap; }
      <width>366</width>
      <height>22</height>
     </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
    </property>
   </widget>
   <widget class="QLabel" name="lbl8_2">

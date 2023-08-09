@@ -7,10 +7,29 @@
 #include <QDebug>
 #include <QSqlDatabase>
 
-Protocol::Protocol(FormMain* parent) : QTableView(){
+Protocol::Protocol(FormMain* parent) : QWidget(){
     p = parent;
 
-    setSortingEnabled(true);
+    QVBoxLayout* vBox = new QVBoxLayout;
+    QHBoxLayout* hBox = new QHBoxLayout;
+    QPushButton* btn1 = new QPushButton("Предварительный просмотр");
+    btn1->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    btn1->setFixedSize(200, 40);
+    QPushButton* btn2 = new QPushButton("Закрыть");
+    btn2->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    btn2->setFixedSize(200, 40);
+    QSpacerItem* horyzontalSpacer;
+    horyzontalSpacer = new QSpacerItem(40, 40, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    tblView = new QTableView(this);
+    hBox->addItem(horyzontalSpacer);
+    hBox->addWidget(btn1);
+    hBox->addWidget(btn2);
+    hBox->setStretchFactor(btn1, 1);
+    vBox->addWidget(tblView);
+    vBox->addLayout(hBox);
+    setLayout(vBox);
+    tblView->setSortingEnabled(true);
+    setWindowTitle("Демонстрация техники");
 }
 
 void Protocol::updateProtocol(){
@@ -23,6 +42,17 @@ void Protocol::updateProtocol(){
         msgBox.exec();
         return;
     }
+
+    st = static_cast<FormMain*>(p)->currentDataBase.split("_").at(1); //_st;        //"Брянск"
+
+    name_competition = static_cast<FormMain*>(p)->currentDataBase.split("_").at(0); //_name_competition;
+    QString ds = static_cast<FormMain*>(p)->currentDataBase.split("_").at(2);       //дата начала соревнований
+    QString df = static_cast<FormMain*>(p)->currentDataBase.split("_").at(3);       //дата окончания соревнований
+    df.remove(df.length() - 3, 3);
+    if(ds == df)
+        date = ds;
+    else
+        date = ds + " - " + df;
 
     // выбор текущего раунда
     QString sql = "SELECT id FROM rounds WHERE round = '%1' and age = '%2' and weight = '%3'";
@@ -41,7 +71,7 @@ void Protocol::updateProtocol(){
         ID.append(query.value(0).toString());
     }
     // выбор спортсменов и записей оценок из таблицы ошибок
-    sql = "SELECT id, id_sportsmen FROM errors_and_rates WHERE id_round = '%1' ORDER BY id";
+    sql = "SELECT id, id_sportsmen FROM errors_and_rates WHERE id_round = '%1' ORDER BY place";
     sql = sql.arg(ID[0]);
     query.exec(sql);
     QStringList id_name;
@@ -152,17 +182,18 @@ void Protocol::updateProtocol(){
     model->setHeaderData(32, Qt::Horizontal, "Сумма баллов");
     model->setHeaderData(33, Qt::Horizontal, "Место");
 
-    setModel(model);
-    setShowGrid(true);
+    tblView->setModel(model);
+    tblView->setShowGrid(true);
     for (int i = 2; i < 32; ++i) {
-        setColumnWidth(i, 10);
+        tblView->setColumnWidth(i, 10);
     }
-    resizeColumnToContents(0);
-    resizeColumnToContents(1);
+    tblView->resizeColumnToContents(0);
+    tblView->resizeColumnToContents(1);
 
-    qDebug()<<list<<this->model()->rowCount()<<this->model()->columnCount();
-    sortByColumn(32, Qt::DescendingOrder);
-    show();
+    //qDebug()<<list<<tblView->model()->rowCount()<<tblView->model()->columnCount();
+    //tblView->sortByColumn(32, Qt::DescendingOrder);
+    //tblView->setUserData()
+    showMaximized();
 }
 
 void Protocol::placeChanged(QStandardItem * item){
@@ -176,10 +207,355 @@ void Protocol::placeChanged(QStandardItem * item){
         msgBox.exec();
         return;
     }
-    QString sql = "UPDATE errors_and_rates SET place = " + item->text() + " WHERE id = " + QString::number(item->data().toInt());
+    //QString place();
+    QString sql = "UPDATE errors_and_rates SET place = '" + item->text() + "' WHERE id = " + QString::number(item->data().toInt());
     QSqlQuery query;
     if(query.exec(sql))
         qDebug()<<"ok placeChanged!";
     else
-        qDebug()<<sql<<"error placeChanged!";
+        qDebug()<<sql<<"error placeChanged!"<<sql;
+}
+
+QString Protocol::createHTML(int mode){
+    //int num_round = __num_round;
+    QString html = "";
+    //html += "<center>\n";
+    html += "<html>\n";
+
+
+    if(mode == 1){
+        html +=
+            "<style>"
+                "table.print{"
+                    "border: 1px solid black;"
+                    "border-collapse: collapse;"
+                "}"
+
+                "[data-tooltip] {"
+                    "position: relative;" /* Относительное позиционирование */
+                "}"
+                "[data-tooltip]::after {"
+                    "content: attr(data-tooltip);" /* Выводим текст */
+                    "position: absolute;" /* Абсолютное позиционирование */
+                    "width: 100px;" /* Ширина подсказки */
+                    "left: 0; top: 0;" /* Положение подсказки */
+                    "background: #3989c9;" /* Синий цвет фона */
+                    "color: #fff;" /* Цвет текста */
+                    "padding: 0.5em;" /* Поля вокруг текста */
+                    "box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);" /* Параметры тени */
+                    "pointer-events: none;" /* Подсказка */
+                    "opacity: 0;" /* Подсказка невидима */
+                    "transition: 0.5s;" /* Время появления подсказки */
+                "}"
+                "[data-tooltip]:hover::after {"
+                    "opacity: 1;" /* Показываем подсказку */
+                    "top: 2em;" /* Положение подсказки */
+                "}"
+            "</style>";
+
+    }
+    html += "<body><big>\n";
+
+    //html += "<p align=\"center\">П Р О Т О К О Л</p><br>\n";
+
+    html += "<table style=\"border-width: 0px;\" align=\"center\" width=\"100%\">\n";
+
+    html += "<tr>\n";
+    html += "<td align=\"center\" colspan=\"3\">\n";
+    html += "<b>П Р О Т О К О Л</b>\n";
+    html += "</td>\n";
+
+    html += "<tr>\n";
+    html += "<td align=\"center\" colspan=\"3\">\n";
+    html += name_competition;
+    html += "</td>\n";
+    html += "</tr>\n";
+
+    html += "<tr>\n";
+    html += "<td width=\"20%\" align=\"left\">\n";
+
+    html += date + " г.";
+    html += "</td>\n";
+
+    html += "<td width=\"60%\" align=\"center\">\n";
+    html += "возраст " + static_cast<FormMain*>(p)->CmbAge->currentText() +
+                " лет, вес " + static_cast<FormMain*>(p)->CmbWeight->currentText() + " кг ";
+    html += static_cast<FormMain*>(p)->Cmb_round->currentText();
+    html += "</td>\n";
+
+    html += "<td width=\"20%\" align=\"right\">\n";
+    html += "гор.";
+    html += "&nbsp;";
+    html += "&nbsp;";
+    html += st;
+    html += "</td>\n";
+    html += "</tr>\n";
+
+    html += "</table>\n";
+/*---------------------------------------------------------------------------------*/
+    html += "<br>";
+    if(mode == 0){
+        html += "<table style=\"vertical-align: middle\" width=\"100%\" "
+                "cellspacing = 0 cellpadding = 2 style=\"border-width: 1px;";
+        html += " border-style: solid; border-color: #000000;\" margin=\"auto\" >\n";
+    }else
+        html += "<table rules=\"all\" class=\"print\" width=\"100%\" margin=\"auto\">\n";
+
+    html += "<tr>\n";
+    html += "<td  width=\"2%\" rowspan=\"2\"><font size=\"2\">\n";
+    html += "№ </font><br>п/п\n";
+    html += "</td>\n";
+    html += "<td width=\"15%\" align=\"center\" rowspan=\"2\">Фамилия,<br>имя</td>\n";
+    html += "<td  align=\"center\" width=\"15%\" rowspan=\"2\">Команда,<br>разряд</td>\n";
+
+    html += "<td align=\"center\" width=\"60%\" colspan=\"30\">Оценки выступления</td>\n";
+
+    html += "<td align=\"center\"  width=\"5%\" rowspan=\"2\"><font size=\"2\">Сумма<br>баллов</font></td>\n";
+    html += "<td align=\"center\" width=\"3%\" rowspan=\"2\"><font size=\"2\">Место</font></td>\n";
+    html += "</tr>\n";
+    html += "<tr>\n";
+    int i=1;
+
+    int count_judge = 6;
+
+    // печать шапки таблицы
+    int j;
+    while(i < 6){
+        j = 1;
+        while(j < count_judge){
+            html += "<td align=\"center\"><font size=\"2\">"+QString::number(j)+"</font></td>\n";
+            j++;
+        }
+        html += "<td align=\"center\"><font size=\"2\">S"+QString::number(i)+"</font></td>\n";
+        i++;
+    }
+    html += "</tr>\n";
+    int count = 0;
+    int count_color = 0;
+    QString color = "White";
+
+    while(count < name.length()){
+        count++;
+        if(static_cast<FormMain*>(p)->flag_mode == 1){
+            count_color++;
+            if(count_color < 3)
+                color = "LightGray";
+            else
+                color = "White";
+            if(count_color == 4)
+                count_color = 0;
+        }
+        html += "<tr bgcolor=" + color  + " align=\"center\"><td align=\"center\">" + QString::number(count) + "</td>\n";    // порядковый номер
+        html += "<td><font size=\"3\">" + name[count - 1][0] + "</font></td>\n";                                                    // фамилия, имя
+        html += "<td align=\"center\"><font size=\"2\">" + name[count - 1][1] + "</font></td>\n";                                   // регион
+
+        for(int i=0;i<32;i++){
+            if(rates[count - 1][i] != NULL){
+                if(rates[count - 1][i][0] == "N"){
+                    html += "<td " + tooltip(count, i) + " align=\"center\" width=\"2%\"><font size=\"2\"><s>\n" +
+                            rates[count - 1][i].remove(0, 1) + "</s></font></td>";
+                }else{
+                    if(i == 30){
+                        html += "<td align=\"center\" width=\"2%\"><font size=\"3\">" +
+                                rates[count - 1][i] + "</font></td>\n";
+                    }else{
+                        html += "<td " + tooltip(count, i) + " align=\"center\" width=\"2%\"><font size=\"2\">" +
+                                rates[count - 1][i] + "</font></td>\n";
+                    }
+                }
+            }else
+                html = html + "<td align=\"center\" width=\"2%\"><font size=\"2\">" + "" + "</font></td>\n";
+        }
+        html = html + "<td align=\"center\" width=\"2%\"><font size=\"2\">" + "" + "</font></td>\n";
+        html += "</tr>\n";
+    }
+    html += "</tr>\n";
+    html += "</table>\n";
+
+    html += "<br>";
+
+    html += "<table style=\"border-width: 0px;\" align=\"center\" width=\"100%\" >\n";
+
+    html += "<tr>\n";
+
+    html += "<td width=\"20%\" >\n";
+    html += "Главный судья";
+    html += "</td>\n";
+
+    html += "<td align=\"right\" width=\"5%\" >\n";
+    //html += "______________";
+    html += "</td>\n";
+
+    html += "<td  width=\"20%\" ><u><em>\n";
+    html += static_cast<FormMain*>(p)->main_refery.split(';')[0];
+    //for(int i=0;i<(25 - static_cast<FormMain*>(p)->main_refery.split(';')[0].trimmed().length());i++)
+    //    html += "&nbsp;";
+    html += "</u></em></td>\n";
+
+    html += "<td width=\"10%\" >\n";
+    html += "</td>\n";
+
+    html += "<td width=\"20%\" >\n";
+    html += "Главный секретарь";
+    html += "</td>\n";
+
+    html += "<td align=\"right\" width=\"5%\" >\n";
+    //html += "______________";
+    html += "</td>\n";
+
+    html += "<td width=\"20%\" ><u><em>\n";
+    html += static_cast<FormMain*>(p)->main_secretary.split(';')[0];
+    //for(int i=0;i<(25 - static_cast<FormMain*>(p)->main_secretary.split(';')[0].trimmed().length());i++)
+    //    html += "&nbsp;";
+    html += "</u></em></td>\n";
+
+    html += "</tr>\n";
+
+    html += "<tr>\n";
+    html += "</tr>\n";
+
+    html += "<tr>\n";
+
+    html += "<td width=\"20%\" >\n";
+    html += "Руководитель ковра";
+    html += "</td>\n";
+
+    html += "<td align=\"right\" width=\"5%\" >\n";
+    //html += "______________";
+    html += "</td>\n";
+
+    html += "<td  width=\"20%\" ><u><em>\n";
+    html += static_cast<FormMain*>(p)->judge1.split(';')[0];
+    //for(int i=0;i<(25 - static_cast<FormMain*>(p)->judge1.split(';')[0].trimmed().length());i++)
+    //    html += "&nbsp;";
+    html += "</u></em></td>\n";
+
+    html += "<td width=\"10%\" >\n";
+    html += "</td>\n";
+
+    html += "<td width=\"20%\" >\n";
+    html += "Судья 2";
+    html += "</td>\n";
+
+    html += "<td align=\"right\" width=\"5%\" >\n";
+    //html += "______________";
+    html += "</td>\n";
+
+    html += "<td width=\"20%\" ><u><em>\n";
+    html += static_cast<FormMain*>(p)->judge2.split(';')[0];
+    //for(int i=0;i<(25 - static_cast<FormMain*>(p)->judge2.split(';')[0].trimmed().length());i++)
+    //    html += "&nbsp;";
+    html += "</u></em></td>\n";
+
+    html += "</tr>\n";
+
+    html += "<tr>\n";
+    html += "</tr>\n";
+
+    html += "<tr>\n";
+
+    html += "<td width=\"20%\" >\n";
+    html += "Судья 3";
+    html += "</td>\n";
+
+    html += "<td align=\"right\" width=\"5%\" >\n";
+    //html += "______________";
+    html += "</td>";
+
+    html += "<td  width=\"20%\" ><u><em>\n";
+    html += static_cast<FormMain*>(p)->judge3.split(';')[0];
+    //for(int i=0;i<(25 - static_cast<FormMain*>(p)->judge3.split(';')[0].trimmed().length());i++)
+    //    html += "&nbsp;";
+    html += "</u></em></td>\n";
+
+    html += "<td width=\"10%\" >\n";
+    html += "</td>\n";
+
+    html += "<td width=\"20%\" >\n";
+    html += "Судья 4";
+    html += "</td>\n";
+
+    html += "<td align=\"right\" width=\"5%\" >\n";
+    //html += "______________";
+    html += "</td>\n";
+
+    html += "<td width=\"20%\" ><u><em>\n";
+    html += static_cast<FormMain*>(p)->judge4.split(';')[0];
+    //for(int i=0;i<(25 - static_cast<FormMain*>(p)->judge4.split(';')[0].trimmed().length());i++)
+    //    html += "&nbsp;";
+    html += "</u></em></td>\n";
+
+    html += "</tr>\n";
+
+    html += "<tr>\n";
+    html += "</tr>\n";
+
+    html += "<tr>\n";
+
+    html += "<td width=\"20%\" >\n";
+    html += "Судья 5";
+    html += "</td>\n";
+
+    html += "<td align=\"right\" width=\"5%\" >\n";
+    //html += "______________";
+    html += "</td\n>";
+
+    html += "<td  width=\"20%\" ><u><em>\n";
+    html += static_cast<FormMain*>(p)->judge5.split(';')[0];
+    //for(int i=0;i<(25 - static_cast<FormMain*>(p)->judge5.split(';')[0].trimmed().length());i++)
+    //    html += "&nbsp;";
+    html += "</u></em></td>\n";
+
+    html += "<td width=\"10%\" >\n";
+    html += "</td>\n";
+
+    html += "<td width=\"20%\" >\n";
+    html += "Технический секретарь";
+    html += "</td>\n";
+
+    html += "<td align=\"right\" width=\"5%\" >\n";
+    //html += "______________";
+    html += "</td>\n";
+
+    html += "<td width=\"20%\" ><u><em>\n";
+    html += static_cast<FormMain*>(p)->ts.split(';')[0];
+    //for(int i=0;i<(25 - static_cast<FormMain*>(p)->ts.split(';')[0].trimmed().length());i++)
+    //    html += "&nbsp;";
+    html += "</u></em></td>\n";
+
+    html += "</tr>\n";
+
+    html += "</table>\n";
+
+    html += "</body></big></html>\n";
+    //html += "</center>";
+
+    return html;
+}
+
+QString Protocol::tooltip(int count, int i){
+    QString err;
+    if(i < 5)
+        err = errors[count - 1][i];
+    else if((i > 5) && (i < 11))
+        err = errors[count - 1][i - 1];
+    else if((i > 11) and (i < 17))
+        err = errors[count - 1][i - 2];
+    else if((i > 17) and (i < 23))
+        err = errors[count - 1][i - 3];
+    else if((i > 23) and (i < 29))
+        err = errors[count - 1][i - 4];
+    else
+        return "";
+
+
+    if(err.length() > 2){
+        QString s = "";
+        foreach(QString each, err){
+            if((each != '\'') && (each != '[') && (each != ']'))
+                s = s + each;
+        }
+        return "data-tooltip=\"" + s + "\"";
+    }else
+        return "";
 }

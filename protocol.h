@@ -4,12 +4,23 @@
 
 #include "FormMain.h"
 
-class Protocol : public QTableView {
+class Protocol : public QWidget {
     Q_OBJECT
 
     FormMain* p;
     QPrinter* printer;
     //virtual void showEvent(QShowEvent*);
+    QTableView* tblView;
+    QString createHTML(int);
+    QString tooltip(int, int);
+
+    QString name_competition;
+    QString date;
+    //QWidget* p;
+    QString st;
+    QList<QStringList> name;
+    QList<QStringList> rates;
+    QList<QStringList> errors;
 
 public:
     Protocol(FormMain* parent = nullptr);

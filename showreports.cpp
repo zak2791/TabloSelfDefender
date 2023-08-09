@@ -9,6 +9,8 @@ ShowReports::ShowReports(int _num_round,
 
     p = parent;
 
+
+
     QSqlDatabase m_db;
     m_db = QSqlDatabase::addDatabase("QSQLITE");
     m_db.setDatabaseName(((FormMain*)p)->currentDataBase);
@@ -33,6 +35,12 @@ ShowReports::ShowReports(int _num_round,
 
     dlg = new QPrintDialog(printer);
     QPushButton* button = new QPushButton("print");
+//    QWebEngineView webView;
+//    webView.load(QUrl("http://www.bhv.ru"));
+//    webView.show();
+
+
+
     textEdit = new QTextEdit();
     QTextDocument* doc = new QTextDocument();
     textEdit->setDocument(doc);
@@ -42,6 +50,7 @@ ShowReports::ShowReports(int _num_round,
              .arg(static_cast<FormMain*>(p)->CmbAge->currentText())
              .arg(static_cast<FormMain*>(p)->CmbWeight->currentText());
     QSqlQuery query;
+
     query.exec(sql);
     QStringList ID;
     if(!query.next()){
@@ -53,14 +62,23 @@ ShowReports::ShowReports(int _num_round,
         ID.append(query.value(0).toString());
     }
     // выбор спортсменов и записей оценок из таблицы ошибок
-    sql = "SELECT id, id_sportsmen FROM errors_and_rates WHERE id_round = '%1' ORDER BY id";
+    sql = "SELECT * "//id, id_sportsmen, place"
+          " FROM errors_and_rates WHERE id_round = '%1' ORDER BY 60 DESC;";
+          /*"BY CASE WHEN place = 1 THEN 1"
+          "                                                           WHEN place = 2 THEN 2"
+          "                                                           WHEN place = 3 THEN 3"
+          "                                                           WHEN place = 4 THEN 4"
+          "                                                           ELSE 5"
+          "                                                      END DESC;";*/
     sql = sql.arg(ID[0]);
-    query.exec(sql);
+    query.prepare(sql);
+    query.exec();
     QStringList id_name;
     QStringList id_reffery_rates;
+    //QStringList place;
     while(query.next()){
         id_name.append(query.value(1).toString());
-        id_reffery_rates.append(query.value(0).toString());
+        id_reffery_rates.append(query.value(0).toString());     //id круга
     }
 
     // выбор фамилий спортсменов
@@ -87,14 +105,14 @@ ShowReports::ShowReports(int _num_round,
             "rate1_3, rate2_3, rate3_3, rate4_3, rate5_3, sum3, "
             "rate1_4, rate2_4, rate3_4, rate4_4, rate5_4, sum4, "
             "rate1_5, rate2_5, rate3_5, rate4_5, rate5_5, sum5, "
-            "total "
+            "total, place "
             "FROM errors_and_rates WHERE id " + id;
 
     query.exec(sql);
 
     while(query.next()){
         QStringList l;
-        for(int i=0;i<31;i++)
+        for(int i=0;i<32;i++)
             l.append(query.value(i).toString());
         rates.append(l);
     }
@@ -147,6 +165,17 @@ ShowReports::ShowReports(int _num_round,
     }
 
     //Protocol protocol(list);
+    QString s = static_cast<FormMain*>(p)->CmbAge->currentText() + " лет, ";
+       s.append(static_cast<FormMain*>(p)->CmbWeight->currentText() + " кг, ");
+       s.append(static_cast<FormMain*>(p)->Cmb_round->currentText() + ".html");
+    QFile f;
+    f.setFileName(s);
+    f.open(QIODevice::WriteOnly | QIODevice::Text);
+    QTextStream out(&f);
+    out << createHTML(1);
+    f.close();
+
+    QDesktopServices::openUrl(QUrl(QUrl::fromLocalFile(s)));
 
 }
 
@@ -283,7 +312,7 @@ QString ShowReports::createHTML(int mode){
         html += "<td><font size=\"3\">" + name[count - 1][0] + "</font></td>\n";                                                    // фамилия, имя
         html += "<td align=\"center\"><font size=\"2\">" + name[count - 1][1] + "</font></td>\n";                                   // регион
 
-        for(int i=0;i<31;i++){
+        for(int i=0;i<32;i++){
             if(rates[count - 1][i] != NULL){
                 if(rates[count - 1][i][0] == "N"){
                     html += "<td " + tooltip(count, i) + " align=\"center\" width=\"2%\"><font size=\"2\"><s>\n" +
@@ -500,7 +529,7 @@ void ShowReports::prt(void){
            s.append(static_cast<FormMain*>(p)->CmbWeight->currentText() + " кг, ");
            s.append(static_cast<FormMain*>(p)->Cmb_round->currentText() + ".html");
         QFile f;
-        f.setFileName("reports/" + s);
+        f.setFileName(s);
         f.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream out(&f);
         out << createHTML(1);

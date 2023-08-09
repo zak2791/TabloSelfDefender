@@ -1297,27 +1297,6 @@
 круг</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="btn_look">
-   <property name="geometry">
-    <rect>
-     <x>290</x>
-     <y>330</y>
-     <width>221</width>
-     <height>51</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="focusPolicy">
-    <enum>Qt::NoFocus</enum>
-   </property>
-   <property name="text">
-    <string>Протокол</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="btn_enterName">
    <property name="geometry">
     <rect>
@@ -2380,9 +2359,9 @@
   <widget class="QPushButton" name="btnErrors">
    <property name="geometry">
     <rect>
-     <x>570</x>
+     <x>760</x>
      <y>330</y>
-     <width>221</width>
+     <width>171</width>
      <height>51</height>
     </rect>
    </property>
@@ -2395,7 +2374,7 @@
     <enum>Qt::NoFocus</enum>
    </property>
    <property name="text">
-    <string>Просмотр
+    <string>Просмотр\коррекция
 оценок</string>
    </property>
   </widget>
@@ -2426,6 +2405,9 @@
       <height>20</height>
      </rect>
     </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -2448,6 +2430,9 @@
       <pointsize>10</pointsize>
      </font>
     </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
     <property name="text">
      <string>Просмотр
 замедленный</string>
@@ -2466,6 +2451,9 @@
      <font>
       <pointsize>10</pointsize>
      </font>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
     </property>
     <property name="text">
      <string>Просмотр
@@ -2486,6 +2474,9 @@
       <pointsize>10</pointsize>
      </font>
     </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
     <property name="text">
      <string>Просмотр
 замедленный</string>
@@ -2504,6 +2495,9 @@
      <font>
       <pointsize>10</pointsize>
      </font>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
     </property>
     <property name="text">
      <string>Просмотр
@@ -2524,6 +2518,9 @@
       <pointsize>10</pointsize>
      </font>
     </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
     <property name="text">
      <string>Просмотр
 замедленный</string>
@@ -2542,6 +2539,9 @@
      <font>
       <pointsize>10</pointsize>
      </font>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
     </property>
     <property name="text">
      <string>Просмотр
@@ -2562,6 +2562,9 @@
       <pointsize>10</pointsize>
      </font>
     </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
     <property name="text">
      <string>Просмотр
 с выбором файла</string>
@@ -2580,6 +2583,9 @@
      <font>
       <pointsize>10</pointsize>
      </font>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
     </property>
     <property name="text">
      <string>Стоп запись</string>
@@ -2620,6 +2626,9 @@
       <height>210</height>
      </rect>
     </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
    </widget>
    <widget class="CameraViewer" name="camera2">
     <property name="geometry">
@@ -2630,6 +2639,9 @@
       <height>210</height>
      </rect>
     </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
    </widget>
    <widget class="QGraphicsView" name="camera3">
     <property name="geometry">
@@ -2639,6 +2651,9 @@
       <width>379</width>
       <height>210</height>
      </rect>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
     </property>
    </widget>
    <widget class="QLabel" name="lblStatusCam1">
@@ -2715,6 +2730,9 @@
        <pointsize>10</pointsize>
       </font>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
      <property name="text">
       <string>Включение</string>
      </property>
@@ -2733,6 +2751,9 @@
        <pointsize>10</pointsize>
       </font>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
      <property name="text">
       <string>Автонастройка</string>
      </property>
@@ -2750,6 +2771,9 @@
       <font>
        <pointsize>10</pointsize>
       </font>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
      </property>
     </widget>
     <widget class="QLabel" name="label_6">
@@ -2800,6 +2824,9 @@
        <pointsize>10</pointsize>
       </font>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
      <property name="text">
       <string>Включение</string>
      </property>
@@ -2818,6 +2845,9 @@
        <pointsize>10</pointsize>
       </font>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
      <property name="text">
       <string>Автонастройка</string>
      </property>
@@ -2835,6 +2865,9 @@
       <font>
        <pointsize>10</pointsize>
       </font>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
      </property>
     </widget>
     <widget class="QLabel" name="label_7">
@@ -2885,6 +2918,9 @@
        <pointsize>10</pointsize>
       </font>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
      <property name="text">
       <string>Включение</string>
      </property>
@@ -2903,6 +2939,9 @@
        <pointsize>10</pointsize>
       </font>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
      <property name="text">
       <string>Автонастройка</string>
      </property>
@@ -2920,6 +2959,9 @@
       <font>
        <pointsize>10</pointsize>
       </font>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
      </property>
     </widget>
     <widget class="QLabel" name="label_10">
@@ -2959,6 +3001,9 @@
      <pointsize>10</pointsize>
     </font>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
    <property name="text">
     <string>Новый
 финальный круг</string>
@@ -2976,6 +3021,85 @@
    <property name="orientation">
     <enum>Qt::Vertical</enum>
    </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_6">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>309</y>
+     <width>611</width>
+     <height>86</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Протокол</string>
+   </property>
+   <widget class="QPushButton" name="btn_look">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>21</y>
+      <width>171</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
+    <property name="text">
+     <string>Просмотр
+в программе</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_look_brauzer">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>21</y>
+      <width>171</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
+    <property name="text">
+     <string>Просмотр
+в браузере</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_save">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>21</y>
+      <width>171</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
+    <property name="text">
+     <string>Сохранение
+в файл</string>
+    </property>
+   </widget>
   </widget>
   <zorder>line</zorder>
   <zorder>label</zorder>
@@ -3001,7 +3125,6 @@
   <zorder>cmb_round</zorder>
   <zorder>label_15</zorder>
   <zorder>btn_new</zorder>
-  <zorder>btn_look</zorder>
   <zorder>btn_enterName</zorder>
   <zorder>lbl_name</zorder>
   <zorder>btn_settings</zorder>
@@ -3022,6 +3145,7 @@
   <zorder>btnErrors</zorder>
   <zorder>btnNewFinal</zorder>
   <zorder>line_4</zorder>
+  <zorder>groupBox_6</zorder>
   <zorder>windowCameras</zorder>
  </widget>
  <customwidgets>
