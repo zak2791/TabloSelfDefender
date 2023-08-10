@@ -216,7 +216,11 @@ void Protocol::placeChanged(QStandardItem * item){
         qDebug()<<sql<<"error placeChanged!"<<sql;
 }
 
-QString Protocol::createHTML(int mode){
+QString Protocol::createHTML(int mode,
+                             QStringList name,
+                             QList<QStringList> rate,
+                             QList<QStringList> err){
+
     //int num_round = __num_round;
     QString html = "";
     //html += "<center>\n";

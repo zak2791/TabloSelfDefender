@@ -11,7 +11,11 @@ class Protocol : public QWidget {
     QPrinter* printer;
     //virtual void showEvent(QShowEvent*);
     QTableView* tblView;
-    QString createHTML(int);
+    QString createHTML(int,
+                       QStringList,
+                       QList<QStringList>,
+                       QList<QStringList>);
+
     QString tooltip(int, int);
 
     QString name_competition;
