@@ -237,8 +237,10 @@ public:
     QComboBox* CmbAge;
     QComboBox* CmbWeight;
     QPushButton* Btn_new;
-    QPushButton* BtnNewFinal;
+    QPushButton* BtnFinal;
+    QPushButton* BtnSemiFinal;
     QPushButton* btnEnterName;
+    QPushButton* Btn_change;
 
     QLabel* Lbl_sum;
     QLabel* Lbl_q;
@@ -290,7 +292,7 @@ public slots:
     void btn_9_clicked(void);
     void btn_10_clicked(void);
     void btn_11_clicked(void);
-    void btn_look_clicked(void);
+
 
     void btn_errors_clicked(void);
 
@@ -338,6 +340,8 @@ private slots:
     void round_(void);
     virtual void timerEvent(QTimerEvent*);
     void btnChoice_clicked(void);
+    void btn_change_clicked(void);
+    void btn_look_clicked(void);
 
     void setCam(void);
     //void showView(void);

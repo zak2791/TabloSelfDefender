@@ -7,32 +7,109 @@
 #include <QDebug>
 #include <QSqlDatabase>
 
-Protocol::Protocol(FormMain* parent) : QWidget(){
+Protocol::Protocol(FormMain* parent) : QDialog(){
     p = parent;
 
     QVBoxLayout* vBox = new QVBoxLayout;
     QHBoxLayout* hBox = new QHBoxLayout;
-    QPushButton* btn1 = new QPushButton("Предварительный просмотр");
-    btn1->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    btn1->setFixedSize(200, 40);
-    QPushButton* btn2 = new QPushButton("Закрыть");
-    btn2->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    btn2->setFixedSize(200, 40);
+    QPushButton* btnShowBrauzer = new QPushButton("Открыть в браузере");
+    btnShowBrauzer->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    btnShowBrauzer->setFixedSize(200, 40);
+
+    QPushButton* btnSave = new QPushButton("Сохранить");
+    btnShowBrauzer->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    btnSave->setFixedSize(200, 40);
+
+    QPushButton* btnClose = new QPushButton("Закрыть");
+    btnClose->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    btnClose->setFixedSize(200, 40);
+
+    QPushButton* btnPrint = new QPushButton("Печать");
+    btnPrint->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    btnPrint->setFixedSize(200, 40);
+
     QSpacerItem* horyzontalSpacer;
     horyzontalSpacer = new QSpacerItem(40, 40, QSizePolicy::Expanding, QSizePolicy::Minimum);
     tblView = new QTableView(this);
     hBox->addItem(horyzontalSpacer);
-    hBox->addWidget(btn1);
-    hBox->addWidget(btn2);
-    hBox->setStretchFactor(btn1, 1);
+    hBox->addWidget(btnShowBrauzer);
+    hBox->addWidget(btnPrint);
+    hBox->addWidget(btnSave);
+    hBox->addWidget(btnClose);
+    //hBox->setStretchFactor(btnShowBrauzer, 1);
     vBox->addWidget(tblView);
     vBox->addLayout(hBox);
     setLayout(vBox);
-    tblView->setSortingEnabled(true);
+    if(p->flag_mode == 0)
+        tblView->setSortingEnabled(true);
     setWindowTitle("Демонстрация техники");
+    setAttribute(Qt::WA_DeleteOnClose);
+    setWindowState(Qt::WindowMaximized);
+
+    connect(btnClose, SIGNAL(clicked()), this, SLOT(close()));
+    connect(btnShowBrauzer, SIGNAL(clicked()), this, SLOT(showBrauser()));
+    connect(btnPrint, SIGNAL(clicked()), this, SLOT(printProtocol()));
+    connect(btnSave, SIGNAL(clicked()), this, SLOT(saveProtocol()));
+
+    updateProtocol();
+
+    QList<QStringList> list;
+    for(int i=0; i<name.count(); i++){
+        list.append(name[i] + rates[i]);
+    }
+
+    //qDebug()<<list;
+
+    QStandardItemModel* model = new QStandardItemModel(list.count(), 34);
+    for (int row = 0; row < model->rowCount(); ++row) {
+        for (int column = 0; column < model->columnCount(); ++column) {
+            //QStandardItem *item = new QStandardItem(QString("row %0, column %1").arg(row).arg(column));
+            QStandardItem *item = new QStandardItem(list[row][column]);
+            if(column != 33){
+                item->setEditable(false);
+                model->setItem(row, column, item);
+            }
+            else{
+                item->setEditable(true);
+                item->setData(list[row][column + 1]);   //id
+                model->setItem(row, column, item);
+
+            }
+        }
+    }
+    connect(model, SIGNAL(itemChanged(QStandardItem*)), this, SLOT(placeChanged(QStandardItem*)));
+    model->setHeaderData(0, Qt::Horizontal, "Фамилия Имя");
+    model->setHeaderData(1 , Qt::Horizontal, "Команда");
+    int j = 0;
+    QString s;
+    int count = 2;
+    for(int i=2; i<33; i++){
+        if(++j == 6){
+            s = ("S") + QString::number((i - count++) / 5);
+            j = 0;
+        }
+        else
+            s = QString::number(j);
+        model->setHeaderData(i, Qt::Horizontal, s);
+    }
+    model->setHeaderData(32, Qt::Horizontal, "Сумма баллов");
+    model->setHeaderData(33, Qt::Horizontal, "Место");
+
+    delete tblView->model();
+    tblView->setModel(model);
+    tblView->setShowGrid(true);
+    for (int i = 2; i < 32; ++i) {
+        tblView->setColumnWidth(i, 10);
+    }
+    tblView->resizeColumnToContents(0);
+    tblView->resizeColumnToContents(1);
 }
 
 void Protocol::updateProtocol(){
+    name.clear();
+    rates.clear();
+    errors.clear();
+
     QSqlDatabase m_db;
     m_db = QSqlDatabase::addDatabase("QSQLITE");
     m_db.setDatabaseName(((FormMain*)p)->currentDataBase);
@@ -71,7 +148,10 @@ void Protocol::updateProtocol(){
         ID.append(query.value(0).toString());
     }
     // выбор спортсменов и записей оценок из таблицы ошибок
-    sql = "SELECT id, id_sportsmen FROM errors_and_rates WHERE id_round = '%1' ORDER BY place";
+    if(p->flag_mode == 0)
+        sql = "SELECT id, id_sportsmen FROM errors_and_rates WHERE id_round = '%1' ORDER BY place ASC";
+    else
+        sql = "SELECT id, id_sportsmen FROM errors_and_rates WHERE id_round = '%1'";
     sql = sql.arg(ID[0]);
     query.exec(sql);
     QStringList id_name;
@@ -82,7 +162,7 @@ void Protocol::updateProtocol(){
     }
 
     // выбор фамилий спортсменов
-    QList<QStringList> name;
+    //QList<QStringList> name;
     foreach(QString i, id_name){
         sql = "SELECT name, region FROM sportsmens WHERE id = " + i;
         query.exec(sql);
@@ -99,35 +179,58 @@ void Protocol::updateProtocol(){
         id = "= " + id_reffery_rates[0];
     else
         id = " IN ( " + id_reffery_rates.join(", ") + " )";
-    sql =   "SELECT "
-            "rate1_1, rate2_1, rate3_1, rate4_1, rate5_1, sum1, "
-            "rate1_2, rate2_2, rate3_2, rate4_2, rate5_2, sum2, "
-            "rate1_3, rate2_3, rate3_3, rate4_3, rate5_3, sum3, "
-            "rate1_4, rate2_4, rate3_4, rate4_4, rate5_4, sum4, "
-            "rate1_5, rate2_5, rate3_5, rate4_5, rate5_5, sum5, "
-            "total, place, id "
-            "FROM errors_and_rates WHERE id " + id;
+    if(p->flag_mode == 0){
+        sql =   "SELECT "
+                "rate1_1, rate2_1, rate3_1, rate4_1, rate5_1, sum1, "
+                "rate1_2, rate2_2, rate3_2, rate4_2, rate5_2, sum2, "
+                "rate1_3, rate2_3, rate3_3, rate4_3, rate5_3, sum3, "
+                "rate1_4, rate2_4, rate3_4, rate4_4, rate5_4, sum4, "
+                "rate1_5, rate2_5, rate3_5, rate4_5, rate5_5, sum5, "
+                "total, place, id "
+                "FROM errors_and_rates WHERE id " + id + " ORDER BY place ASC";
+    }
+    else{
+        sql =   "SELECT "
+                "rate1_1, rate2_1, rate3_1, rate4_1, rate5_1, sum1, "
+                "rate1_2, rate2_2, rate3_2, rate4_2, rate5_2, sum2, "
+                "rate1_3, rate2_3, rate3_3, rate4_3, rate5_3, sum3, "
+                "rate1_4, rate2_4, rate3_4, rate4_4, rate5_4, sum4, "
+                "rate1_5, rate2_5, rate3_5, rate4_5, rate5_5, sum5, "
+                "total, place, id "
+                "FROM errors_and_rates WHERE id " + id;
+    }
 
     query.exec(sql);
 
-    QList<QStringList> rates;
+    //QList<QStringList> rates;
     while(query.next()){
         QStringList l;
         for(int i=0;i<33;i++)
             l.append(query.value(i).toString());
         rates.append(l);
     }
-    sql =   "SELECT "
-            "errors1_1, errors2_1, errors3_1, errors4_1, errors5_1,"
-            "errors1_2, errors2_2, errors3_2, errors4_2, errors5_2,"
-            "errors1_3, errors2_3, errors3_3, errors4_3, errors5_3,"
-            "errors1_4, errors2_4, errors3_4, errors4_4, errors5_4,"
-            "errors1_5, errors2_5, errors3_5, errors4_5, errors5_5 "
-            "FROM errors_and_rates WHERE id " + id;
+    if(p->flag_mode == 0){
+        sql =   "SELECT "
+                "errors1_1, errors2_1, errors3_1, errors4_1, errors5_1,"
+                "errors1_2, errors2_2, errors3_2, errors4_2, errors5_2,"
+                "errors1_3, errors2_3, errors3_3, errors4_3, errors5_3,"
+                "errors1_4, errors2_4, errors3_4, errors4_4, errors5_4,"
+                "errors1_5, errors2_5, errors3_5, errors4_5, errors5_5 "
+                "FROM errors_and_rates WHERE id " + id + " ORDER BY place ASC";
+    }
+    else{
+        sql =   "SELECT "
+                "errors1_1, errors2_1, errors3_1, errors4_1, errors5_1,"
+                "errors1_2, errors2_2, errors3_2, errors4_2, errors5_2,"
+                "errors1_3, errors2_3, errors3_3, errors4_3, errors5_3,"
+                "errors1_4, errors2_4, errors3_4, errors4_4, errors5_4,"
+                "errors1_5, errors2_5, errors3_5, errors4_5, errors5_5 "
+                "FROM errors_and_rates WHERE id " + id;
+    }
 
     query.exec(sql);
 
-    QList<QStringList> errors;
+    //QList<QStringList> errors;
     while(query.next()){
         QStringList l;
         for(int i=0;i<25;i++)
@@ -141,60 +244,28 @@ void Protocol::updateProtocol(){
 
 
 
-    QList<QStringList> list;
-    for(int i=0; i<name.count(); i++){
-        list.append(name[i] + rates[i]);
-    }
 
 
-    QStandardItemModel* model = new QStandardItemModel(list.count(), 34);
-    for (int row = 0; row < model->rowCount(); ++row) {
-        for (int column = 0; column < model->columnCount(); ++column) {
-            //QStandardItem *item = new QStandardItem(QString("row %0, column %1").arg(row).arg(column));
-            QStandardItem *item = new QStandardItem(list[row][column]);
-            if(column != 33){
-                item->setEditable(false);
-                model->setItem(row, column, item);
-            }
-            else{
-                item->setEditable(true);
-                item->setData(list[row][column + 1]);
-                model->setItem(row, column, item);
-
-            }
-        }
-    }
-    connect(model, SIGNAL(itemChanged(QStandardItem*)), this, SLOT(placeChanged(QStandardItem*)));
-    model->setHeaderData(0, Qt::Horizontal, "Фамилия Имя");
-    model->setHeaderData(1 , Qt::Horizontal, "Команда");
-    int j = 0;
-    QString s;
-    int count = 2;
-    for(int i=2; i<33; i++){
-        if(++j == 6){
-            s = ("S") + QString::number((i - count++) / 5);
-            j = 0;
-        }
-        else
-            s = QString::number(j);
-        model->setHeaderData(i, Qt::Horizontal, s);
-    }
-    model->setHeaderData(32, Qt::Horizontal, "Сумма баллов");
-    model->setHeaderData(33, Qt::Horizontal, "Место");
-
-    tblView->setModel(model);
-    tblView->setShowGrid(true);
-    for (int i = 2; i < 32; ++i) {
-        tblView->setColumnWidth(i, 10);
-    }
-    tblView->resizeColumnToContents(0);
-    tblView->resizeColumnToContents(1);
 
     //qDebug()<<list<<tblView->model()->rowCount()<<tblView->model()->columnCount();
     //tblView->sortByColumn(32, Qt::DescendingOrder);
     //tblView->setUserData()
-    showMaximized();
+
+    html = createHTML(0);
+
 }
+
+void Protocol::showBrauser(){
+    updateProtocol();
+    QFile f;
+    f.setFileName("temp.html");
+    f.open(QIODevice::WriteOnly | QIODevice::Text);
+    QTextStream out(&f);
+    out << html;
+    f.close();
+    QDesktopServices::openUrl(QUrl(QUrl::fromLocalFile("temp.html")));
+}
+
 
 void Protocol::placeChanged(QStandardItem * item){
     qDebug()<<item->row()<<item->data().toInt()<<item->text();
@@ -216,10 +287,7 @@ void Protocol::placeChanged(QStandardItem * item){
         qDebug()<<sql<<"error placeChanged!"<<sql;
 }
 
-QString Protocol::createHTML(int mode,
-                             QStringList name,
-                             QList<QStringList> rate,
-                             QList<QStringList> err){
+QString Protocol::createHTML(int mode){
 
     //int num_round = __num_round;
     QString html = "";
@@ -227,7 +295,7 @@ QString Protocol::createHTML(int mode,
     html += "<html>\n";
 
 
-    if(mode == 1){
+    //if(mode == 1){
         html +=
             "<style>"
                 "table.print{"
@@ -257,7 +325,7 @@ QString Protocol::createHTML(int mode,
                 "}"
             "</style>";
 
-    }
+    //}
     html += "<body><big>\n";
 
     //html += "<p align=\"center\">П Р О Т О К О Л</p><br>\n";
@@ -298,12 +366,11 @@ QString Protocol::createHTML(int mode,
     html += "</table>\n";
 /*---------------------------------------------------------------------------------*/
     html += "<br>";
-    if(mode == 0){
-        html += "<table style=\"vertical-align: middle\" width=\"100%\" "
-                "cellspacing = 0 cellpadding = 2 style=\"border-width: 1px;";
-        html += " border-style: solid; border-color: #000000;\" margin=\"auto\" >\n";
-    }else
-        html += "<table rules=\"all\" class=\"print\" width=\"100%\" margin=\"auto\">\n";
+    //if(mode == 0){
+    //    html += "<table border "//style=\"vertical-align: middle; border-width: 1px; border-style: solid; border-color: #000000;\" "
+    //            "width=\"100%\" cellspacing = \"0\" cellpadding = \"2\"   margin=\"auto\" >\n";
+    //}else
+        html += "<table border=\"1\" rules=\"all\" class=\"print\" width=\"100%\" margin=\"auto\">\n";
 
     html += "<tr>\n";
     html += "<td  width=\"2%\" rowspan=\"2\"><font size=\"2\">\n";
@@ -350,8 +417,8 @@ QString Protocol::createHTML(int mode,
                 count_color = 0;
         }
         html += "<tr bgcolor=" + color  + " align=\"center\"><td align=\"center\">" + QString::number(count) + "</td>\n";    // порядковый номер
-        html += "<td><font size=\"3\">" + name[count - 1][0] + "</font></td>\n";                                                    // фамилия, имя
-        html += "<td align=\"center\"><font size=\"2\">" + name[count - 1][1] + "</font></td>\n";                                   // регион
+        html += "<td align=\"left\"><font size=\"3\">" + name[count - 1][0] + "</font></td>\n";                                                    // фамилия, имя
+        html += "<td align=\"left\"><font size=\"2\">" + name[count - 1][1] + "</font></td>\n";                                   // регион
 
         for(int i=0;i<32;i++){
             if(rates[count - 1][i] != NULL){
@@ -370,12 +437,12 @@ QString Protocol::createHTML(int mode,
             }else
                 html = html + "<td align=\"center\" width=\"2%\"><font size=\"2\">" + "" + "</font></td>\n";
         }
-        html = html + "<td align=\"center\" width=\"2%\"><font size=\"2\">" + "" + "</font></td>\n";
+        //html = html + "<td align=\"center\" width=\"2%\"><font size=\"2\">" + "" + "</font></td>\n";
         html += "</tr>\n";
     }
     html += "</tr>\n";
     html += "</table>\n";
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     html += "<br>";
 
     html += "<table style=\"border-width: 0px;\" align=\"center\" width=\"100%\" >\n";
@@ -562,4 +629,46 @@ QString Protocol::tooltip(int count, int i){
         return "data-tooltip=\"" + s + "\"";
     }else
         return "";
+}
+
+void Protocol::printProtocol(){
+    updateProtocol();
+    QPrinter* printer = new QPrinter(QPrinter::HighResolution);
+    printer->setPageSize(QPrinter::A4);
+    printer->setOrientation(QPrinter::Landscape);
+    QPrintDialog* dlg = new QPrintDialog(printer);
+    if(dlg->exec() == QDialog::Accepted){
+        QTextEdit* textEdit = new QTextEdit();
+        QTextDocument* doc = new QTextDocument();
+        textEdit->setDocument(doc);
+        doc->setHtml(html);
+        textEdit->print(printer);
+    }
+
+}
+
+void Protocol::saveProtocol(){
+    QSettings settings ("settings.ini",QSettings::IniFormat);
+    settings.beginGroup("Settings");
+    QString dir = settings.value("dir").toString();
+    QString name = static_cast<FormMain*>(p)->CmbAge->currentText() + " лет, ";
+       name.append(static_cast<FormMain*>(p)->CmbWeight->currentText() + " кг, ");
+       name.append(static_cast<FormMain*>(p)->Cmb_round->currentText() + ".html");
+    if(dir != "")
+        dir = dir + "/";
+    QString sFile = QFileDialog::getSaveFileName(this, "Сохранение протокола", dir + name, "*.html");
+    if(sFile != ""){
+        updateProtocol();
+        int pos = sFile.lastIndexOf('/');
+        settings.setValue("dir", sFile.remove(pos, 50));
+        QFile f;
+        f.setFileName(sFile);
+        f.open(QIODevice::WriteOnly | QIODevice::Text);
+        QTextStream out(&f);
+        out << html;
+        f.close();
+
+    }
+    settings.endGroup();
+
 }

@@ -71,6 +71,7 @@ HEADERS += \
     udp.h
 
 DISTFILES += \
+    images/change.png \
     images/circle.png \
     images/circle_green.png \
     images/close.png \

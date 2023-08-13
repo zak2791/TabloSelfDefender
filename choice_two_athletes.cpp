@@ -172,7 +172,8 @@ void Choice_two_athletes::closeEvent(QCloseEvent*){
         p->CmbAge->setEnabled(false);
         p->CmbWeight->setEnabled(false);
         p->Btn_new->setEnabled(false);
-        p->BtnNewFinal->setEnabled(false);
+        p->BtnFinal->setEnabled(false);
+        p->BtnSemiFinal->setEnabled(false);
         p->mainwin->menuBar()->setEnabled(false);
      }else{
         p->Btn_next->setEnabled(false);
@@ -181,7 +182,8 @@ void Choice_two_athletes::closeEvent(QCloseEvent*){
         p->CmbAge->setEnabled(true);
         p->CmbWeight->setEnabled(true);
         p->Btn_new->setEnabled(true);
-        p->BtnNewFinal->setEnabled(true);
+        p->BtnFinal->setEnabled(true);
+        p->BtnSemiFinal->setEnabled(true);
         p->mainwin->menuBar()->setEnabled(true);
         if(p->current_mode == -1)
             p->GroupBox->setEnabled(true);

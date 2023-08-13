@@ -85,5 +85,6 @@ void Btn_next_clicked(FormMain* fm){
         fm->pult5->task = task;
         fm->task = 1;
         fm->Btn_enter->setEnabled(true);
+        fm->Btn_change->setEnabled(false);
     }
 }

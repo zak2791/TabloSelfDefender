@@ -63,13 +63,8 @@ ShowReports::ShowReports(int _num_round,
     }
     // выбор спортсменов и записей оценок из таблицы ошибок
     sql = "SELECT * "//id, id_sportsmen, place"
-          " FROM errors_and_rates WHERE id_round = '%1' ORDER BY 60 DESC;";
-          /*"BY CASE WHEN place = 1 THEN 1"
-          "                                                           WHEN place = 2 THEN 2"
-          "                                                           WHEN place = 3 THEN 3"
-          "                                                           WHEN place = 4 THEN 4"
-          "                                                           ELSE 5"
-          "                                                      END DESC;";*/
+          " FROM errors_and_rates WHERE id_round = '%1' ORDER BY place ASC;";
+
     sql = sql.arg(ID[0]);
     query.prepare(sql);
     query.exec();
@@ -106,7 +101,7 @@ ShowReports::ShowReports(int _num_round,
             "rate1_4, rate2_4, rate3_4, rate4_4, rate5_4, sum4, "
             "rate1_5, rate2_5, rate3_5, rate4_5, rate5_5, sum5, "
             "total, place "
-            "FROM errors_and_rates WHERE id " + id;
+            "FROM errors_and_rates WHERE id " + id + " ORDER BY place ASC";
 
     query.exec(sql);
 
@@ -122,7 +117,7 @@ ShowReports::ShowReports(int _num_round,
             "errors1_3, errors2_3, errors3_3, errors4_3, errors5_3,"
             "errors1_4, errors2_4, errors3_4, errors4_4, errors5_4,"
             "errors1_5, errors2_5, errors3_5, errors4_5, errors5_5 "
-            "FROM errors_and_rates WHERE id " + id;
+            "FROM errors_and_rates WHERE id " + id + " ORDER BY place ASC";
 
     query.exec(sql);
 
@@ -172,7 +167,7 @@ ShowReports::ShowReports(int _num_round,
     f.setFileName(s);
     f.open(QIODevice::WriteOnly | QIODevice::Text);
     QTextStream out(&f);
-    out << createHTML(1);
+    out << html;
     f.close();
 
     QDesktopServices::openUrl(QUrl(QUrl::fromLocalFile(s)));
@@ -180,13 +175,13 @@ ShowReports::ShowReports(int _num_round,
 }
 
 QString ShowReports::createHTML(int mode){
-    int num_round = __num_round;
+    //int num_round = __num_round;
     QString html = "";
     //html += "<center>\n";
     html += "<html>\n";
 
 
-    if(mode == 1){
+    //if(mode == 1){
         html +=
             "<style>"
                 "table.print{"
@@ -216,7 +211,7 @@ QString ShowReports::createHTML(int mode){
                 "}"
             "</style>";
 
-    }
+    //}
     html += "<body><big>\n";
 
     //html += "<p align=\"center\">П Р О Т О К О Л</p><br>\n";
@@ -257,11 +252,10 @@ QString ShowReports::createHTML(int mode){
     html += "</table>\n";
 /*---------------------------------------------------------------------------------*/
     html += "<br>";
-    if(mode == 0){
-        html += "<table style=\"vertical-align: middle\" width=\"100%\" "
-                "cellspacing = 0 cellpadding = 2 style=\"border-width: 1px;";
-        html += " border-style: solid; border-color: #000000;\" margin=\"auto\" >\n";
-    }else
+    //if(mode == 0){
+    //    html += "<table border "//style=\"vertical-align: middle; border-width: 1px; border-style: solid; border-color: #000000;\" "
+    //            "width=\"100%\" cellspacing = \"0\" cellpadding = \"2\"   margin=\"auto\" >\n";
+    //}else
         html += "<table rules=\"all\" class=\"print\" width=\"100%\" margin=\"auto\">\n";
 
     html += "<tr>\n";
@@ -309,8 +303,8 @@ QString ShowReports::createHTML(int mode){
                 count_color = 0;
         }
         html += "<tr bgcolor=" + color  + " align=\"center\"><td align=\"center\">" + QString::number(count) + "</td>\n";    // порядковый номер
-        html += "<td><font size=\"3\">" + name[count - 1][0] + "</font></td>\n";                                                    // фамилия, имя
-        html += "<td align=\"center\"><font size=\"2\">" + name[count - 1][1] + "</font></td>\n";                                   // регион
+        html += "<td align=\"left\"><font size=\"3\">" + name[count - 1][0] + "</font></td>\n";                                                    // фамилия, имя
+        html += "<td align=\"left\"><font size=\"2\">" + name[count - 1][1] + "</font></td>\n";                                   // регион
 
         for(int i=0;i<32;i++){
             if(rates[count - 1][i] != NULL){
@@ -329,12 +323,12 @@ QString ShowReports::createHTML(int mode){
             }else
                 html = html + "<td align=\"center\" width=\"2%\"><font size=\"2\">" + "" + "</font></td>\n";
         }
-        html = html + "<td align=\"center\" width=\"2%\"><font size=\"2\">" + "" + "</font></td>\n";
+        //html = html + "<td align=\"center\" width=\"2%\"><font size=\"2\">" + "" + "</font></td>\n";
         html += "</tr>\n";
     }
     html += "</tr>\n";
     html += "</table>\n";
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     html += "<br>";
 
     html += "<table style=\"border-width: 0px;\" align=\"center\" width=\"100%\" >\n";

@@ -4,17 +4,14 @@
 
 #include "FormMain.h"
 
-class Protocol : public QWidget {
+class Protocol : public QDialog {
     Q_OBJECT
 
     FormMain* p;
-    QPrinter* printer;
+    //QPrinter* printer;
     //virtual void showEvent(QShowEvent*);
     QTableView* tblView;
-    QString createHTML(int,
-                       QStringList,
-                       QList<QStringList>,
-                       QList<QStringList>);
+    QString createHTML(int);
 
     QString tooltip(int, int);
 
@@ -25,15 +22,17 @@ class Protocol : public QWidget {
     QList<QStringList> name;
     QList<QStringList> rates;
     QList<QStringList> errors;
+    QString html;
+    void updateProtocol(void);
 
 public:
     Protocol(FormMain* parent = nullptr);
 
 private slots:
     void placeChanged(QStandardItem*);
-
-public slots:
-    void updateProtocol(void);
+    void showBrauser(void);
+    void printProtocol(void);
+    void saveProtocol(void);
 
 };
 

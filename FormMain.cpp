@@ -270,8 +270,10 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
     CmbAge = cmbAge;
     CmbWeight = cmbWeight;
     Btn_new = btn_new;
-    BtnNewFinal = btnNewFinal;
+    BtnFinal = btnFin;
+    BtnSemiFinal = btnSemiFin;
     btnEnterName = btn_enterName;
+    Btn_change = btnChange;
 
     //BtnChoice = btnChoice;
     //BtnChoice->setVisible(false);
@@ -407,9 +409,9 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
 
     lbl_total->setText("");
 
-    Protocol* prt = new Protocol(this);
-    QPushButton* BtnNewFinal = btnNewFinal;
-    connect(BtnNewFinal,       SIGNAL(clicked()), prt, SLOT(updateProtocol()));
+    //Protocol* prt = new Protocol(this);
+    //QPushButton* BtnNewFinal = btnNewFinal;
+    connect(btn_look,       SIGNAL(clicked()), this, SLOT(btn_look_clicked()));
 
     connect(btn_next,       SIGNAL(clicked()), this, SLOT(btn_next_clicked()));
     connect(btn_enter,      SIGNAL(clicked()), this, SLOT(btn_enter_clicked()));
@@ -427,7 +429,7 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
     connect(btn_10,         SIGNAL(clicked()), this, SLOT(btn_10_clicked()));
     connect(btn_5,          SIGNAL(clicked()), this, SLOT(btn_5_clicked()));
     connect(btn_11,         SIGNAL(clicked()), this, SLOT(btn_11_clicked()));
-    connect(btn_look,       SIGNAL(clicked()), this, SLOT(btn_look_clicked()));     //протокол
+    connect(Btn_change,     SIGNAL(clicked()), this, SLOT(btn_change_clicked()));     //смена фамилий
 
     connect(btn_settings,   SIGNAL(clicked()), this, SLOT(btn_settings_clicked()));
     connect(btnErrors,      SIGNAL(clicked()), this, SLOT(btn_errors_clicked()));
@@ -1682,6 +1684,7 @@ void FormMain::btn_enterName_clicked(){
     mainwin->menuBar()->setEnabled(true);
     flag_priem = 0;
     m_db.close();
+    Btn_change->setEnabled(false);
 }
 
 void FormMain::button_num(QString num){
@@ -1758,8 +1761,14 @@ void FormMain::keyPressEvent(QKeyEvent* e){
 }
 
 void FormMain::btn_look_clicked(){
-    ShowReports* shR = new ShowReports(num_round, this);
-    shR->show();
+    if(currentDataBase == "")
+        return;
+    Protocol* prt = new Protocol(this);
+    prt->exec();
+}
+
+void FormMain::btn_change_clicked(){
+    qDebug()<<"change";
 }
 
 void FormMain::btnChoice_clicked(){

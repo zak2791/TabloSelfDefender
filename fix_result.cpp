@@ -310,12 +310,16 @@ void fix_result(FormMain* p){
             p->id_rates_blue = query.value(0).toInt();
             F1(p);
         }
+        if(p->current_mode > 0)
+            p->Btn_change->setEnabled(true);
 
     }else{           // если прием № 2, 3, 4 или 5
         if(p->current_mode == 0)
             F2(p);
-        else
+        else{
             F1(p);
+            p->Btn_change->setEnabled(true);
+        }
     }
     m_db.close();
 }

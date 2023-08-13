@@ -4,5 +4,6 @@
         <file>images/open.png</file>
         <file>images/circle.png</file>
         <file>images/circle_green.png</file>
+        <file>images/change.png</file>
     </qresource>
 </RCC>
