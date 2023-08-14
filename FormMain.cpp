@@ -1768,7 +1768,40 @@ void FormMain::btn_look_clicked(){
 }
 
 void FormMain::btn_change_clicked(){
-    qDebug()<<"change";
+    QSqlDatabase m_db;
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    QMessageBox msgBox;
+    m_db.setDatabaseName(currentDataBase);
+    if (!m_db.open()){
+        msgBox.setText("Ошибка открытия базы данных btn_change_clicked " + m_db.lastError().text());
+        msgBox.exec();
+        return;
+    }
+
+    QSqlQuery query;
+    QString sql = "SELECT MAX(id) FROM errors_and_rates WHERE id_round = '%1'";     //выбор последней записи в
+                                                                                    //таблице оценок для текущего круга
+    sql = sql.arg(id_round);
+    query.exec(sql);
+    if(!query.next())
+        return;
+    int id_red = query.value(0).toInt();    //id записи с оценками красного
+    int id_blue = id_red - 1;               //id записи с оценками синего
+    sql = "SELECT id_sportsmen FROM errors_and_rates WHERE id = '%1'";
+    query.exec(sql.arg(QString::number(id_red)));
+    query.next();
+    QString id_sportsmen_red = query.value(0).toString();
+    query.exec(sql.arg(QString::number(id_blue)));
+    query.next();
+    QString id_sportsmen_blue = query.value(0).toString();
+    sql = "UPDATE errors_and_rates SET id_sportsmen = '%1' WHERE id = '%2'";
+    query.exec(sql.arg("-", QString::number(id_blue)));
+    if(!query.exec(sql.arg(id_sportsmen_blue, QString::number(id_red))))
+        qDebug()<<"error update red"<<query.lastError();
+    if(!query.exec(sql.arg(id_sportsmen_red, QString::number(id_blue))))
+        qDebug()<<"error update blue"<<query.lastError();
+    m_db.close();
+    qDebug()<<id_red<<id_blue<<id_sportsmen_red<<id_sportsmen_blue;
 }
 
 void FormMain::btnChoice_clicked(){
@@ -1832,6 +1865,14 @@ void FormMain::addOneSportsmen(){
             ui.cbWeight->addItem(query.value(0).toString());
         }
     }
+    query.exec("SELECT DISTINCT (region) FROM sportsmens");
+    if(query.next()){
+        query.previous();
+        while(query.next()){
+            //qDebug()<<query.value(0).toString();
+            ui.cbTeam->addItem(query.value(0).toString());
+        }
+    }
     m_db.close();
     int ret = dlg->exec();
     if(ret){
@@ -1869,7 +1910,7 @@ void FormMain::addOneReferee(){
     ui.lblRegion->setText("Регион");
     ui.cbAge->setEnabled(false);
     ui.cbWeight->setEnabled(false);
-    QString sql_region     = "SELECT DISTINCT (region) FROM sportsmens";
+    QString sql_region     = "SELECT DISTINCT (region) FROM referee";
     QSqlQuery query;
     query.exec(sql_region);
     if(query.next()){
