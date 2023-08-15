@@ -1371,7 +1371,7 @@ void FormMain::new_round(void){
 }
 
 void FormMain::btn_semiFinal_clicked(void){
-    if(cmbWeight->count() == 0 || cmbAge->count() == 0)
+    if(cmbWeight->count() == 0 || cmbAge->count() == 0 || cmb_round->currentText() == "Полуфинал")
         return;
     QSqlDatabase m_db;
     QMessageBox msgBox;
@@ -1383,7 +1383,7 @@ void FormMain::btn_semiFinal_clicked(void){
         return;
     }
     QSqlQuery query;
-    QString sql = "SELECT id, mode FROM rounds WHERE round = '%1' and age = '%2' and weight = '%3'";
+    QString sql = "SELECT id FROM rounds WHERE round = '%1' and age = '%2' and weight = '%3'";
     sql = sql.arg(cmb_round->currentText().split(" ")[1], cmbAge->currentText(), cmbWeight->currentText());
     query.exec(sql);
     if(!query.next()){
@@ -1393,12 +1393,12 @@ void FormMain::btn_semiFinal_clicked(void){
         m_db.close();
         return;
     }
-    if(query.value(1).toInt() != 0){
-        msgBox.setText("Ошибка! Создать полуфинальный круг можно только из круга предварительного этапа");
-        msgBox.exec();
-        m_db.close();
-        return;
-    }
+//    if(query.value(1).toInt() != 0){
+//        msgBox.setText("Ошибка! Создать полуфинальный круг можно только из круга предварительного этапа");
+//        msgBox.exec();
+//        m_db.close();
+//        return;
+//    }
     qDebug()<<"id = "<<query.value(0);
     sql = "SELECT id, id_sportsmen, place FROM errors_and_rates WHERE id_round = %1 and place IN (1, 2, 3, 4) ORDER BY place";
     sql = sql.arg(query.value(0).toString());
