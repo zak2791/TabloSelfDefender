@@ -220,7 +220,7 @@ public:
     int id_rates_red;               //
     int id_rates_blue;              //
     int task;
-    int current_mode;               // текущий режим: -1-неопределен, 0-общий, 1-парный
+    int current_mode;               // текущий режим: -1-неопределен, 0-общий, 1-парный, 2-полуфинал, 3-финал
 
     QString style;
     boolean enable_correct;         // флаг разрешения коррекции результатов текущего вопроса
@@ -342,6 +342,7 @@ private slots:
     void btnChoice_clicked(void);
     void btn_change_clicked(void);
     void btn_look_clicked(void);
+    void btn_semiFinal_clicked(void);
 
     void setCam(void);
     //void showView(void);

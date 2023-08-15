@@ -151,7 +151,7 @@ void Protocol::updateProtocol(){
     if(p->flag_mode == 0)
         sql = "SELECT id, id_sportsmen FROM errors_and_rates WHERE id_round = '%1' ORDER BY place ASC";
     else
-        sql = "SELECT id, id_sportsmen FROM errors_and_rates WHERE id_round = '%1'";
+        sql = "SELECT id, id_sportsmen FROM errors_and_rates WHERE id_round = '%1' ORDER BY id";
     sql = sql.arg(ID[0]);
     query.exec(sql);
     QStringList id_name;
@@ -197,7 +197,7 @@ void Protocol::updateProtocol(){
                 "rate1_4, rate2_4, rate3_4, rate4_4, rate5_4, sum4, "
                 "rate1_5, rate2_5, rate3_5, rate4_5, rate5_5, sum5, "
                 "total, place, id "
-                "FROM errors_and_rates WHERE id " + id;
+                "FROM errors_and_rates WHERE id " + id + " ORDER BY id";
     }
 
     query.exec(sql);
@@ -225,7 +225,7 @@ void Protocol::updateProtocol(){
                 "errors1_3, errors2_3, errors3_3, errors4_3, errors5_3,"
                 "errors1_4, errors2_4, errors3_4, errors4_4, errors5_4,"
                 "errors1_5, errors2_5, errors3_5, errors4_5, errors5_5 "
-                "FROM errors_and_rates WHERE id " + id;
+                "FROM errors_and_rates WHERE id " + id + " ORDER BY id";
     }
 
     query.exec(sql);
