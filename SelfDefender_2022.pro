@@ -15,6 +15,7 @@ FORMS += \
     FormSettings.ui \
     addOneSportsmen.ui \
     addcompetition.ui \
+    dlgsemifinal.ui \
     mainwin.ui
 
 # QXlsx code for Application Qt project
@@ -33,6 +34,7 @@ SOURCES += \
     choice.cpp \
     choice_one_athlete.cpp \
     choice_two_athletes.cpp \
+    dlgsemifinal.cpp \
     errors.cpp \
     fam_reg.cpp \
     firstround.cpp \
@@ -58,6 +60,7 @@ HEADERS += \
     choice.h \
     choice_one_athlete.h \
     choice_two_athletes.h \
+    dlgsemifinal.h \
     errors.h \
     fam_reg.h \
     firstround.h \
