@@ -251,7 +251,7 @@ void Protocol::updateProtocol(){
     //tblView->sortByColumn(32, Qt::DescendingOrder);
     //tblView->setUserData()
 
-    html = createHTML(0);
+    html = createHTML(p->current_mode);
 
 }
 
@@ -304,24 +304,24 @@ QString Protocol::createHTML(int mode){
                 "}"
 
                 "[data-tooltip] {"
-                    "position: relative;" /* Относительное позиционирование */
+                    "position: relative;"                           /* Относительное позиционирование */
                 "}"
                 "[data-tooltip]::after {"
-                    "content: attr(data-tooltip);" /* Выводим текст */
-                    "position: absolute;" /* Абсолютное позиционирование */
-                    "width: 100px;" /* Ширина подсказки */
-                    "left: 0; top: 0;" /* Положение подсказки */
-                    "background: #3989c9;" /* Синий цвет фона */
-                    "color: #fff;" /* Цвет текста */
-                    "padding: 0.5em;" /* Поля вокруг текста */
-                    "box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);" /* Параметры тени */
-                    "pointer-events: none;" /* Подсказка */
-                    "opacity: 0;" /* Подсказка невидима */
-                    "transition: 0.5s;" /* Время появления подсказки */
+                    "content: attr(data-tooltip);"                  /* Выводим текст */
+                    "position: absolute;"                           /* Абсолютное позиционирование */
+                    "width: 100px;"                                 /* Ширина подсказки */
+                    "left: 0; top: 0;"                              /* Положение подсказки */
+                    "background: #3989c9;"                          /* Синий цвет фона */
+                    "color: #fff;"                                  /* Цвет текста */
+                    "padding: 0.5em;"                               /* Поля вокруг текста */
+                    "box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);"   /* Параметры тени */
+                    "pointer-events: none;"                         /* Подсказка */
+                    "opacity: 0;"                                   /* Подсказка невидима */
+                    "transition: 0.5s;"                             /* Время появления подсказки */
                 "}"
                 "[data-tooltip]:hover::after {"
-                    "opacity: 1;" /* Показываем подсказку */
-                    "top: 2em;" /* Положение подсказки */
+                    "opacity: 1;"                                   /* Показываем подсказку */
+                    "top: 2em;"                                     /* Положение подсказки */
                 "}"
             "</style>";
 
@@ -351,8 +351,8 @@ QString Protocol::createHTML(int mode){
 
     html += "<td width=\"60%\" align=\"center\">\n";
     html += "возраст " + static_cast<FormMain*>(p)->CmbAge->currentText() +
-                " лет, вес " + static_cast<FormMain*>(p)->CmbWeight->currentText() + " кг ";
-    html += static_cast<FormMain*>(p)->Cmb_round->currentText();
+                " лет, вес " + static_cast<FormMain*>(p)->CmbWeight->currentText() + " кг, ";
+    html += static_cast<FormMain*>(p)->Cmb_round->currentText().toLower();
     html += "</td>\n";
 
     html += "<td width=\"20%\" align=\"right\">\n";
@@ -384,6 +384,7 @@ QString Protocol::createHTML(int mode){
     html += "<td align=\"center\"  width=\"5%\" rowspan=\"2\"><font size=\"2\">Сумма<br>баллов</font></td>\n";
     html += "<td align=\"center\" width=\"3%\" rowspan=\"2\"><font size=\"2\">Место</font></td>\n";
     html += "</tr>\n";
+
     html += "<tr>\n";
     int i=1;
 
@@ -401,12 +402,23 @@ QString Protocol::createHTML(int mode){
         i++;
     }
     html += "</tr>\n";
+    if(mode == 3){
+        html += "<tr>\n";
+        html += "<td colspan=\"35\" align=\"center\">3-4 место</font></td>\n";
+        html += "</tr>\n";
+    }
+
     int count = 0;
     int count_color = 0;
     QString color = "White";
 
     while(count < name.length()){
         count++;
+        if(count == 3 && mode == 3){
+            html += "<tr>\n";
+            html += "<td colspan=\"35\" align=\"center\">Финал</font></td>\n";
+            html += "</tr>\n";
+        }
         if(static_cast<FormMain*>(p)->flag_mode == 1){
             count_color++;
             if(count_color < 3)
@@ -444,8 +456,98 @@ QString Protocol::createHTML(int mode){
     html += "</table>\n";
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     html += "<br>";
+    if(mode == 3){
+        QString name1 = ""; // 1 место
+        QString name2 = ""; // 2 место
+        QString name3 = ""; // 3 место
+        QString name4 = ""; // 4 место
 
-    html += "<table style=\"border-width: 0px;\" align=\"center\" width=\"100%\" >\n";
+        QSqlDatabase m_db;
+        QMessageBox msgBox;
+        m_db = QSqlDatabase::addDatabase("QSQLITE");
+        m_db.setDatabaseName(p->currentDataBase);
+        if(!m_db.open()){
+            msgBox.setText("Ошибка базы данных (html)!");
+            msgBox.exec();
+        }
+
+        QSqlQuery query;
+        QString sql = "SELECT err.id_sportsmen, err.place FROM errors_and_rates err "
+                      "JOIN rounds rnd ON rnd.id=err.id_round WHERE rnd.age = '%1' and rnd.weight = '%2' and rnd.mode = 3 ORDER BY err.id";
+
+        //sql = "SELECT id_sportsmen, place FROM errors_and_rates WHERE id_round = '%3' and age = '%1' and weight = '%2' ORDER BY id";
+        QList<int> id_sportsmen;
+        QList<int> place;
+        sql = sql.arg(p->CmbAge->currentText(), p->CmbWeight->currentText());
+        query.exec(sql);
+        qDebug()<<query.lastError()<<sql;
+        while(query.next()){
+            if(query.value(0).isNull()) id_sportsmen.append(0);
+            else id_sportsmen.append(query.value(0).toInt());
+            place.append(query.value(1).toInt());
+        }
+
+        if(id_sportsmen.at(0) > 0 && id_sportsmen.at(1) > 0){
+            if(place.at(0) != place.at(1)){
+                if(place.at(0) == 1){
+                    query.exec("SELECT name FROM sportsmens WHERE id = " + QString::number(id_sportsmen.at(0)));
+                    query.next();
+                    name4 = query.value(0).toString();
+                    query.exec("SELECT name FROM sportsmens WHERE id = " + QString::number(id_sportsmen.at(1)));
+                    query.next();
+                    name3 = query.value(0).toString();
+                }
+                if(place.at(1) == 1){
+                    query.exec("SELECT name FROM sportsmens WHERE id = " + QString::number(id_sportsmen.at(1)));
+                    query.next();
+                    name3 = query.value(0).toString();
+                    query.exec("SELECT name FROM sportsmens WHERE id = " + QString::number(id_sportsmen.at(0)));
+                    query.next();
+                    name4 = query.value(0).toString();
+                }
+                            }
+        }else if(place.at(1) == 3){                                                                         // если 3 человека в весе
+            query.exec("SELECT name FROM sportsmens WHERE id = " + QString::number(id_sportsmen.at(1)));
+            query.next();
+            name3 = query.value(0).toString();
+            name4 = "";
+        }
+
+        if(id_sportsmen.at(2) > 0 && id_sportsmen.at(3) > 0){
+            if(place.at(2) != place.at(3)){
+                if(place.at(2) == 1){
+                    query.exec("SELECT name FROM sportsmens WHERE id = " + QString::number(id_sportsmen.at(2)));
+                    query.next();
+                    name1 = query.value(0).toString();
+                    query.exec("SELECT name FROM sportsmens WHERE id = " + QString::number(id_sportsmen.at(3)));
+                    query.next();
+                    name2 = query.value(0).toString();
+                }
+                if(place.at(3) == 1){
+                    query.exec("SELECT name FROM sportsmens WHERE id = " + QString::number(id_sportsmen.at(3)));
+                    query.next();
+                    name1 = query.value(0).toString();
+                    query.exec("SELECT name FROM sportsmens WHERE id = " + QString::number(id_sportsmen.at(2)));
+                    query.next();
+                    name2 = query.value(0).toString();
+                }
+            }
+        }
+
+        html += "<table style=\"border-collapse: collapse;\" align=\"left\" width=\"30%\" >\n";
+        html += "<tr style=\"border-bottom: 1pt solid black;\">\n";
+        html += "<td>1 место&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" + name1 + "</td>\n";
+        html += "<tr style=\"border-bottom: 1pt solid black;\">\n";
+        html += "<td>2 место&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" + name2 + "</td>\n";
+        html += "<tr style=\"border-bottom: 1pt solid black;\">\n";
+        html += "<td>3 место&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" + name3 + "</td>\n";
+        html += "<tr style=\"border-bottom: 1pt solid black;\">\n";
+        html += "<td>4 место&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" + name4 + "</td>\n";
+        html += "</table>\n";
+
+    }
+
+    html += "<table style=\"border-width: 0px; margin: 50px; float: left;\" align=\"center\" width=\"100%\" >\n";
 
     html += "<tr>\n";
 

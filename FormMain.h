@@ -343,6 +343,7 @@ private slots:
     void btn_change_clicked(void);
     void btn_look_clicked(void);
     void btn_semiFinal_clicked(void);
+    void btn_final_clicked(void);
 
     void setCam(void);
     //void showView(void);

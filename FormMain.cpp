@@ -432,6 +432,7 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
     connect(btn_11,         SIGNAL(clicked()), this, SLOT(btn_11_clicked()));
     connect(Btn_change,     SIGNAL(clicked()), this, SLOT(btn_change_clicked()));     //смена фамилий
     connect(BtnSemiFinal,   SIGNAL(clicked()), this, SLOT(btn_semiFinal_clicked()));
+    connect(BtnFinal,       SIGNAL(clicked()), this, SLOT(btn_final_clicked()));
 
     connect(btn_settings,   SIGNAL(clicked()), this, SLOT(btn_settings_clicked()));
     connect(btnErrors,      SIGNAL(clicked()), this, SLOT(btn_errors_clicked()));
@@ -743,6 +744,9 @@ void FormMain::find_id_round(void){
     if(cmb_round->currentText() == "Полуфинал"){
         sql = "SELECT id FROM rounds WHERE age = '%1' and weight = '%2' and mode = 2";
         sql = sql.arg(a).arg(w);
+    }else if(cmb_round->currentText() == "Финал"){
+        sql = "SELECT id FROM rounds WHERE age = '%1' and weight = '%2' and mode = 3";
+        sql = sql.arg(a).arg(w);
     }
     else{
         int r = cmb_round->currentText().remove(0, 5).toInt();  // номер круга
@@ -836,6 +840,8 @@ void FormMain::age(void){
     foreach(QString sEach, l){
         if(sEach.split(";")[1] == "2")
             cmb_round->addItem("Полуфинал");
+        else if(sEach.split(";")[1] == "3")
+            cmb_round->addItem("Финал");
         else
             cmb_round->addItem("круг " + sEach.split(";")[0]);
     }
@@ -882,6 +888,8 @@ void FormMain::weight(void){
         foreach(QString sEach, l){
             if(sEach.split(";")[1] == "2")
                 cmb_round->addItem("Полуфинал");
+            else if(sEach.split(";")[1] == "3")
+                cmb_round->addItem("Финал");
             else
                 cmb_round->addItem("круг " + sEach.split(";")[0]);
         }
@@ -1372,7 +1380,7 @@ void FormMain::new_round(void){
 }
 
 void FormMain::btn_semiFinal_clicked(void){
-    if(cmbWeight->count() == 0 || cmbAge->count() == 0 || cmb_round->currentText() == "Полуфинал")
+    if(cmbWeight->count() == 0 || cmbAge->count() == 0 || cmb_round->currentText() == "Полуфинал" || cmb_round->currentText() == "Финал")
         return;
     QSqlDatabase m_db;
     QMessageBox msgBox;
@@ -1417,9 +1425,6 @@ void FormMain::btn_semiFinal_clicked(void){
     if(list.count() != 4){
         msgBox.setText("Ошибка! Для создания полуфинального круга необходимо, чтобы в текущем кругу было 4 спортсмена с проставленными занятыми местами");
         msgBox.exec();
-//        while(query.next()){
-//            qDebug()<<query.value(0).toString()<<query.value(1).toString()<<query.value(2).toString();
-//        }
         m_db.close();
         return;
     }
@@ -1456,6 +1461,239 @@ void FormMain::btn_semiFinal_clicked(void){
 
     cmb_round->addItem("Полуфинал");
     cmb_round->setCurrentIndex(len_rounds);
+
+}
+
+void FormMain::btn_final_clicked(void){
+    if(cmbWeight->count() == 0 || cmbAge->count() == 0 || cmb_round->currentText() == "Финал")
+        return;
+    QSqlDatabase m_db;
+    QMessageBox msgBox;
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(currentDataBase);
+    if(!m_db.open()){
+        msgBox.setText("Ошибка базы данных (btn_semiFinal_clicked)!");
+        msgBox.exec();
+        return;
+    }
+
+    int len_rounds = 0;
+    QSqlQuery query;
+    QString sql = "SELECT * FROM rounds WHERE age = '%1' and weight = '%2' and mode = 3";
+    sql = sql.arg(cmbAge->currentText(), cmbWeight->currentText());
+    if(!query.exec(sql))
+        qDebug()<<"err = "<<query.lastError();
+    while(query.next()){
+        msgBox.setText("Финальный круг уже создан!");
+        msgBox.exec();
+        m_db.close();
+        return;
+    }
+
+    if(cmb_round->currentText() == "Полуфинал"){
+        sql = "SELECT id FROM rounds WHERE mode = 2 and age = '%2' and weight = '%3'";
+        sql = sql.arg(cmbAge->currentText(), cmbWeight->currentText());
+        query.exec(sql);
+        if(!query.next()){
+            msgBox.setText("Невозможно создать финальный круг!(1)" + query.lastError().text());
+            msgBox.exec();
+            m_db.close();
+            return;
+        }
+
+        sql = "SELECT id, id_sportsmen, place FROM errors_and_rates WHERE id_round = %1 ORDER BY id";
+        sql = sql.arg(query.value(0).toString());
+        query.exec(sql);
+        QStringList list;
+        int place1, place2, place3, place4;
+        bool flag_error = false;
+        QList<int> id_sportsmen{0, 0, 0, 0};    //id спортсменов для распределения в финале
+        query.next();
+        if(!query.value(2).isNull()){
+            place1 = query.value(2).toInt();
+            if(place1 != 1) flag_error = true;
+            id_sportsmen[2] = query.value(1).toInt();
+        }
+        else{
+            place1 = 0;
+            id_sportsmen[0] = query.value(1).toInt();
+        }
+        query.next();
+        if(!query.value(2).isNull()){
+            place2 = query.value(2).toInt();
+            if(place2 != 1) flag_error = true;
+            id_sportsmen[2] = query.value(1).toInt();
+        }
+        else{
+            place2 = 0;
+            id_sportsmen[0] = query.value(1).toInt();
+        }
+        query.next();
+        if(!query.value(2).isNull()){
+            place3 = query.value(2).toInt();
+            if(place3 != 1) flag_error = true;
+            id_sportsmen[3] = query.value(1).toInt();
+        }
+        else{
+            place3 = 0;
+            id_sportsmen[1] = query.value(1).toInt();
+        }
+        query.next();
+        if(!query.value(2).isNull()){
+            place4 = query.value(2).toInt();
+            if(place4 != 1) flag_error = true;
+            id_sportsmen[3] = query.value(1).toInt();
+        }
+        else{
+            place4 = 0;
+            id_sportsmen[1] = query.value(1).toInt();
+        }
+
+        if((place1 + place2) != 1) flag_error = true;
+        if((place3 + place4) != 1) flag_error = true;
+
+        if(flag_error){
+            msgBox.setText("Ошибка! Для создания финального круга необходимо, чтобы в каждой полуфинальной подгруппе был отмечен один победитель (цифра 1)");
+            msgBox.exec();
+            m_db.close();
+            return;
+        }
+
+        /* определение общего количества кругов в категории ...*/
+        sql = "SELECT round FROM rounds WHERE age = '%1' and weight = '%2'";
+        sql = sql.arg(cmbAge->currentText()).arg(cmbWeight->currentText());
+        query.exec(sql);
+        QList<QString> l_round;
+        while(query.next())
+            l_round.append(query.value(0).toString());
+        len_rounds = l_round.length();
+
+        /* ... для присваивания номера следующему кругу */
+        sql = "INSERT INTO rounds (round, age, weight, mode) VALUES ('%1', '%2', '%3', '%4')";
+        sql = sql.arg(len_rounds + 1).arg(cmbAge->currentText()).arg(cmbWeight->currentText()).arg("3");
+        query.exec(sql);
+
+        int last_id = query.lastInsertId().toInt();
+
+        sql = "INSERT INTO errors_and_rates (id_sportsmen, id_round) VALUES ('%1', '%2')";
+        query.exec(sql.arg(QString::number(id_sportsmen[0]), QString::number(last_id)));   // пара 1
+        query.exec(sql.arg(QString::number(id_sportsmen[1]), QString::number(last_id)));   // за 3 место
+        query.exec(sql.arg(QString::number(id_sportsmen[2]), QString::number(last_id)));   // пара 2
+        query.exec(sql.arg(QString::number(id_sportsmen[3]), QString::number(last_id)));   // за 1 место
+
+        m_db.close();
+        cmb_round->addItem("Финал");
+        cmb_round->setCurrentIndex(len_rounds);
+    }
+    else{
+        /* Если в категории два или три спортсмена */
+        sql = "SELECT id FROM sportsmens WHERE age = '%1' and weight = '%2'";
+        sql = sql.arg(cmbAge->currentText(), cmbWeight->currentText());
+        query.exec(sql);
+        int count = 0;
+        while(query.next())
+            count++;
+        if(count == 2){
+            /* определение общего количества кругов в категории ...*/
+            sql = "SELECT round FROM rounds WHERE age = '%1' and weight = '%2'";
+            sql = sql.arg(cmbAge->currentText()).arg(cmbWeight->currentText());
+            query.exec(sql);
+            QList<QString> l_round;
+            while(query.next())
+                l_round.append(query.value(0).toString());
+            len_rounds = l_round.length();
+
+            /* ... для присваивания номера следующему кругу */
+            sql = "INSERT INTO rounds (round, age, weight, mode) VALUES ('%1', '%2', '%3', '%4')";
+            sql = sql.arg(len_rounds + 1).arg(cmbAge->currentText()).arg(cmbWeight->currentText()).arg("3");
+            query.exec(sql);
+
+            int last_id = query.lastInsertId().toInt();
+
+            sql = "SELECT id FROM sportsmens WHERE age = '%1' and weight = '%2'";
+            sql = sql.arg(cmbAge->currentText()).arg(cmbWeight->currentText());
+            query.exec(sql);
+            QList<int> id_sportsmen;
+            query.next();
+            id_sportsmen.append(query.value(0).toInt());
+            query.next();
+            id_sportsmen.append(query.value(0).toInt());
+
+            sql = "INSERT INTO errors_and_rates (id_sportsmen, id_round) VALUES ('%1', '%2')";
+            query.exec(sql.arg(QString::number(-1), QString::number(last_id)));                 // пусто
+            query.exec(sql.arg(QString::number(-2), QString::number(last_id)));                 // пусто
+            query.exec(sql.arg(QString::number(id_sportsmen[0]), QString::number(last_id)));    // пара за;
+            query.exec(sql.arg(QString::number(id_sportsmen[1]), QString::number(last_id)));    // 1 место;
+
+            m_db.close();
+            cmb_round->addItem("Финал");
+            cmb_round->setCurrentIndex(len_rounds);
+        }
+        else if(count == 3){
+            sql = "SELECT id FROM rounds WHERE round = '%1' and age = '%2' and weight = '%3'";
+            sql = sql.arg(cmb_round->currentText().split(" ")[1], cmbAge->currentText(), cmbWeight->currentText());
+            query.exec(sql);
+            if(!query.next()){
+                msgBox.setText("Невозможно создать финальный круг!(1)" + query.lastError().text());
+                msgBox.exec();
+                m_db.close();
+                return;
+            }
+
+            sql = "SELECT id, id_sportsmen, place FROM errors_and_rates WHERE id_round = %1 and place IN (1, 2, 3) ORDER BY place";
+            sql = sql.arg(query.value(0).toString());
+            qDebug()<<sql;
+            query.exec(sql);
+            QStringList list;
+            while(query.next())
+                list.append(query.value(2).toString());
+             list.removeDuplicates();
+            if(list.count() != 3){
+                msgBox.setText("Ошибка! Для создания финального круга необходимо, чтобы в текущем кругу было 3 спортсмена с проставленными занятыми местами");
+                msgBox.exec();
+                m_db.close();
+                return;
+            }
+            /* список id спортсменов круга в порядке занятых мест */
+            list.clear();
+            query.first();
+            list.append(query.value(1).toString());
+            while(query.next())
+                list.append(query.value(1).toString());
+
+            /* определение общего количества кругов в категории ...*/
+            sql = "SELECT round FROM rounds WHERE age = '%1' and weight = '%2'";
+            sql = sql.arg(cmbAge->currentText()).arg(cmbWeight->currentText());
+            query.exec(sql);
+            QList<QString> l_round;
+            while(query.next())
+                l_round.append(query.value(0).toString());
+            len_rounds = l_round.length();
+
+            /* ... для присваивания номера следующему кругу */
+            sql = "INSERT INTO rounds (round, age, weight, mode) VALUES ('%1', '%2', '%3', '%4')";
+            sql = sql.arg(len_rounds + 1).arg(cmbAge->currentText()).arg(cmbWeight->currentText()).arg("3");
+            query.exec(sql);
+
+            int last_id = query.lastInsertId().toInt();
+
+            sql = "INSERT INTO errors_and_rates (id_sportsmen, id_round) VALUES ('%1', '%2')";
+            query.exec(sql.arg(QString::number(-1), QString::number(last_id))); // пусто
+            query.exec(sql.arg(list.at(2), QString::number(last_id)));          // 3 место
+            query.exec(sql.arg(list.at(0), QString::number(last_id)));          // за 1
+            query.exec(sql.arg(list.at(1), QString::number(last_id)));          // место
+
+            m_db.close();
+            cmb_round->addItem("Финал");
+            cmb_round->setCurrentIndex(len_rounds);
+        }
+
+
+
+    }
+
+
+
 
 }
 
@@ -1766,19 +2004,17 @@ void FormMain::btn_enterName_clicked(){
 
 
     if(flag_mode == 0){
-        new Choice_one_athlete(data, this);    // окно выбора спортсменов общего круга
+        Choice_one_athlete* ch = new Choice_one_athlete(data, this);    // окно выбора спортсменов общего круга
         total_sum = 0.0;
         QString s;
         s = s.setNum(total_sum);
         lbl_total->setText(s);
     }else{
         if(current_mode == 1 || current_mode == -1)
-            new Choice_two_athletes(data, this);
-        else if(current_mode == 2){
-            new dlgSemiFinal(this);
-            //dlg->exec();
-        }else if(current_mode == 3){
-
+            Choice_two_athletes* ch = new Choice_two_athletes(data, this);
+        else if(current_mode == 2 || current_mode == 3){
+            dlgSemiFinal* dlg = new dlgSemiFinal(this, current_mode);
+            dlg->exec();
         }
         total_sum_red = 0.0;
         total_sum_blue = 0.0;
@@ -1898,21 +2134,47 @@ void FormMain::btn_change_clicked(){
     }
 
     QSqlQuery query;
-    QString sql = "SELECT MAX(id) FROM errors_and_rates WHERE id_round = '%1'";     //выбор последней записи в
-                                                                                    //таблице оценок для текущего круга
-    sql = sql.arg(id_round);
-    query.exec(sql);
-    if(!query.next())
-        return;
-    int id_red = query.value(0).toInt();    //id записи с оценками красного
-    int id_blue = id_red - 1;               //id записи с оценками синего
-    sql = "SELECT id_sportsmen FROM errors_and_rates WHERE id = '%1'";
-    query.exec(sql.arg(QString::number(id_red)));
-    query.next();
-    QString id_sportsmen_red = query.value(0).toString();
-    query.exec(sql.arg(QString::number(id_blue)));
-    query.next();
-    QString id_sportsmen_blue = query.value(0).toString();
+    QString sql;
+    int id_red;
+    int id_blue;
+    QString id_sportsmen_red;
+    QString id_sportsmen_blue;
+
+    if(current_mode == 2 || current_mode == 3){
+        sql = "SELECT err.id, err.id_sportsmen FROM errors_and_rates err "
+              "JOIN sportsmens sp ON err.id_sportsmen=sp.id "
+              "WHERE err.id_round = '%1' and sp.name = '%2'";
+        if(!query.exec(sql.arg(QString::number(id_round), Lbl_name_red->text().split(";")[0]))) qDebug()<<"err select id red = "<<query.lastError()<<sql;
+        query.next();
+        id_red = query.value(0).toInt();
+        id_sportsmen_red = query.value(1).toString();
+        sql = "SELECT err.id, err.id_sportsmen FROM errors_and_rates err "
+              "JOIN sportsmens sp ON err.id_sportsmen=sp.id "
+              "WHERE id_round = '%1' and sp.name = '%2'";
+        if(!query.exec(sql.arg(QString::number(id_round), Lbl_name_blue->text().split(";")[0]))) qDebug()<<"err select id blue = "<<query.lastError()<<sql;
+        query.next();
+        id_blue = query.value(0).toInt();
+        id_sportsmen_blue = query.value(1).toString();
+    }
+    else{
+        sql = "SELECT MAX(id) FROM errors_and_rates WHERE id_round = '%1'";     //выбор последней записи в
+                                                                                //таблице оценок для текущего круга
+        sql = sql.arg(id_round);
+        query.exec(sql);
+        if(!query.next())
+            return;
+        id_red = query.value(0).toInt();    //id записи с оценками красного
+        id_blue = id_red - 1;               //id записи с оценками синего
+        sql = "SELECT id_sportsmen FROM errors_and_rates WHERE id = '%1'";
+        query.exec(sql.arg(QString::number(id_red)));
+        query.next();
+        id_sportsmen_red = query.value(0).toString();
+        query.exec(sql.arg(QString::number(id_blue)));
+        query.next();
+        id_sportsmen_blue = query.value(0).toString();
+    }
+
+
     sql = "UPDATE errors_and_rates SET id_sportsmen = '%1' WHERE id = '%2'";
     query.exec(sql.arg("-", QString::number(id_blue)));
     if(!query.exec(sql.arg(id_sportsmen_blue, QString::number(id_red))))
@@ -2444,18 +2706,25 @@ void FormMain::choiceCompetitions(QString s){
     l_weight = f_sort(l_weight);
     foreach(QString sEach, l_weight)
         cmbWeight->addItem(sEach);
-    QString sql_round = "SELECT round FROM rounds WHERE age = '%1' and weight = '%2'";
+    QString sql_round = "SELECT round, mode FROM rounds WHERE age = '%1' and weight = '%2'";
     sql_round =sql_round.arg(l_age[0]).arg(l_weight[0]);
     query.exec(sql_round);
-    QList<QString> l_round;
+    QList<QStringList> l_round;
     while(query.next())
-        l_round.append(query.value(0).toString());
-    foreach(QString sEach, l_round)
-        cmb_round->addItem("круг " + sEach);
+        l_round.append({query.value(0).toString(), query.value(1).toString()});
+    foreach(QStringList sEach, l_round){
+        if(sEach[1] == "2")
+            cmb_round->addItem("Полуфинал");
+        else if(sEach[1] == "3")
+            cmb_round->addItem("Финал");
+        else
+            cmb_round->addItem("круг " + sEach[0]);
+    }
+
+    connect(cmb_round,  SIGNAL(currentIndexChanged(int)), this, SLOT(round_()));
     cmb_round->setCurrentIndex(l_round.count() - 1);
     connect(cmbAge,     SIGNAL(currentIndexChanged(int)), this, SLOT(age()));
     connect(cmbWeight,  SIGNAL(currentIndexChanged(int)), this, SLOT(weight()));
-    connect(cmb_round,  SIGNAL(currentIndexChanged(int)), this, SLOT(round_()));
 
     m_db.close();
 }

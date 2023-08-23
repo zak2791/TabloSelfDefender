@@ -263,7 +263,7 @@ void fix_result(FormMain* p){
             query.next();
             p->id_rates = query.value(0).toInt();
             F2(p);
-        }else{                   //current_mode = 1
+        }else if(p->current_mode == 1){                   //current_mode = 1
             /////////////////////////////////////////////////////////////
             // создание новой записи в таблице для красного спортсмена //
             /////////////////////////////////////////////////////////////
@@ -303,6 +303,38 @@ void fix_result(FormMain* p){
                 return;
             }
 
+            sql = "SELECT id FROM errors_and_rates WHERE id_sportsmen = '%1' and id_round = '%2'";
+            sql = sql.arg(IDS).arg(p->id_round);
+            query.exec(sql);
+            query.next();
+            p->id_rates_blue = query.value(0).toInt();
+            F1(p);
+        }else if(p->current_mode == 2 || p->current_mode == 3){
+            /////////////////////////////////////////////////////////////
+            // создание новой записи в таблице для красного спортсмена //
+            /////////////////////////////////////////////////////////////
+            QString sql_sportsmens = "SELECT id FROM sportsmens WHERE name = '" +
+                                        p->Lbl_name_red->text().split(';')[0] +
+                                        "'";
+            QSqlQuery query;
+            query.exec(sql_sportsmens);
+            query.next();
+            QString IDS = query.value(0).toString();    // id спортсмена
+            QString sql = "SELECT id FROM errors_and_rates WHERE id_sportsmen = '%1' and id_round = '%2'";
+            sql = sql.arg(IDS).arg(p->id_round);
+            query.exec(sql);
+            query.next();
+            p->id_rates_red = query.value(0).toInt();
+
+            /////////////////////////////////////////////////////////////
+            //  создание новой записи в таблице для синего спортсмена  //
+            /////////////////////////////////////////////////////////////
+            sql_sportsmens = "SELECT id FROM sportsmens WHERE name = '" +
+                                p->Lbl_name_blue->text().split(';')[0] +
+                                "'";
+            query.exec(sql_sportsmens);
+            query.next();
+            IDS = query.value(0).toString();        // id спортсмена
             sql = "SELECT id FROM errors_and_rates WHERE id_sportsmen = '%1' and id_round = '%2'";
             sql = sql.arg(IDS).arg(p->id_round);
             query.exec(sql);
