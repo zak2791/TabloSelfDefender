@@ -36,7 +36,6 @@ Protocol::Protocol(FormMain* parent) : QDialog(){
     hBox->addWidget(btnPrint);
     hBox->addWidget(btnSave);
     hBox->addWidget(btnClose);
-    //hBox->setStretchFactor(btnShowBrauzer, 1);
     vBox->addWidget(tblView);
     vBox->addLayout(hBox);
     setLayout(vBox);
@@ -54,26 +53,23 @@ Protocol::Protocol(FormMain* parent) : QDialog(){
     updateProtocol();
 
     QList<QStringList> list;
-    for(int i=0; i<name.count(); i++){
+    for(int i=0; i<name.count(); i++)
         list.append(name[i] + rates[i]);
-    }
-
-    //qDebug()<<list;
 
     QStandardItemModel* model = new QStandardItemModel(list.count(), 34);
     for (int row = 0; row < model->rowCount(); ++row) {
         for (int column = 0; column < model->columnCount(); ++column) {
-            //QStandardItem *item = new QStandardItem(QString("row %0, column %1").arg(row).arg(column));
             QStandardItem *item = new QStandardItem(list[row][column]);
             if(column != 33){
                 item->setEditable(false);
+                if(column == 32)
+                    item->setData(list[row][column].toFloat(), Qt::DisplayRole);
                 model->setItem(row, column, item);
             }
             else{
                 item->setEditable(true);
                 item->setData(list[row][column + 1]);   //id
                 model->setItem(row, column, item);
-
             }
         }
     }
@@ -147,9 +143,10 @@ void Protocol::updateProtocol(){
     while(query.next()){
         ID.append(query.value(0).toString());
     }
+
     // выбор спортсменов и записей оценок из таблицы ошибок
     if(p->flag_mode == 0)
-        sql = "SELECT id, id_sportsmen FROM errors_and_rates WHERE id_round = '%1' ORDER BY place ASC";
+        sql = "SELECT id, id_sportsmen FROM errors_and_rates WHERE id_round = '%1' ORDER BY place NULLS LAST";
     else
         sql = "SELECT id, id_sportsmen FROM errors_and_rates WHERE id_round = '%1' ORDER BY id";
     sql = sql.arg(ID[0]);
@@ -161,6 +158,7 @@ void Protocol::updateProtocol(){
         id_reffery_rates.append(query.value(0).toString());
     }
 
+    qDebug()<<"id_reffery_rates = "<<id_reffery_rates;
     // выбор фамилий спортсменов
     //QList<QStringList> name;
     foreach(QString i, id_name){
@@ -187,7 +185,7 @@ void Protocol::updateProtocol(){
                 "rate1_4, rate2_4, rate3_4, rate4_4, rate5_4, sum4, "
                 "rate1_5, rate2_5, rate3_5, rate4_5, rate5_5, sum5, "
                 "total, place, id "
-                "FROM errors_and_rates WHERE id " + id + " ORDER BY place ASC";
+                "FROM errors_and_rates WHERE id " + id + " ORDER BY place NULLS LAST";
     }
     else{
         sql =   "SELECT "
@@ -216,7 +214,7 @@ void Protocol::updateProtocol(){
                 "errors1_3, errors2_3, errors3_3, errors4_3, errors5_3,"
                 "errors1_4, errors2_4, errors3_4, errors4_4, errors5_4,"
                 "errors1_5, errors2_5, errors3_5, errors4_5, errors5_5 "
-                "FROM errors_and_rates WHERE id " + id + " ORDER BY place ASC";
+                "FROM errors_and_rates WHERE id " + id + " ORDER BY place NULLS LAST";
     }
     else{
         sql =   "SELECT "
@@ -230,7 +228,6 @@ void Protocol::updateProtocol(){
 
     query.exec(sql);
 
-    //QList<QStringList> errors;
     while(query.next()){
         QStringList l;
         for(int i=0;i<25;i++)
@@ -238,18 +235,7 @@ void Protocol::updateProtocol(){
         errors.append(l);
     }
 
-   //__num_round = _num_round;
-
     m_db.close();
-
-
-
-
-
-
-    //qDebug()<<list<<tblView->model()->rowCount()<<tblView->model()->columnCount();
-    //tblView->sortByColumn(32, Qt::DescendingOrder);
-    //tblView->setUserData()
 
     html = createHTML(p->current_mode);
 
@@ -278,8 +264,15 @@ void Protocol::placeChanged(QStandardItem * item){
         msgBox.exec();
         return;
     }
-    //QString place();
-    QString sql = "UPDATE errors_and_rates SET place = '" + item->text() + "' WHERE id = " + QString::number(item->data().toInt());
+
+    QString sql;
+    bool ok;
+    int dec = item->text().toInt(&ok, 10);       // dec == 0, ok == false
+    if(ok)
+        sql = "UPDATE errors_and_rates SET place = '" + item->text() + "' WHERE id = " + QString::number(item->data().toInt());
+    else
+        sql = "UPDATE errors_and_rates SET place = NULL WHERE id = " + QString::number(item->data().toInt());
+
     QSqlQuery query;
     if(query.exec(sql))
         qDebug()<<"ok placeChanged!";
@@ -289,14 +282,11 @@ void Protocol::placeChanged(QStandardItem * item){
 
 QString Protocol::createHTML(int mode){
 
-    //int num_round = __num_round;
     QString html = "";
-    //html += "<center>\n";
     html += "<html>\n";
 
 
-    //if(mode == 1){
-        html +=
+    html +=
             "<style>"
                 "table.print{"
                     "border: 1px solid black;"
@@ -325,10 +315,7 @@ QString Protocol::createHTML(int mode){
                 "}"
             "</style>";
 
-    //}
     html += "<body><big>\n";
-
-    //html += "<p align=\"center\">П Р О Т О К О Л</p><br>\n";
 
     html += "<table style=\"border-width: 0px;\" align=\"center\" width=\"100%\">\n";
 
@@ -366,11 +353,8 @@ QString Protocol::createHTML(int mode){
     html += "</table>\n";
 /*---------------------------------------------------------------------------------*/
     html += "<br>";
-    //if(mode == 0){
-    //    html += "<table border "//style=\"vertical-align: middle; border-width: 1px; border-style: solid; border-color: #000000;\" "
-    //            "width=\"100%\" cellspacing = \"0\" cellpadding = \"2\"   margin=\"auto\" >\n";
-    //}else
-        html += "<table border=\"1\" rules=\"all\" class=\"print\" width=\"100%\" margin=\"auto\">\n";
+
+    html += "<table border=\"1\" rules=\"all\" class=\"print\" width=\"100%\" margin=\"auto\">\n";
 
     html += "<tr>\n";
     html += "<td  width=\"2%\" rowspan=\"2\"><font size=\"2\">\n";
@@ -407,6 +391,11 @@ QString Protocol::createHTML(int mode){
         html += "<td colspan=\"35\" align=\"center\">3-4 место</font></td>\n";
         html += "</tr>\n";
     }
+    if(mode == 2){
+        html += "<tr>\n";
+        html += "<td colspan=\"35\" align=\"center\">пара 1-4</font></td>\n";
+        html += "</tr>\n";
+    }
 
     int count = 0;
     int count_color = 0;
@@ -417,6 +406,11 @@ QString Protocol::createHTML(int mode){
         if(count == 3 && mode == 3){
             html += "<tr>\n";
             html += "<td colspan=\"35\" align=\"center\">Финал</font></td>\n";
+            html += "</tr>\n";
+        }
+        if(count == 3 && mode == 2){
+            html += "<tr>\n";
+            html += "<td colspan=\"35\" align=\"center\">пара 2-3</font></td>\n";
             html += "</tr>\n";
         }
         if(static_cast<FormMain*>(p)->flag_mode == 1){
@@ -449,12 +443,11 @@ QString Protocol::createHTML(int mode){
             }else
                 html = html + "<td align=\"center\" width=\"2%\"><font size=\"2\">" + "" + "</font></td>\n";
         }
-        //html = html + "<td align=\"center\" width=\"2%\"><font size=\"2\">" + "" + "</font></td>\n";
         html += "</tr>\n";
     }
     html += "</tr>\n";
     html += "</table>\n";
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     html += "<br>";
     if(mode == 3){
         QString name1 = ""; // 1 место
@@ -475,12 +468,10 @@ QString Protocol::createHTML(int mode){
         QString sql = "SELECT err.id_sportsmen, err.place FROM errors_and_rates err "
                       "JOIN rounds rnd ON rnd.id=err.id_round WHERE rnd.age = '%1' and rnd.weight = '%2' and rnd.mode = 3 ORDER BY err.id";
 
-        //sql = "SELECT id_sportsmen, place FROM errors_and_rates WHERE id_round = '%3' and age = '%1' and weight = '%2' ORDER BY id";
         QList<int> id_sportsmen;
         QList<int> place;
         sql = sql.arg(p->CmbAge->currentText(), p->CmbWeight->currentText());
         query.exec(sql);
-        qDebug()<<query.lastError()<<sql;
         while(query.next()){
             if(query.value(0).isNull()) id_sportsmen.append(0);
             else id_sportsmen.append(query.value(0).toInt());
@@ -506,7 +497,7 @@ QString Protocol::createHTML(int mode){
                     name4 = query.value(0).toString();
                 }
                             }
-        }else if(place.at(1) == 3){                                                                         // если 3 человека в весе
+        }else if(place.at(1) == 1){                                                                         // если 3 человека в весе
             query.exec("SELECT name FROM sportsmens WHERE id = " + QString::number(id_sportsmen.at(1)));
             query.next();
             name3 = query.value(0).toString();
@@ -561,8 +552,7 @@ QString Protocol::createHTML(int mode){
 
     html += "<td  width=\"20%\" ><u><em>\n";
     html += static_cast<FormMain*>(p)->main_refery.split(';')[0];
-    //for(int i=0;i<(25 - static_cast<FormMain*>(p)->main_refery.split(';')[0].trimmed().length());i++)
-    //    html += "&nbsp;";
+
     html += "</u></em></td>\n";
 
     html += "<td width=\"10%\" >\n";
@@ -578,8 +568,7 @@ QString Protocol::createHTML(int mode){
 
     html += "<td width=\"20%\" ><u><em>\n";
     html += static_cast<FormMain*>(p)->main_secretary.split(';')[0];
-    //for(int i=0;i<(25 - static_cast<FormMain*>(p)->main_secretary.split(';')[0].trimmed().length());i++)
-    //    html += "&nbsp;";
+
     html += "</u></em></td>\n";
 
     html += "</tr>\n";
@@ -594,13 +583,12 @@ QString Protocol::createHTML(int mode){
     html += "</td>\n";
 
     html += "<td align=\"right\" width=\"5%\" >\n";
-    //html += "______________";
+
     html += "</td>\n";
 
     html += "<td  width=\"20%\" ><u><em>\n";
     html += static_cast<FormMain*>(p)->judge1.split(';')[0];
-    //for(int i=0;i<(25 - static_cast<FormMain*>(p)->judge1.split(';')[0].trimmed().length());i++)
-    //    html += "&nbsp;";
+
     html += "</u></em></td>\n";
 
     html += "<td width=\"10%\" >\n";
@@ -611,7 +599,7 @@ QString Protocol::createHTML(int mode){
     html += "</td>\n";
 
     html += "<td align=\"right\" width=\"5%\" >\n";
-    //html += "______________";
+
     html += "</td>\n";
 
     html += "<td width=\"20%\" ><u><em>\n";
@@ -632,13 +620,12 @@ QString Protocol::createHTML(int mode){
     html += "</td>\n";
 
     html += "<td align=\"right\" width=\"5%\" >\n";
-    //html += "______________";
+
     html += "</td>";
 
     html += "<td  width=\"20%\" ><u><em>\n";
     html += static_cast<FormMain*>(p)->judge3.split(';')[0];
-    //for(int i=0;i<(25 - static_cast<FormMain*>(p)->judge3.split(';')[0].trimmed().length());i++)
-    //    html += "&nbsp;";
+
     html += "</u></em></td>\n";
 
     html += "<td width=\"10%\" >\n";
@@ -649,13 +636,12 @@ QString Protocol::createHTML(int mode){
     html += "</td>\n";
 
     html += "<td align=\"right\" width=\"5%\" >\n";
-    //html += "______________";
+
     html += "</td>\n";
 
     html += "<td width=\"20%\" ><u><em>\n";
     html += static_cast<FormMain*>(p)->judge4.split(';')[0];
-    //for(int i=0;i<(25 - static_cast<FormMain*>(p)->judge4.split(';')[0].trimmed().length());i++)
-    //    html += "&nbsp;";
+
     html += "</u></em></td>\n";
 
     html += "</tr>\n";
@@ -670,13 +656,12 @@ QString Protocol::createHTML(int mode){
     html += "</td>\n";
 
     html += "<td align=\"right\" width=\"5%\" >\n";
-    //html += "______________";
+
     html += "</td\n>";
 
     html += "<td  width=\"20%\" ><u><em>\n";
     html += static_cast<FormMain*>(p)->judge5.split(';')[0];
-    //for(int i=0;i<(25 - static_cast<FormMain*>(p)->judge5.split(';')[0].trimmed().length());i++)
-    //    html += "&nbsp;";
+
     html += "</u></em></td>\n";
 
     html += "<td width=\"10%\" >\n";
@@ -687,13 +672,12 @@ QString Protocol::createHTML(int mode){
     html += "</td>\n";
 
     html += "<td align=\"right\" width=\"5%\" >\n";
-    //html += "______________";
+
     html += "</td>\n";
 
     html += "<td width=\"20%\" ><u><em>\n";
     html += static_cast<FormMain*>(p)->ts.split(';')[0];
-    //for(int i=0;i<(25 - static_cast<FormMain*>(p)->ts.split(';')[0].trimmed().length());i++)
-    //    html += "&nbsp;";
+
     html += "</u></em></td>\n";
 
     html += "</tr>\n";
@@ -701,7 +685,6 @@ QString Protocol::createHTML(int mode){
     html += "</table>\n";
 
     html += "</body></big></html>\n";
-    //html += "</center>";
 
     return html;
 }
@@ -769,7 +752,6 @@ void Protocol::saveProtocol(){
         QTextStream out(&f);
         out << html;
         f.close();
-
     }
     settings.endGroup();
 

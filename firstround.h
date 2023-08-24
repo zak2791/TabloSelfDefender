@@ -19,11 +19,6 @@ class FirstRound : public QWidget{
     QLabel* lbl_sum;
     QLabel* lbl_total;
 
-
-
-
-
-
     void sbros(void);
     void func(void);
     virtual void paintEvent(QPaintEvent*);

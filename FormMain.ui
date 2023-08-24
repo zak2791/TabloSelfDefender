@@ -2548,7 +2548,7 @@
 со звуком</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="btnChoice">
+   <widget class="QPushButton" name="btnPlayChoice">
     <property name="geometry">
      <rect>
       <x>410</x>
@@ -2617,7 +2617,7 @@
      <enum>Qt::Vertical</enum>
     </property>
    </widget>
-   <widget class="CameraViewer" name="camera1">
+   <widget class="CameraViewer" name="viewCam1">
     <property name="geometry">
      <rect>
       <x>16</x>
@@ -2630,7 +2630,7 @@
      <enum>Qt::NoFocus</enum>
     </property>
    </widget>
-   <widget class="CameraViewer" name="camera2">
+   <widget class="CameraViewer" name="viewCam2">
     <property name="geometry">
      <rect>
       <x>427</x>
@@ -2643,7 +2643,7 @@
      <enum>Qt::NoFocus</enum>
     </property>
    </widget>
-   <widget class="QGraphicsView" name="camera3">
+   <widget class="CameraViewer" name="viewCam3">
     <property name="geometry">
      <rect>
       <x>836</x>

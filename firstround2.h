@@ -9,10 +9,6 @@
 class FirstRound2 : public QWidget{
     Q_OBJECT
 
-
-
-
-
     QLabel* lbl_1;
     QLabel* lbl_2;
     QLabel* lbl_3;
@@ -30,13 +26,6 @@ class FirstRound2 : public QWidget{
     QLabel* lbl_empty_top;
     QLabel* lbl_empty_bottom;
     QLabel* space_bottom;
-
-
-
-
-
-
-
 
     int space;
 

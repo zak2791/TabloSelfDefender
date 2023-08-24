@@ -13,6 +13,9 @@
 #include <QtSql>
 
 #include "cameraconnection.h"
+#include "playerviewer.h"
+#include "camera.h"
+
 #include "mainwin.h"
 
 class TabFilter : public QObject {
@@ -348,11 +351,11 @@ private slots:
     void setCam(void);
     //void showView(void);
 
-    //void finishedCamera(void);
-    //void turnCamera(bool);
+    void finishedCamera(void);
+    void turnCamera(bool);
 
 
-    //void StopRecord(void);
+    void StopRecord(void);
     //void StartRecord(bool);
     //void PlayFile(void);
     //void PlaySlowMotion(void);
@@ -366,12 +369,42 @@ private slots:
     void setCamera(QString);
 
 private:
+    CameraViewer* ViewCam1;
+    CameraViewer* ViewCam2;
+    CameraViewer* ViewCam3;
+
+    Camera* camera1;
+    Camera* camera2;
+    Camera* camera3;
+
+    QThread* threadCam1;
+    QThread* threadCam2;
+    QThread* threadCam3;
+
+    //QCheckBox* cbCam1;
+    //QCheckBox* cbCam2;
+
+    QPointer<PlayerViewer> slowMotionPlayer;
+
+    QPushButton* BtnStopRecord;
+
+    QPushButton* BtnCam1Sound;
+    QPushButton* BtnCam2Sound;
+    QPushButton* BtnCam3Sound;
+
+    QPushButton* BtnCam1NoSound;
+    QPushButton* BtnCam2NoSound;
+    QPushButton* BtnCam3NoSound;
+
+    QPushButton* BtnPlayChoice;
+
     QString cam1Url = "";
     QString cam2Url = "";
     QString cam3Url = "";
 
     QThread* cam1Thread;
     QThread* cam2Thread;
+    QThread* cam3Thread;
 
     QPointer<CameraConnection> camConn;
 

@@ -345,7 +345,7 @@ p, li { white-space: pre-wrap; }
      <string>Российский</string>
     </property>
     <property name="checked">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QRadioButton" name="rbEng">
@@ -362,6 +362,9 @@ p, li { white-space: pre-wrap; }
     </property>
     <property name="text">
      <string>Международный</string>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QCheckBox" name="cbFlag">

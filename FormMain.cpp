@@ -586,7 +586,121 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
         cam3.close();
     }
 
+    ViewCam1 = viewCam1;
+    ViewCam2 = viewCam2;
+    ViewCam3 = viewCam3;
 
+    BtnCam1Sound = btnCam1Sound;
+    BtnCam2Sound = btnCam2Sound;
+    BtnCam3Sound = btnCam3Sound;
+    connect(BtnCam1Sound, SIGNAL(clicked()), SLOT(PlayFile()));
+    connect(BtnCam2Sound, SIGNAL(clicked()), SLOT(PlayFile()));
+    connect(BtnCam3Sound, SIGNAL(clicked()), SLOT(PlayFile()));
+
+
+    BtnCam1NoSound = btnCam1NoSound;
+    BtnCam2NoSound = btnCam2NoSound;
+    BtnCam3NoSound = btnCam3NoSound;
+    connect(BtnCam1NoSound, SIGNAL(clicked()), SLOT(PlaySlowMotion()));
+    connect(BtnCam2NoSound, SIGNAL(clicked()), SLOT(PlaySlowMotion()));
+    connect(BtnCam3NoSound, SIGNAL(clicked()), SLOT(PlaySlowMotion()));
+
+    BtnPlayChoice = btnPlayChoice;
+    connect(BtnPlayChoice, SIGNAL(clicked()), SLOT(PlaySelectedFile()));
+
+    BtnStopRecord = btnStopRecord;
+    connect(BtnStopRecord, SIGNAL(clicked()), SLOT(StopRecord()));
+
+
+    connect(cbCam1, SIGNAL(toggled(bool)), this, SLOT(turnCamera(bool)));
+    connect(cbCam2, SIGNAL(toggled(bool)), this, SLOT(turnCamera(bool)));
+    connect(cbCam3, SIGNAL(toggled(bool)), this, SLOT(turnCamera(bool)));
+
+    camera1 = new Camera;
+    camera1->setObjectName("camera1");
+    threadCam1 = new QThread;
+    camera1->moveToThread(threadCam1);
+    connect(threadCam1, SIGNAL(started()),        camera1,  SLOT(TurnOnCamera()));
+    connect(camera1,    SIGNAL(sigImage(QImage)), viewCam1, SLOT(draw_image(QImage)));
+    connect(camera1,    SIGNAL(finished()),       this,     SLOT(finishedCamera()));
+    //connect(ui.cbKey,   SIGNAL(toggled(bool)),    camera1,  SLOT(onlyKeyFrame(bool)), Qt::DirectConnection);
+
+    camera2 = new Camera;
+    camera2->setObjectName("camera2");
+    threadCam2 = new QThread;
+    camera2->moveToThread(threadCam2);
+    connect(threadCam2, SIGNAL(started()),        camera2,  SLOT(TurnOnCamera()));
+    connect(camera2,    SIGNAL(sigImage(QImage)), viewCam2, SLOT(draw_image(QImage)));
+    connect(camera2,    SIGNAL(finished()),       this,     SLOT(finishedCamera()));
+    //connect(ui.cbKey,   SIGNAL(toggled(bool)),    camera2,  SLOT(onlyKeyFrame(bool)), Qt::DirectConnection);
+
+    //connect(mainTimer, SIGNAL(sigStarted(bool)), this, SLOT(StartRecord(bool)));
+    //connect(mainTimer, SIGNAL(sigReset()), this, SLOT(StopRecord()));
+
+
+    sett->RbRus->setChecked(true);
+
+}
+
+void FormMain::StopRecord(){
+    camera1->StopRecord();
+    camera2->StopRecord();
+
+    BtnCam1Sound->setEnabled(true);
+    BtnCam2Sound->setEnabled(true);
+    BtnCam3Sound->setEnabled(true);
+
+    BtnCam1NoSound->setEnabled(true);
+    BtnCam2NoSound->setEnabled(true);
+    BtnCam3NoSound->setEnabled(true);
+
+    BtnPlayChoice->setEnabled(true);
+
+    btnStopRecord->setEnabled(false);
+}
+
+void FormMain::turnCamera(bool state){
+    if(state){
+        if(sender()->objectName() == "cbCam1"){
+            camera1->setUrl(cam1Url);
+            threadCam1->start();
+        }else if(sender()->objectName() == "cbCam2"){
+            camera2->setUrl(cam2Url);
+            threadCam2->start();
+        }else{
+            camera3->setUrl(cam3Url);
+            threadCam3->start();
+        }
+
+    }
+    else{
+        if(sender()->objectName() == "cbCam1"){
+            camera1->TurnOffCamera();
+        }else if(sender()->objectName() == "cbCam2"){
+            camera2->TurnOffCamera();
+        }else{
+            camera3->TurnOffCamera();
+        }
+    }
+}
+
+void FormMain::finishedCamera(){
+    if(sender()->objectName() == "camera1"){
+        threadCam1->quit();
+        threadCam1->wait();
+        if(cbCam1->isChecked())
+            cbCam1->toggle();
+    }else if(sender()->objectName() == "camera2"){
+        threadCam2->quit();
+        threadCam2->wait();
+        if(cbCam2->isChecked())
+            cbCam2->toggle();
+    }else{
+        threadCam3->quit();
+        threadCam3->wait();
+        if(cbCam3->isChecked())
+            cbCam3->toggle();
+    }
 }
 
 void FormMain::animation(){
@@ -736,10 +850,10 @@ void FormMain::find_id_round(void){
         msgBox.exec();
         return;
     }
-
+    qDebug()<<"find_id_round";
     QString a = cmbAge->currentText();                      // возраст
     QString w = cmbWeight->currentText();                   // вес
-    qDebug() << cmb_round->currentText();
+    qDebug() <<"cmb_round->currentText()"<< cmb_round->currentText();
     QSqlQuery query;
     QString sql;
     if(cmb_round->currentText() == "Полуфинал"){
@@ -765,7 +879,7 @@ void FormMain::find_id_round(void){
     qDebug() << "find_id_round 2";
     query.next();
     current_mode = query.value(0).toInt();
-    qDebug() << "value 10";
+    qDebug() << "current_mode = "<<current_mode;
     if(current_mode != -1){
         if(current_mode == 1 || current_mode == 2 || current_mode == 3){
             flag_mode = 1;
@@ -781,6 +895,7 @@ void FormMain::find_id_round(void){
             rbFirst->setChecked(true);
         }
         groupBox->setEnabled(false);
+        qDebug()<<"groupBox->setEnabled(false)";
     }else{
         flag_mode = 0;
         flag_shoise = 0;
@@ -909,6 +1024,7 @@ void FormMain::weight(void){
 void FormMain::round_(){
     if(flag_shoise == 0){
         flag_shoise = 1;
+        qDebug()<<"round_";
         find_id_round();
         flag_shoise = 0;
     }
@@ -2527,9 +2643,11 @@ void FormMain::addSportsmensToBaza(QList<QStringList> lSl){
     foreach(QString sEach, l_round)
         cmb_round->addItem("круг " + sEach);
     cmb_round->setCurrentIndex(l_round.count() - 1);
+    round_();
     connect(cmbAge,     SIGNAL(currentIndexChanged(int)), this, SLOT(age()));
     connect(cmbWeight,  SIGNAL(currentIndexChanged(int)), this, SLOT(weight()));
     connect(cmb_round,  SIGNAL(currentIndexChanged(int)), this, SLOT(round_()));
+
     m_db.close();
 }
 
@@ -2723,11 +2841,17 @@ void FormMain::choiceCompetitions(QString s){
     }
 
     connect(cmb_round,  SIGNAL(currentIndexChanged(int)), this, SLOT(round_()));
+    qDebug()<<"cmb_round->setCurrentIndex(1)"<<current_mode<<l_round.count() - 1;
     cmb_round->setCurrentIndex(l_round.count() - 1);
+    round_();
+    qDebug()<<"cmb_round->setCurrentIndex(2)"<<current_mode;
     connect(cmbAge,     SIGNAL(currentIndexChanged(int)), this, SLOT(age()));
     connect(cmbWeight,  SIGNAL(currentIndexChanged(int)), this, SLOT(weight()));
 
     m_db.close();
+
+    sett->show();
+    sett->hide();
 }
 
 ////////////////////////////

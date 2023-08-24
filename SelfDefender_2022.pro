@@ -5,7 +5,8 @@ QT += \
     widgets \
     sql \
     network \
-    printsupport
+    printsupport \
+    multimedia
 
 FORMS += \
     FormChoice.ui \
@@ -17,12 +18,6 @@ FORMS += \
     addcompetition.ui \
     dlgsemifinal.ui \
     mainwin.ui
-
-# QXlsx code for Application Qt project
-QXLSX_PARENTPATH=./         # current QXlsx path is . (. means curret directory)
-QXLSX_HEADERPATH=./header/  # current QXlsx header path is ./header/
-QXLSX_SOURCEPATH=./source/  # current QXlsx source path is ./source/
-include(./QXlsx.pri)
 
 SOURCES += \
     Ball.cpp \
@@ -44,6 +39,8 @@ SOURCES += \
     main.cpp \
     mainwin.cpp \
     next_question.cpp \
+    player.cpp \
+    playerviewer.cpp \
     protocol.cpp \
     registration.cpp \
     settings.cpp \
@@ -67,6 +64,8 @@ HEADERS += \
     firstround2.h \
     formcorrection.h \
     mainwin.h \
+    player.h \
+    playerviewer.h \
     protocol.h \
     registration.h \
     settings.h \

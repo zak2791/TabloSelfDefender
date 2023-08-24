@@ -45,6 +45,7 @@ public:
 
     QRadioButton* RbnSeparate;
     QRadioButton* RbnTogether;
+    QRadioButton* RbRus;
     QRadioButton* RbEng;
     QLineEdit* LED_CITY;
     QLineEdit* NAME_COMPETITION;

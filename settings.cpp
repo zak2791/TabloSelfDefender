@@ -7,10 +7,9 @@ Settings::Settings(QWidget *parent):QWidget(){
     setupUi(this);
 
     RbnSeparate = rbnSeparate;
-    RbnTogether = rbnTogether;
+    RbnTogether = rbnTogether;  
+    RbRus = rbRus;
     RbEng = rbEng;
-
-
 
     ip = "";
     code = "";
