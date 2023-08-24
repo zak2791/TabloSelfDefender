@@ -414,6 +414,11 @@ private:
     QTimer* udpTimer;
     int flagUdp;    //0 - запрос адреса удаленного компьютера
                     //1 - отправка данных
+
+    QLabel* LblStatusCam1;
+    QLabel* LblStatusCam2;
+    QLabel* LblStatusCam3;
+
 };
 
 #endif // MAIN_H
