@@ -3136,10 +3136,10 @@
   <zorder>btnErrors</zorder>
   <zorder>btnSemiFin</zorder>
   <zorder>line_4</zorder>
-  <zorder>windowCameras</zorder>
   <zorder>btn_look</zorder>
   <zorder>btnFin</zorder>
   <zorder>btnChange</zorder>
+  <zorder>windowCameras</zorder>
  </widget>
  <customwidgets>
   <customwidget>

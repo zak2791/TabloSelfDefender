@@ -262,6 +262,7 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
     Btn_next = btn_next;
     GroupBox_2 = groupBox_2;
     GroupBox = groupBox;
+
     Lbl_sum = lbl_sum;
     Lbl_q = lbl_q;
     Btn_enter = btn_enter;
