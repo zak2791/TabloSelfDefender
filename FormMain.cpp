@@ -642,6 +642,24 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
 
 }
 
+void FormMain::CpuUsage(){
+    static ULARGE_INTEGER TimeIdle, TimeKernel, TimeUser;
+    FILETIME Idle, Kernel, User;
+    ULARGE_INTEGER uIdle, uKernel, uUser;
+    GetSystemTimes(&Idle, &Kernel, &User);
+    memcpy(&uIdle, &Idle, sizeof(FILETIME));
+    memcpy(&uKernel, &Kernel, sizeof(FILETIME));
+    memcpy(&uUser, &User, sizeof(FILETIME));
+    long long t;
+    t = (((((uKernel.QuadPart-TimeKernel.QuadPart)+(uUser.QuadPart-TimeUser.QuadPart))-
+        (uIdle.QuadPart-TimeIdle.QuadPart))*(100))/((uKernel.QuadPart-
+            TimeKernel.QuadPart)+(uUser.QuadPart-TimeUser.QuadPart)));
+    TimeIdle.QuadPart = uIdle.QuadPart;
+    TimeUser.QuadPart = uUser.QuadPart;
+    TimeKernel.QuadPart = uKernel.QuadPart;
+    lblCpuUsage->setText(QString::number(t) + " %");
+}
+
 void FormMain::StopRecord(){
     camera1->StopRecord();
     camera2->StopRecord();

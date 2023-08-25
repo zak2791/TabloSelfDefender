@@ -368,6 +368,8 @@ private slots:
     //void closeView(void);
     void setCamera(QString);
 
+    void CpuUsage(void);
+
 private:
     CameraViewer* ViewCam1;
     CameraViewer* ViewCam2;
