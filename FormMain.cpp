@@ -634,9 +634,22 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
     connect(camera2,    SIGNAL(finished()),       this,     SLOT(finishedCamera()));
     //connect(ui.cbKey,   SIGNAL(toggled(bool)),    camera2,  SLOT(onlyKeyFrame(bool)), Qt::DirectConnection);
 
+    camera3 = new Camera;
+    camera3->setObjectName("camera3");
+    threadCam3 = new QThread;
+    camera3->moveToThread(threadCam3);
+    connect(threadCam3, SIGNAL(started()),        camera3,  SLOT(TurnOnCamera()));
+    connect(camera3,    SIGNAL(sigImage(QImage)), viewCam3, SLOT(draw_image(QImage)));
+    connect(camera3,    SIGNAL(finished()),       this,     SLOT(finishedCamera()));
+    //connect(ui.cbKey,   SIGNAL(toggled(bool)),    camera2,  SLOT(onlyKeyFrame(bool)), Qt::DirectConnection);
+
     //connect(mainTimer, SIGNAL(sigStarted(bool)), this, SLOT(StartRecord(bool)));
     //connect(mainTimer, SIGNAL(sigReset()), this, SLOT(StopRecord()));
 
+
+    LblStatusCam1 = lblStatusCam1;
+    LblStatusCam2 = lblStatusCam2;
+    LblStatusCam3 = lblStatusCam3;
 
     sett->RbRus->setChecked(true);
 
@@ -663,6 +676,7 @@ void FormMain::CpuUsage(){
 void FormMain::StopRecord(){
     camera1->StopRecord();
     camera2->StopRecord();
+    camera3->StopRecord();
 
     BtnCam1Sound->setEnabled(true);
     BtnCam2Sound->setEnabled(true);
@@ -682,22 +696,28 @@ void FormMain::turnCamera(bool state){
         if(sender()->objectName() == "cbCam1"){
             camera1->setUrl(cam1Url);
             threadCam1->start();
+            LblStatusCam1->setPixmap(QPixmap(":/images/circle_green.png"));
         }else if(sender()->objectName() == "cbCam2"){
             camera2->setUrl(cam2Url);
             threadCam2->start();
+            LblStatusCam3->setPixmap(QPixmap(":/images/circle_green.png"));
         }else{
             camera3->setUrl(cam3Url);
             threadCam3->start();
+            LblStatusCam3->setPixmap(QPixmap(":/images/circle_green.png"));
         }
 
     }
     else{
         if(sender()->objectName() == "cbCam1"){
             camera1->TurnOffCamera();
+            LblStatusCam1->setPixmap(QPixmap(":/images/circle.png"));
         }else if(sender()->objectName() == "cbCam2"){
             camera2->TurnOffCamera();
+            LblStatusCam2->setPixmap(QPixmap(":/images/circle.png"));
         }else{
             camera3->TurnOffCamera();
+            LblStatusCam3->setPixmap(QPixmap(":/images/circle.png"));
         }
     }
 }

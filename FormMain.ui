@@ -2669,7 +2669,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="images.qrc">:/images/circle_green.png</pixmap>
+     <pixmap resource="images.qrc">:/images/circle.png</pixmap>
     </property>
    </widget>
    <widget class="QLabel" name="lblStatusCam2">
