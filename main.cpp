@@ -33,6 +33,7 @@ int main(int argc, char* argv[]){
     mWin->setCentralWidget(form);
 
     mWin->show();
+    mWin->move(100, 50);
     mWin->setFixedSize(mWin->size());
 
     return app.exec();

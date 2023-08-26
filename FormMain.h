@@ -333,6 +333,8 @@ public slots:
     void choiceCompetitions(QString);
     void editCompetition(void);
 
+    void StopRecord(void);
+
 private slots:
     //void editSity(void);
     void new_round(void);
@@ -355,12 +357,12 @@ private slots:
     void turnCamera(bool);
 
 
-    void StopRecord(void);
-    //void StartRecord(bool);
-    //void PlayFile(void);
-    //void PlaySlowMotion(void);
-    //void closePlayer(void);
-    //void PlaySelectedFile(void);
+
+    void StartRecord(void);
+    void PlayFile(void);
+    void PlaySlowMotion(void);
+    void closePlayer(void);
+    void PlaySelectedFile(void);
     //void changeSize(void);
     //void drawTvScreenshot(void);
 
@@ -388,17 +390,17 @@ private:
 
     QPointer<PlayerViewer> slowMotionPlayer;
 
-    QPushButton* BtnStopRecord;
+    //QPushButton* BtnStopRecord;
 
-    QPushButton* BtnCam1Sound;
-    QPushButton* BtnCam2Sound;
-    QPushButton* BtnCam3Sound;
+//    QPushButton* BtnCam1Sound;
+//    QPushButton* BtnCam2Sound;
+//    QPushButton* BtnCam3Sound;
 
-    QPushButton* BtnCam1NoSound;
-    QPushButton* BtnCam2NoSound;
-    QPushButton* BtnCam3NoSound;
+//    QPushButton* BtnCam1NoSound;
+//    QPushButton* BtnCam2NoSound;
+//    QPushButton* BtnCam3NoSound;
 
-    QPushButton* BtnPlayChoice;
+    //QPushButton* BtnPlayChoice;
 
     QString cam1Url = "";
     QString cam2Url = "";
@@ -409,17 +411,6 @@ private:
     QThread* cam3Thread;
 
     QPointer<CameraConnection> camConn;
-
-    QString address;
-    QHostAddress* remoteAddress;
-    QUdpSocket* s_udp;
-    QTimer* udpTimer;
-    int flagUdp;    //0 - запрос адреса удаленного компьютера
-                    //1 - отправка данных
-
-    QLabel* LblStatusCam1;
-    QLabel* LblStatusCam2;
-    QLabel* LblStatusCam3;
 
 };
 

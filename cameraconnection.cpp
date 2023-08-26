@@ -16,7 +16,6 @@ CameraConnection::CameraConnection(QObject *parent, int cam) : QObject(parent){
 
     startTimer(1000);
 
-    //QList<QString> ip;
     QList<QHostAddress> list = QNetworkInterface::allAddresses();
     for(int nIter=0; nIter<list.count(); nIter++){
         if(!list[nIter].isLoopback())
@@ -28,7 +27,6 @@ CameraConnection::CameraConnection(QObject *parent, int cam) : QObject(parent){
     for(int i = 0; i < ip.length(); i++)
         qDebug()<<ip[i];
 
-    qDebug()<<"constructor"<<camera;
 }
 
 CameraConnection::~CameraConnection(){
@@ -49,7 +47,6 @@ void CameraConnection::timerEvent(QTimerEvent*){
 }
 
 void CameraConnection::clientProcessDatagrams(){
-    qDebug()<<"datagramm";
     QNetworkDatagram dtg;
     do {
         dtg = udpClient->receiveDatagram();

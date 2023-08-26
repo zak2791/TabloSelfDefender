@@ -50,11 +50,11 @@ PlayerViewer::PlayerViewer(QString file, QWidget* parent) : QGraphicsView(parent
 
     connect(thread, SIGNAL(started()), player, SLOT(Play()));
 
-    connect(player, SIGNAL(sigImage(QImage)), this, SLOT(draw_image (QImage)));
-    connect(player, SIGNAL(sigParam(int, int, int)), this, SLOT(parametersMedia(int, int, int)));
-    connect(player, SIGNAL(sigFrame(int)), slider, SLOT(setValue(int)));
-    connect(player, SIGNAL(sigBuffer(int, int)), this, SLOT(drawBuffer(int, int)));
-    connect(player, SIGNAL(sigStartStopPlay(bool)), this, SLOT(playEnable(bool)));
+    connect(player, SIGNAL(sigImage(QImage)),           this,   SLOT(draw_image (QImage)));
+    connect(player, SIGNAL(sigParam(int, int, int)),    this,   SLOT(parametersMedia(int, int, int)));
+    connect(player, SIGNAL(sigFrame(int)),              slider, SLOT(setValue(int)));
+    connect(player, SIGNAL(sigBuffer(int, int)),        this,   SLOT(drawBuffer(int, int)));
+    connect(player, SIGNAL(sigStartStopPlay(bool)),     this,   SLOT(playEnable(bool)));
 
 
     thread->start();
@@ -76,10 +76,15 @@ void PlayerViewer::playEnable(bool b){
 }
 
 void PlayerViewer::closeEvent(QCloseEvent*){
+    qDebug()<<"emit sigClose()";
     player->turnOff();
+    qDebug()<<"emit sigClose()(0)";
     thread->quit();
+    qDebug()<<"emit sigClose()(1)";
     thread->wait();
+    qDebug()<<"emit sigClose()(2)";
     emit sigClose();
+    qDebug()<<"emit sigClose()(3)";
 }
 
 void PlayerViewer::resizeEvent(QResizeEvent*){

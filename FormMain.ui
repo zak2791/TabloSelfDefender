@@ -2762,14 +2762,14 @@
      <property name="geometry">
       <rect>
        <x>182</x>
-       <y>39</y>
+       <y>43</y>
        <width>181</width>
-       <height>25</height>
+       <height>21</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>10</pointsize>
+       <pointsize>8</pointsize>
       </font>
      </property>
      <property name="focusPolicy">
@@ -2856,14 +2856,14 @@
      <property name="geometry">
       <rect>
        <x>182</x>
-       <y>39</y>
+       <y>43</y>
        <width>181</width>
-       <height>25</height>
+       <height>21</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>10</pointsize>
+       <pointsize>8</pointsize>
       </font>
      </property>
      <property name="focusPolicy">
@@ -2950,14 +2950,14 @@
      <property name="geometry">
       <rect>
        <x>182</x>
-       <y>39</y>
+       <y>43</y>
        <width>181</width>
-       <height>25</height>
+       <height>21</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>10</pointsize>
+       <pointsize>8</pointsize>
       </font>
      </property>
      <property name="focusPolicy">
@@ -2989,9 +2989,9 @@
    <widget class="QLabel" name="lblCpuUsage">
     <property name="geometry">
      <rect>
-      <x>110</x>
+      <x>10</x>
       <y>0</y>
-      <width>201</width>
+      <width>581</width>
       <height>20</height>
      </rect>
     </property>

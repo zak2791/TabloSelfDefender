@@ -85,7 +85,6 @@ void Player::Play(){
             if(flag_seek){
                 ret =av_seek_frame(ifmt_ctx, best_stream, flag_seek, AVSEEK_FLAG_FRAME);
                 flag_seek = 0;
-                qDebug()<<"seek = 0";
                 bufImage->clear();
             }
             ret = av_read_frame(ifmt_ctx, pkt);
@@ -94,7 +93,6 @@ void Player::Play(){
                 if (ret < 0 ) break;
                 continue;
             }
-
             if (pkt->stream_index == best_stream){
                 if(flag_play || flag_one_next_frame)
                     emit sigFrame(pkt->pts / oneFrameDuration);
@@ -118,13 +116,13 @@ void Player::Play(){
                         sec = QString::number(cel);
                 }
                 msec = QString::number(drob).remove(0, 1);
-
                 emit sigTime(min + sec + msec);
                 ret = avcodec_send_packet(pCodecCtx, pkt);
                 if (ret < 0) {
                     goto end_preview;
                 }
                 AVFrame* frame = av_frame_alloc();
+
                 while (ret >= 0) {
                     ret = avcodec_receive_frame(pCodecCtx, frame);
                     if (ret == AVERROR(EAGAIN)){
@@ -153,6 +151,7 @@ void Player::Play(){
                         emit sigBuffer(bufImage->length(), bufImage->length() - 1);
                         emit sigImage(img);
                     }
+
                 }
             }
             end_preview:
@@ -169,7 +168,6 @@ end:
 void Player::seek(int s){
     flag_seek = s * oneFrameDuration;
     currentImage = -1;
-    qDebug()<<"flag_seek = "<<s<<oneFrameDuration<<flag_seek;
 }
 
 void Player::turnPlay(){
@@ -204,6 +202,7 @@ QImage Player::avFrame2QImage(AVFrame* frame){
 }
 
 void Player::turnOff(){
+    //qDebug()<<"Player::turnOff()";
     process = false;
     flag_play = false;
     bufImage->clear();
@@ -222,7 +221,6 @@ void Player::nextFrame(){
 }
 
 void Player::previewFrame(){
-    qDebug()<<"currentImage"<<currentImage<<"bufImage->length()"<<bufImage->length();
     if(currentImage > 0 && !flag_play){
         emit sigImage(bufImage->at(--currentImage));
         emit sigBuffer(bufImage->length(), currentImage);

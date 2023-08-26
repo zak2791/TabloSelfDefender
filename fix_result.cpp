@@ -78,6 +78,8 @@ void F1(FormMain* p){
     }
     if(p->flag_priem < 10)
         p->Btn_next->setEnabled(true);
+    else
+        p->StopRecord();
 ////////////////////////////////////////////////////////////////////////////////////////////////
     QString priem = QString::number(int((float)(p->flag_priem) / 2.0 + 0.5));
     QString sql =   "UPDATE errors_and_rates SET "
@@ -179,6 +181,8 @@ void F2(FormMain* p){
 
     if(p->flag_priem < 5)
         p->Btn_next->setEnabled(true);
+    else
+        p->StopRecord();
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     QString priem = QString::number(p->flag_priem);
@@ -352,6 +356,8 @@ void fix_result(FormMain* p){
             F1(p);
             p->Btn_change->setEnabled(true);
         }
+//        if(p->flag_priem == 5)
+//            emit sigFixResult
     }
     m_db.close();
 }

@@ -538,10 +538,6 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
     connect(animClose, SIGNAL(finished()), this, SLOT(endAnimation()));
     windowCameras->setGeometry(windowCameras->geometry().x(), 876, windowCameras->geometry().width(), 21);
     ///////////////////////////////////////////////////////////
-
-    leCam1->setObjectName("leCam1");
-    leCam2->setObjectName("leCam2");
-    //leCam3->setObjectName("leCam3");
     connect(leCam1, SIGNAL(editingFinished()), this, SLOT(setCam()));
     connect(leCam2, SIGNAL(editingFinished()), this, SLOT(setCam()));
     connect(leCam3, SIGNAL(editingFinished()), this, SLOT(setCam()));
@@ -550,67 +546,26 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
     connect(cbAutoCam2, SIGNAL(toggled(bool)), this, SLOT(autoCamera(bool)));
     connect(cbAutoCam3, SIGNAL(toggled(bool)), this, SLOT(autoCamera(bool)));
 
-    QFile cam1("cam1.txt");
-    if(!cam1.exists()){
-        cam1.open(QIODevice::WriteOnly);
-        cam1.close();
-    }
-    else{
-        cam1.open(QIODevice::ReadOnly);
-        cam1Url = cam1.readAll();
-        leCam1->setText(cam1Url);
-        cam1.close();
-    }
+    settings.beginGroup("ip");
+    cam1Url = settings.value("cam1", "").toString();
+    leCam1->setText(cam1Url);
+    cam2Url = settings.value("cam2", "").toString();
+    leCam2->setText(cam2Url);
+    cam3Url = settings.value("cam3", "").toString();
+    leCam3->setText(cam3Url);
+    settings.endGroup();
 
-    QFile cam2("cam2.txt");
-    if(!cam2.exists()){
-        cam2.open(QIODevice::WriteOnly);
-        cam2.close();
-    }
-    else{
-        cam2.open(QIODevice::ReadOnly);
-        cam2Url = cam2.readAll();
-        leCam2->setText(cam2Url);
-        cam2.close();
-    }
+    connect(btnCam1Sound, SIGNAL(clicked()), SLOT(PlayFile()));
+    connect(btnCam2Sound, SIGNAL(clicked()), SLOT(PlayFile()));
+    connect(btnCam3Sound, SIGNAL(clicked()), SLOT(PlayFile()));
 
-    QFile cam3("cam3.txt");
-    if(!cam3.exists()){
-        cam3.open(QIODevice::WriteOnly);
-        cam3.close();
-    }
-    else{
-        cam3.open(QIODevice::ReadOnly);
-        cam3Url = cam3.readAll();
-        leCam3->setText(cam3Url);
-        cam3.close();
-    }
+    connect(btnCam1NoSound, SIGNAL(clicked()), SLOT(PlaySlowMotion()));
+    connect(btnCam2NoSound, SIGNAL(clicked()), SLOT(PlaySlowMotion()));
+    connect(btnCam3NoSound, SIGNAL(clicked()), SLOT(PlaySlowMotion()));
 
-    ViewCam1 = viewCam1;
-    ViewCam2 = viewCam2;
-    ViewCam3 = viewCam3;
+    connect(btnPlayChoice, SIGNAL(clicked()), SLOT(PlaySelectedFile()));
 
-    BtnCam1Sound = btnCam1Sound;
-    BtnCam2Sound = btnCam2Sound;
-    BtnCam3Sound = btnCam3Sound;
-    connect(BtnCam1Sound, SIGNAL(clicked()), SLOT(PlayFile()));
-    connect(BtnCam2Sound, SIGNAL(clicked()), SLOT(PlayFile()));
-    connect(BtnCam3Sound, SIGNAL(clicked()), SLOT(PlayFile()));
-
-
-    BtnCam1NoSound = btnCam1NoSound;
-    BtnCam2NoSound = btnCam2NoSound;
-    BtnCam3NoSound = btnCam3NoSound;
-    connect(BtnCam1NoSound, SIGNAL(clicked()), SLOT(PlaySlowMotion()));
-    connect(BtnCam2NoSound, SIGNAL(clicked()), SLOT(PlaySlowMotion()));
-    connect(BtnCam3NoSound, SIGNAL(clicked()), SLOT(PlaySlowMotion()));
-
-    BtnPlayChoice = btnPlayChoice;
-    connect(BtnPlayChoice, SIGNAL(clicked()), SLOT(PlaySelectedFile()));
-
-    BtnStopRecord = btnStopRecord;
-    connect(BtnStopRecord, SIGNAL(clicked()), SLOT(StopRecord()));
-
+    connect(btnStopRecord, SIGNAL(clicked()), SLOT(StopRecord()));
 
     connect(cbCam1, SIGNAL(toggled(bool)), this, SLOT(turnCamera(bool)));
     connect(cbCam2, SIGNAL(toggled(bool)), this, SLOT(turnCamera(bool)));
@@ -632,7 +587,6 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
     connect(threadCam2, SIGNAL(started()),        camera2,  SLOT(TurnOnCamera()));
     connect(camera2,    SIGNAL(sigImage(QImage)), viewCam2, SLOT(draw_image(QImage)));
     connect(camera2,    SIGNAL(finished()),       this,     SLOT(finishedCamera()));
-    //connect(ui.cbKey,   SIGNAL(toggled(bool)),    camera2,  SLOT(onlyKeyFrame(bool)), Qt::DirectConnection);
 
     camera3 = new Camera;
     camera3->setObjectName("camera3");
@@ -641,15 +595,30 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
     connect(threadCam3, SIGNAL(started()),        camera3,  SLOT(TurnOnCamera()));
     connect(camera3,    SIGNAL(sigImage(QImage)), viewCam3, SLOT(draw_image(QImage)));
     connect(camera3,    SIGNAL(finished()),       this,     SLOT(finishedCamera()));
-    //connect(ui.cbKey,   SIGNAL(toggled(bool)),    camera2,  SLOT(onlyKeyFrame(bool)), Qt::DirectConnection);
 
-    //connect(mainTimer, SIGNAL(sigStarted(bool)), this, SLOT(StartRecord(bool)));
-    //connect(mainTimer, SIGNAL(sigReset()), this, SLOT(StopRecord()));
+    connect(btn_next, SIGNAL(clicked()), this, SLOT(StartRecord(void)));
 
+    QTimer* tmrCpu = new QTimer(this);
+    connect(tmrCpu, SIGNAL(timeout()), this, SLOT(CpuUsage()));
+    tmrCpu->start(1000);
 
-    LblStatusCam1 = lblStatusCam1;
-    LblStatusCam2 = lblStatusCam2;
-    LblStatusCam3 = lblStatusCam3;
+    QDir dir("camera1");
+    if(!dir.exists()){
+        QDir dir;
+        dir.mkdir("camera1");
+    }
+
+    dir.setPath("camera2");
+    if(!dir.exists()){
+        QDir dir;
+        dir.mkdir("camera2");
+    }
+
+    dir.setPath("camera3");
+    if(!dir.exists()){
+        QDir dir;
+        dir.mkdir("camera3");
+    }
 
     sett->RbRus->setChecked(true);
 
@@ -670,7 +639,47 @@ void FormMain::CpuUsage(){
     TimeIdle.QuadPart = uIdle.QuadPart;
     TimeUser.QuadPart = uUser.QuadPart;
     TimeKernel.QuadPart = uKernel.QuadPart;
-    lblCpuUsage->setText(QString::number(t) + " %");
+
+    double fTotal;
+    double fFree;
+    QString memory;
+    ULARGE_INTEGER free,total;
+    bool bRes = ::GetDiskFreeSpaceExA( 0 , &free , &total , NULL );
+    if ( bRes ){
+        fFree = static_cast<__int64>(free.QuadPart);
+        fTotal = static_cast<double>(static_cast<__int64>(total.QuadPart));
+        memory = QString::number((fFree / fTotal) * 100).split(".").at(0);
+    }else
+        memory = "";
+
+    lblCpuUsage->setText("Нагрузка ЦПУ: " + QString::number(t) +
+                         " %\tСвободное место на диске: " + memory + " %");
+
+}
+
+void FormMain::StartRecord(){
+    QString currentTime = QTime::currentTime().toString().replace(":", "_");
+
+    if(threadCam1->isRunning())
+        camera1->StartRecord("camera1/" + currentTime + ".mp4");
+
+    if(threadCam2->isRunning())
+        camera2->StartRecord("camera2/" + currentTime + ".mp4");
+
+    if(threadCam3->isRunning())
+        camera3->StartRecord("camera3/" + currentTime + ".mp4");
+
+    btnCam1Sound->setEnabled(false);
+    btnCam2Sound->setEnabled(false);
+    btnCam3Sound->setEnabled(false);
+
+    btnCam1NoSound->setEnabled(false);
+    btnCam2NoSound->setEnabled(false);
+    btnCam3NoSound->setEnabled(false);
+
+    btnPlayChoice->setEnabled(false);
+
+    btnStopRecord->setEnabled(true);
 }
 
 void FormMain::StopRecord(){
@@ -678,15 +687,15 @@ void FormMain::StopRecord(){
     camera2->StopRecord();
     camera3->StopRecord();
 
-    BtnCam1Sound->setEnabled(true);
-    BtnCam2Sound->setEnabled(true);
-    BtnCam3Sound->setEnabled(true);
+    btnCam1Sound->setEnabled(true);
+    btnCam2Sound->setEnabled(true);
+    btnCam3Sound->setEnabled(true);
 
-    BtnCam1NoSound->setEnabled(true);
-    BtnCam2NoSound->setEnabled(true);
-    BtnCam3NoSound->setEnabled(true);
+    btnCam1NoSound->setEnabled(true);
+    btnCam2NoSound->setEnabled(true);
+    btnCam3NoSound->setEnabled(true);
 
-    BtnPlayChoice->setEnabled(true);
+    btnPlayChoice->setEnabled(true);
 
     btnStopRecord->setEnabled(false);
 }
@@ -696,31 +705,119 @@ void FormMain::turnCamera(bool state){
         if(sender()->objectName() == "cbCam1"){
             camera1->setUrl(cam1Url);
             threadCam1->start();
-            LblStatusCam1->setPixmap(QPixmap(":/images/circle_green.png"));
+            lblStatusCam1->setPixmap(QPixmap(":/images/circle_green.png"));
         }else if(sender()->objectName() == "cbCam2"){
             camera2->setUrl(cam2Url);
             threadCam2->start();
-            LblStatusCam3->setPixmap(QPixmap(":/images/circle_green.png"));
+            lblStatusCam2->setPixmap(QPixmap(":/images/circle_green.png"));
         }else{
             camera3->setUrl(cam3Url);
             threadCam3->start();
-            LblStatusCam3->setPixmap(QPixmap(":/images/circle_green.png"));
+            lblStatusCam3->setPixmap(QPixmap(":/images/circle_green.png"));
         }
 
     }
     else{
         if(sender()->objectName() == "cbCam1"){
             camera1->TurnOffCamera();
-            LblStatusCam1->setPixmap(QPixmap(":/images/circle.png"));
+            lblStatusCam1->setPixmap(QPixmap(":/images/circle.png"));
         }else if(sender()->objectName() == "cbCam2"){
             camera2->TurnOffCamera();
-            LblStatusCam2->setPixmap(QPixmap(":/images/circle.png"));
+            lblStatusCam2->setPixmap(QPixmap(":/images/circle.png"));
         }else{
             camera3->TurnOffCamera();
-            LblStatusCam3->setPixmap(QPixmap(":/images/circle.png"));
+            lblStatusCam3->setPixmap(QPixmap(":/images/circle.png"));
         }
     }
 }
+
+void FormMain::PlayFile(){
+    QProcess proc;
+    QStringList l;
+    l.append(QString("-fs"));
+    if(sender()->objectName() == "btnCam1Sound"){
+        QDir dir("camera1");
+        QStringList dirList = dir.entryList(QDir::Files, QDir::Time);
+        if(dirList.count() == 0)
+            return;
+        l.append("camera1/" + dirList.at(0));
+    }else if(sender()->objectName() == "btnCam2Sound"){
+        QDir dir("camera2");
+        QStringList dirList = dir.entryList(QDir::Files, QDir::Time);
+        if(dirList.count() == 0)
+            return;
+        l.append("camera2/" + dirList.at(0));
+
+    }else{
+        QDir dir("camera3");
+        QStringList dirList = dir.entryList(QDir::Files, QDir::Time);
+        if(dirList.count() == 0)
+            return;
+        l.append("camera3/" + dirList.at(0));
+    }
+    proc.start("ffplay", l);
+    proc.waitForFinished(-1);
+}
+
+void FormMain::PlaySlowMotion(){
+    if(!slowMotionPlayer){
+        if(sender()->objectName() == "btnCam1NoSound"){
+            QDir dir("camera1");
+            QStringList dirList = dir.entryList(QDir::Files, QDir::Time);
+            if(dirList.count() == 0)
+                return;
+            slowMotionPlayer = new PlayerViewer("camera1/" + dirList.at(0));
+            connect(slowMotionPlayer, SIGNAL(sigClose()), this, SLOT(closePlayer()));
+        }else if(sender()->objectName() == "btnCam2NoSound"){
+            QDir dir("camera2");
+            QStringList dirList = dir.entryList(QDir::Files, QDir::Time);
+            if(dirList.count() == 0)
+                return;
+            slowMotionPlayer = new PlayerViewer("camera2/" + dirList.at(0));
+            connect(slowMotionPlayer, SIGNAL(sigClose()), this, SLOT(closePlayer()));
+        }else{
+            QDir dir("camera3");
+            QStringList dirList = dir.entryList(QDir::Files, QDir::Time);
+            if(dirList.count() == 0)
+                return;
+            slowMotionPlayer = new PlayerViewer("camera3/" + dirList.at(0));
+            connect(slowMotionPlayer, SIGNAL(sigClose()), this, SLOT(closePlayer()));
+        }
+        btnCam1Sound->setEnabled(false);
+        btnCam1NoSound->setEnabled(false);
+        btnCam2Sound->setEnabled(false);
+        btnCam2NoSound->setEnabled(false);
+        btnCam3Sound->setEnabled(false);
+        btnCam3NoSound->setEnabled(false);
+        btnPlayChoice->setEnabled(false);
+    }
+}
+
+void FormMain::PlaySelectedFile(){
+    QDir dir;
+    QString path = dir.currentPath();
+    dir.cdUp();
+    QString newPath = dir.currentPath();
+    dir.cd(path);
+    QString file = QFileDialog::getOpenFileName(this, tr("Выберите файл"),  newPath, tr("*.mp4"));
+    if(file == "" || !file.endsWith(".mp4"))
+        return;
+    slowMotionPlayer = new PlayerViewer(file);
+    connect(slowMotionPlayer, SIGNAL(sigClose()), this, SLOT(closePlayer()));
+}
+
+void FormMain::closePlayer(){
+    qDebug()<<"closePlayer";
+    slowMotionPlayer->deleteLater();
+    btnCam1Sound->setEnabled(true);
+    btnCam1NoSound->setEnabled(true);
+    btnCam2Sound->setEnabled(true);
+    btnCam2NoSound->setEnabled(true);
+    btnCam3Sound->setEnabled(true);
+    btnCam3NoSound->setEnabled(true);
+    btnPlayChoice->setEnabled(true);
+}
+
 
 void FormMain::finishedCamera(){
     if(sender()->objectName() == "camera1"){
@@ -775,101 +872,76 @@ void FormMain::autoCamera(bool state){
         else{
             cbAutoCam1->setEnabled(false);
             cbAutoCam2->setEnabled(false);
-            camConn = new CameraConnection(this, 2);
+            camConn = new CameraConnection(this, 3);
             leCam3->setText("");
             leCam3->setStyleSheet("background-color: red");
         }
         connect(camConn, SIGNAL(sigCamera(QString)), this, SLOT(setCamera(QString)));
     }
     else{
+        QSettings settings ("settings.ini",QSettings::IniFormat);
+        settings.beginGroup("ip");
         if(sender()->objectName() == "cbAutoCam1"){
             cbAutoCam2->setEnabled(true);
             cbAutoCam3->setEnabled(true);
             leCam1->setStyleSheet("background-color: white");
-            QFile f("cam1.txt");
-            f.open(QIODevice::ReadOnly);
-            leCam1->setText(f.readLine());
-            f.close();
+            leCam1->setText(settings.value("cam1", "").toString());
         }
         else if(sender()->objectName() == "cbAutoCam2"){
             cbAutoCam1->setEnabled(true);
             cbAutoCam3->setEnabled(true);
             leCam2->setStyleSheet("background-color: white");
-            QFile f("cam2.txt");
-            f.open(QIODevice::ReadOnly);
-            leCam2->setText(f.readLine());
-            f.close();
+            leCam2->setText(settings.value("cam2", "").toString());
         }
         else{
             cbAutoCam1->setEnabled(true);
             cbAutoCam2->setEnabled(true);
             leCam3->setStyleSheet("background-color: white");
-            QFile f("cam3.txt");
-            f.open(QIODevice::ReadOnly);
-            leCam3->setText(f.readLine());
-            f.close();
+            leCam3->setText(settings.value("cam3", "").toString());
         }
         if(camConn){
             disconnect(camConn, SIGNAL(sigCamera(QString)), nullptr, nullptr);
             camConn->deleteLater();
         }
+        settings.endGroup();
     }
 }
 
 void FormMain::setCamera(QString ip){
-    qDebug()<<"ip = "<<ip;
+    QSettings settings ("settings.ini",QSettings::IniFormat);
+    settings.beginGroup("ip");
     if(cbAutoCam1->isChecked()){
-        QFile f;
-        QTextStream out(&f);
-        f.setFileName("cam1.txt");
-        f.open(QIODevice::WriteOnly);
-        out << "srt://" + ip + ":1111";
-        f.close();
+        settings.setValue("cam1", "srt://" + ip + ":1111");
         cam1Url = "srt://" + ip + ":1111";
         cbAutoCam1->setChecked(false);
     }
     if(cbAutoCam2->isChecked()){
-        QFile f;
-        QTextStream out(&f);
-        f.setFileName("cam2.txt");
-        f.open(QIODevice::WriteOnly);
-        out << "srt://" + ip + ":2222";
-        f.close();
+        settings.setValue("cam2", "srt://" + ip + ":2222");
         cam2Url = "srt://" + ip + ":2222";
         cbAutoCam2->setChecked(false);
     }
     if(cbAutoCam3->isChecked()){
-        QFile f;
-        QTextStream out(&f);
-        f.setFileName("cam3.txt");
-        f.open(QIODevice::WriteOnly);
-        out << "srt://" + ip + ":3333";
-        f.close();
+        settings.setValue("cam3", "srt://" + ip + ":3333");
         cam3Url = "srt://" + ip + ":3333";
         cbAutoCam3->setChecked(false);
     }
+    settings.endGroup();
 }
 
 void FormMain::setCam(){
-    QFile f;
-    QTextStream out(&f);
+    QSettings settings ("settings.ini",QSettings::IniFormat);
+    settings.beginGroup("ip");
     if(sender()->objectName() == "leCam1"){
-        f.setFileName("cam1.txt");
-        f.open(QIODevice::WriteOnly);
-        out << leCam1->text();
+        settings.setValue("cam1", leCam1->text());
         cam1Url = leCam1->text();
     }else if(sender()->objectName() == "leCam2"){
-        f.setFileName("cam2.txt");
-        f.open(QIODevice::WriteOnly);
-        out << leCam2->text();
+        settings.setValue("cam2", leCam2->text());
         cam2Url = leCam2->text();
     }else{
-        f.setFileName("cam3.txt");
-        f.open(QIODevice::WriteOnly);
-        out << leCam3->text();
+        settings.setValue("cam3", leCam3->text());
         cam3Url = leCam3->text();
     }
-    f.close();
+    settings.endGroup();
 }
 
 //////////////////////////////////
