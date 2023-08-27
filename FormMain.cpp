@@ -2083,10 +2083,15 @@ int FormMain::min_max(void){
 
         lbl_sum->setText(QString::number(summa));
 
-        QFile file("style_min_max.qss");
-        file.open(QFile::ReadOnly);
-        QString styleSheet = file.readAll();
-        file.close();
+//        QFile file("style_min_max.qss");
+//        file.open(QFile::ReadOnly);
+        QString styleSheet = "QLabel {color: #303030;"
+                             "border-radius: 20px;"
+                             "border-width: 2px;"
+                             "border-style: solid;"
+                             "border-color:#303030;"
+                             "background-color: black;}";
+        //file.close();
 
         if(count_min == 1 || count_max == 1){
             if(flag_mode == 0) fr->rate_1->setStyleSheet(styleSheet);
