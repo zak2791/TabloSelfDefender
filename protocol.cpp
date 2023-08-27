@@ -234,7 +234,7 @@ void Protocol::updateProtocol(){
             l.append(query.value(i).toString());
         errors.append(l);
     }
-
+    qDebug()<<errors;
     m_db.close();
 
     html = createHTML(p->current_mode);
@@ -705,7 +705,7 @@ QString Protocol::tooltip(int count, int i){
         return "";
 
 
-    if(err.length() > 2){
+    if(err.length() > 0){
         QString s = "";
         foreach(QString each, err){
             if((each != '\'') && (each != '[') && (each != ']'))
