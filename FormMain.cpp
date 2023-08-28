@@ -66,7 +66,12 @@ QList<QString> f_sort(QList<QString> l){
     return l_work;
 }
 
-QString mask_to_string(int key_mask){
+///////////////////////////////////////////////////////////////////
+/// \brief err_to_string - Преобразование ошибок из int в оценку //
+/// \param key_mask      - 17-битная маска ошибок                //
+/// \return                                                      //
+///////////////////////////////////////////////////////////////////
+QString err_to_string(int key_mask){
     int mask = 1;
     float rate = 10.0;
     for(int i=0;i<17;i++){
@@ -93,7 +98,12 @@ QString mask_to_string(int key_mask){
     return QString::number(rate);
 }
 
-QString mask_to_list(int key_mask){
+/////////////////////////////////////////////////////////////////
+/// \brief err_to_list - Преобразование ошибок из int в список //
+/// \param key_mask    - 17-битная маска ошибок                //
+/// \return                                                    //
+/////////////////////////////////////////////////////////////////
+QString err_to_list(int key_mask){
     QString l("[");
     bool first_error = true;
     int mask = 1;
@@ -209,29 +219,33 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
     enable_correct = false;
     timer_id = 0;
 
+    /* списки ошибок проставленных судьями в предварительных кругах */
     lref1 << "" << "" << "" << "" << "";
     lref2 << "" << "" << "" << "" << "";
     lref3 << "" << "" << "" << "" << "";
     lref4 << "" << "" << "" << "" << "";
     lref5 << "" << "" << "" << "" << "";
 
-    lref1_red << "" << "" << "" << "" << "";
-    lref2_red << "" << "" << "" << "" << "";
-    lref3_red << "" << "" << "" << "" << "";
-    lref4_red << "" << "" << "" << "" << "";
-    lref5_red << "" << "" << "" << "" << "";
-
+    /* списки ошибок проставленных судьями в финальных кругах */
     lref1_red_blue << "" << "" << "" << "" << "";
     lref2_red_blue << "" << "" << "" << "" << "";
     lref3_red_blue << "" << "" << "" << "" << "";
     lref4_red_blue << "" << "" << "" << "" << "";
     lref5_red_blue << "" << "" << "" << "" << "";
 
-    lref1_blue << "" << "" << "" << "" << "";
-    lref2_blue << "" << "" << "" << "" << "";
-    lref3_blue << "" << "" << "" << "" << "";
-    lref4_blue << "" << "" << "" << "" << "";
-    lref5_blue << "" << "" << "" << "" << "";
+//    lref1_red << "" << "" << "" << "" << "";
+//    lref2_red << "" << "" << "" << "" << "";
+//    lref3_red << "" << "" << "" << "" << "";
+//    lref4_red << "" << "" << "" << "" << "";
+//    lref5_red << "" << "" << "" << "" << "";
+
+
+
+//    lref1_blue << "" << "" << "" << "" << "";
+//    lref2_blue << "" << "" << "" << "" << "";
+//    lref3_blue << "" << "" << "" << "" << "";
+//    lref4_blue << "" << "" << "" << "" << "";
+//    lref5_blue << "" << "" << "" << "" << "";
 
     main_refery = "-";
     main_secretary = "-";
@@ -337,55 +351,6 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
     judge4 = "-";
     judge5 = "-";
     ts = "-";
-
-//       if(file.open(QIODevice::ReadOnly)){
-//        QTextStream stream(&file);
-//        sity               = stream.readLine();
-//        name_competition   = stream.readLine();
-//        date               = stream.readLine();
-//        team_referees      = stream.readLine();
-//        RateShow           = stream.readLine();
-//        file.close();
-//    }
-
-    //qDebug() << sity << name_competition << date << team_referees << RateShow;
-
-//    file.setFileName("round_referees.txt");
-//    if(!file.exists()){
-//        file.open(QIODevice::WriteOnly | QIODevice::Text);
-//        file.write("0\n");
-//        file.write("0\n");
-//        file.write("0\n");
-//        file.write("0\n");
-//        file.write("0\n");
-//        file.write("0\n");
-//        file.close();
-//    }
-
-//    file.setFileName("round_referees2.txt");
-//    if(!file.exists()){
-//        file.open(QIODevice::WriteOnly | QIODevice::Text);
-//        file.write("0\n");
-//        file.write("0\n");
-//        file.write("0\n");
-//        file.write("0\n");
-//        file.write("0\n");
-//        file.write("0\n");
-//        file.close();
-//    }
-//    file.setFileName("main_referees.txt");
-//    if(!file.exists()){
-//        file.open(QIODevice::WriteOnly | QIODevice::Text);
-//        file.write("0\n");
-//        file.write("0\n");
-//        file.close();
-//    }
-
-//    if(mat == "А")
-//        file.setFileName("connectingA.txt");
-//    if(mat == "Б")
-//        file.setFileName("connectingB.txt");
-
 
     settings.beginGroup("Settings");
     Conn2 = settings.value("pult2").toString();
@@ -1255,10 +1220,10 @@ void FormMain::btn_Enter(void){
         rate_first(rate);
         if(flag_mode == 0){
             lref1[flag_priem - 1] = "";
-            lref1[flag_priem - 1] = mask_to_list(mask);
+            lref1[flag_priem - 1] = err_to_list(mask);
         }else{
             lref1_red_blue[int((float)flag_priem / 2.0 + 0.5)- 1] = "";
-            lref1_red_blue[int((float)flag_priem / 2.0 + 0.5) - 1] = mask_to_list(mask);
+            lref1_red_blue[int((float)flag_priem / 2.0 + 0.5) - 1] = err_to_list(mask);
         }
     }
 }
@@ -1992,44 +1957,44 @@ void FormMain::pult(int rate, int port){
         int value = rate;
         int priem = int((float)flag_priem / 2.0 + 0.5);
         if(rate != 255){
-            QString srate = mask_to_string(rate);
+            QString srate = err_to_string(rate);
             if((srate == "10.0") || (srate == "11.0"))
                 srate = srate.remove(srate.length() - 2, 2);
             if(port == port2){
                 led2->setText(srate);
                 if(flag_mode == 0){
                     lref2[flag_priem - 1].clear();
-                    lref2[flag_priem - 1].append(mask_to_list(value));
+                    lref2[flag_priem - 1].append(err_to_list(value));
                 }else{
                     lref2_red_blue[priem - 1].clear();
-                    lref2_red_blue[priem - 1].append(mask_to_list(value));
+                    lref2_red_blue[priem - 1].append(err_to_list(value));
                 }
             }else if(port == port3){
                 led3->setText(srate);
                 if(flag_mode == 0){
                     lref3[flag_priem - 1].clear();
-                    lref3[flag_priem - 1].append(mask_to_list(value));
+                    lref3[flag_priem - 1].append(err_to_list(value));
                 }else{
                     lref3_red_blue[priem - 1].clear();
-                    lref3_red_blue[priem - 1].append(mask_to_list(value));
+                    lref3_red_blue[priem - 1].append(err_to_list(value));
                 }
             }else if(port == port4){
                 led4->setText(srate);
                 if(flag_mode == 0){
                     lref4[flag_priem - 1].clear();
-                    lref4[flag_priem - 1].append(mask_to_list(value));
+                    lref4[flag_priem - 1].append(err_to_list(value));
                 }else{
                     lref4_red_blue[priem - 1].clear();
-                    lref4_red_blue[priem - 1].append(mask_to_list(value));
+                    lref4_red_blue[priem - 1].append(err_to_list(value));
                 }
             }else if(port == port5){
                 led5->setText(srate);
                 if(flag_mode == 0){
                     lref5[flag_priem - 1].clear();
-                    lref5[flag_priem - 1].append(mask_to_list(value));
+                    lref5[flag_priem - 1].append(err_to_list(value));
                 }else{
                     lref5_red_blue[priem - 1].clear();
-                    lref5_red_blue[priem - 1].append(mask_to_list(value));
+                    lref5_red_blue[priem - 1].append(err_to_list(value));
                 }
             }
         }
@@ -2083,8 +2048,6 @@ int FormMain::min_max(void){
 
         lbl_sum->setText(QString::number(summa));
 
-//        QFile file("style_min_max.qss");
-//        file.open(QFile::ReadOnly);
         QString styleSheet = "QLabel {color: #303030;"
                              "border-radius: 20px;"
                              "border-width: 2px;"
@@ -2232,8 +2195,6 @@ void FormMain::btn_enterName_clicked(){
             }
         }
     }
-
-
 
     if(flag_mode == 0){
         Choice_one_athlete* ch = new Choice_one_athlete(data, this);    // окно выбора спортсменов общего круга

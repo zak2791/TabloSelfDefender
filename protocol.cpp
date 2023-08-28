@@ -483,10 +483,10 @@ QString Protocol::createHTML(int mode){
                 if(place.at(0) == 1){
                     query.exec("SELECT name FROM sportsmens WHERE id = " + QString::number(id_sportsmen.at(0)));
                     query.next();
-                    name4 = query.value(0).toString();
+                    name3 = query.value(0).toString();
                     query.exec("SELECT name FROM sportsmens WHERE id = " + QString::number(id_sportsmen.at(1)));
                     query.next();
-                    name3 = query.value(0).toString();
+                    name4 = query.value(0).toString();
                 }
                 if(place.at(1) == 1){
                     query.exec("SELECT name FROM sportsmens WHERE id = " + QString::number(id_sportsmen.at(1)));
@@ -496,7 +496,7 @@ QString Protocol::createHTML(int mode){
                     query.next();
                     name4 = query.value(0).toString();
                 }
-                            }
+            }
         }else if(place.at(1) == 1){                                                                         // если 3 человека в весе
             query.exec("SELECT name FROM sportsmens WHERE id = " + QString::number(id_sportsmen.at(1)));
             query.next();

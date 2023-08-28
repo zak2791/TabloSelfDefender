@@ -112,20 +112,24 @@ void Errors::showEvent(QShowEvent*){
     }
     QList<QStringList> name;
     foreach(QString i, id_name){
-        sql = "SELECT name, region FROM sportsmens WHERE id = " + i;
-        if(!query.exec(sql))
-            qDebug() << "errors.cpp 2";
-        while(query.next()){
-            QStringList sl;
-            sl.append(query.value(0).toString());
-            sl.append(query.value(1).toString());
-            name.append(sl);
+        if(i[1] < 0){
+            name.append({"-", "-"});
+        }else{
+            sql = "SELECT name, region FROM sportsmens WHERE id = " + i;
+            if(!query.exec(sql))
+                qDebug() << "errors.cpp 2";
+            query.next();
+            name.append({query.value(0).toString(), query.value(1).toString()});
         }
+
 
     }
     QStringList l;
     foreach(QStringList each, name){
-        l.append(each[0] + ", " + each[1]);
+        if(each[0] == "-")
+            l.append("");
+        else
+            l.append(each[0] + ", " + each[1]);
     }
     mdl->setStringList(l);
     for(int i=1;i<6;i++){

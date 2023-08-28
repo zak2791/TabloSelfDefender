@@ -43,7 +43,7 @@ dlgSemiFinal::dlgSemiFinal(QWidget *parent, int mode) :
         sql =         "SELECT sp.name, sp.region FROM sportsmens sp JOIN errors_and_rates err ON sp.id=err.id_sportsmen "
                       "JOIN rounds rnd "
                       "ON rnd.id=err.id_round WHERE rnd.age = '%1' and rnd.weight = '%2' and rnd.mode = 3 ORDER BY err.id";
-        RbOne->setText("За 3 место");
+        RbOne->setText("За\n3 место");
         RbTwo->setText("Финал");
     }
 

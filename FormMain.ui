@@ -458,9 +458,9 @@
   <widget class="QLabel" name="lbl_total">
    <property name="geometry">
     <rect>
-     <x>1050</x>
+     <x>1030</x>
      <y>230</y>
-     <width>101</width>
+     <width>141</width>
      <height>91</height>
     </rect>
    </property>
@@ -2207,7 +2207,7 @@
     <rect>
      <x>962</x>
      <y>230</y>
-     <width>91</width>
+     <width>131</width>
      <height>91</height>
     </rect>
    </property>
@@ -2263,9 +2263,9 @@
   <widget class="QLabel" name="lbl_total_blue">
    <property name="geometry">
     <rect>
-     <x>1150</x>
+     <x>1110</x>
      <y>230</y>
-     <width>91</width>
+     <width>131</width>
      <height>91</height>
     </rect>
    </property>

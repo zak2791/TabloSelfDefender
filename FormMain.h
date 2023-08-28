@@ -62,19 +62,19 @@ private:
     //////////////////////////////////////////////////////////////////////////////////////////////////////
      int timer_id;                  // ID таймера для задержки очистки полей ввода оценок
 
-     //----списки с развернутыми оценками судей----//
+//     //----списки с развернутыми оценками судей----//
 
-     QList<QString> lref1_red;
-     QList<QString> lref2_red;
-     QList<QString> lref3_red;
-     QList<QString> lref4_red;
-     QList<QString> lref5_red;
+//     QList<QString> lref1_red;
+//     QList<QString> lref2_red;
+//     QList<QString> lref3_red;
+//     QList<QString> lref4_red;
+//     QList<QString> lref5_red;
 
-     QList<QString> lref1_blue;
-     QList<QString> lref2_blue;
-     QList<QString> lref3_blue;
-     QList<QString> lref4_blue;
-     QList<QString> lref5_blue;
+//     QList<QString> lref1_blue;
+//     QList<QString> lref2_blue;
+//     QList<QString> lref3_blue;
+//     QList<QString> lref4_blue;
+//     QList<QString> lref5_blue;
 
      QPushButton* BtnChoice;
 
