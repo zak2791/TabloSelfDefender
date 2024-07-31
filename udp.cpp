@@ -34,6 +34,7 @@ void Udp::slotProcessDatagrams(){
     do{
         baDatagram.resize(s_udp->pendingDatagramSize());
         s_udp->readDatagram(baDatagram.data(), baDatagram.size(), &address);
+        qDebug()<<"baDatagram.data() = "<<baDatagram.data();
 
     }while(s_udp->hasPendingDatagrams());
 
@@ -45,14 +46,28 @@ void Udp::slotProcessDatagrams(){
 
         QNetworkDatagram d;
         d.setDestination(address, port);
-        d.setData(QByteArray(1, (char)task));
-        int ret = s_udp->writeDatagram(d);
-        val = (((uchar)baDatagram[2]) << 16) + (((uchar)baDatagram[1]) << 8) + (uchar)baDatagram[0];
+        if(flagErase){
+            d.setData(QByteArray(1, (char)0x00));
+            s_udp->writeDatagram(d);
+            d.setData(QByteArray(1, (char)task));
+            s_udp->writeDatagram(d);
+            emit sigErase(port);
+            flagErase = false;
+        }else{
+            d.setData(QByteArray(1, (char)task));
+            qDebug()<<address<<port<<task;
+            int ret = s_udp->writeDatagram(d);
+            val = (((uchar)baDatagram[2]) << 16) + (((uchar)baDatagram[1]) << 8) + (uchar)baDatagram[0];
 
-        emit pultData(val, port);
-        sendSignal(1);
+            emit pultData(val, port);
+            sendSignal(1);
+        }
     }
 
+}
+
+void Udp::erase(){
+    flagErase = true;
 }
 
 void Udp::sendSignal(int sig){

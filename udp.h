@@ -12,6 +12,7 @@ private:
     int count;
     bool state;
     //QWidget* par;
+    bool flagErase = false;
 
 //virtual void timerEvent(QTimerEvent*);
 
@@ -28,10 +29,12 @@ public:
 
 public slots:
     void setPort(int);
+    void erase(void);
 
 signals:
     void isConnect(int, int);
     void pultData(int, int);
+    void sigErase(int);
 
 };
 

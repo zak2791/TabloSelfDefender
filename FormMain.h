@@ -372,6 +372,8 @@ private slots:
 
     void CpuUsage(void);
 
+    void erase(int);
+
 private:
     CameraViewer* ViewCam1;
     CameraViewer* ViewCam2;

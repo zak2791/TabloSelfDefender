@@ -1,4 +1,4 @@
-#include "FormMain.h"
+ #include "FormMain.h"
 
 #include <QDebug>
 #include <QtSql>
@@ -432,6 +432,16 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
     pult3 = new Udp(port3, this);
     pult4 = new Udp(port4, this);
     pult5 = new Udp(port5, this);
+
+    connect(del2, SIGNAL(clicked()), pult2, SLOT(erase()));
+    connect(del3, SIGNAL(clicked()), pult3, SLOT(erase()));
+    connect(del4, SIGNAL(clicked()), pult4, SLOT(erase()));
+    connect(del5, SIGNAL(clicked()), pult5, SLOT(erase()));
+
+    connect(pult2, SIGNAL(sigErase(int)), this, SLOT(erase(int)));
+    connect(pult3, SIGNAL(sigErase(int)), this, SLOT(erase(int)));
+    connect(pult4, SIGNAL(sigErase(int)), this, SLOT(erase(int)));
+    connect(pult5, SIGNAL(sigErase(int)), this, SLOT(erase(int)));
 
     qDebug() << Conn2 << Conn3 << Conn4 << Conn5;
 
@@ -1887,6 +1897,18 @@ void FormMain::btn_final_clicked(void){
 
 
 
+}
+
+void FormMain::erase(int port){
+    qDebug()<<"erase "<<port;
+    if(port == port2)
+        Led2->setText("");
+    if(port == port3)
+        Led3->setText("");
+    if(port == port4)
+        Led4->setText("");
+    if(port == port5)
+        Led5->setText("");
 }
 
 void FormMain::pult_off(int on_off, int port){
