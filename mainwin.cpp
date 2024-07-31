@@ -54,6 +54,10 @@ MainWin::MainWin(QWidget *parent) :
     ui->Referees->setEnabled(false);
 
     fillLastCompetitions();
+
+    connect(ui->actEnglish, SIGNAL(triggered(bool)), this, SLOT(slotSelectEng(bool)));
+    connect(ui->actRus, SIGNAL(triggered(bool)), this, SLOT(slotSelectRus(bool)));
+
 }
 
 MainWin::~MainWin()
@@ -88,6 +92,32 @@ void MainWin::choiceMats(){
     if(static_cast<QAction*>(sender())->text() != currentActionMat)
         emit sigChoiceMats(static_cast<QAction*>(sender())->text());
     currentActionMat = static_cast<QAction*>(sender())->text();
+}
+
+void MainWin::slotSelectEng(bool b)
+{
+    if(ui->actRus->isChecked()){
+        ui->actRus->setChecked(false);
+        qDebug()<<"rus";
+        if(translator.load((QApplication::applicationDirPath() + "/QtLanguage_en"))){
+            qApp->installTranslator(&translator);
+            ui->retranslateUi(this);
+        }
+    }
+    else
+        ui->actEnglish->setChecked(true);
+}
+
+void MainWin::slotSelectRus(bool b)
+{
+    if(ui->actEnglish->isChecked()){
+        ui->actEnglish->setChecked(false);
+        qDebug()<<"rus";
+        qApp->removeTranslator(&translator);
+        ui->retranslateUi(this);
+    }
+    else
+        ui->actRus->setChecked(true);
 }
 
 void MainWin::choiceMat(QString mat){

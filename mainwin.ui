@@ -55,11 +55,19 @@
     </property>
     <addaction name="ShowHelp"/>
    </widget>
+   <widget class="QMenu" name="mChoice">
+    <property name="title">
+     <string>Выбор языка</string>
+    </property>
+    <addaction name="actRus"/>
+    <addaction name="actEnglish"/>
+   </widget>
    <addaction name="Competition"/>
    <addaction name="Mat"/>
    <addaction name="Sportsmens"/>
    <addaction name="Referees"/>
    <addaction name="Help"/>
+   <addaction name="mChoice"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="New">
@@ -95,6 +103,25 @@
   <action name="addRefFromBuffer">
    <property name="text">
     <string>Добавить судей из буфера обмена</string>
+   </property>
+  </action>
+  <action name="actRus">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Русский</string>
+   </property>
+  </action>
+  <action name="actEnglish">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Английский</string>
    </property>
   </action>
  </widget>

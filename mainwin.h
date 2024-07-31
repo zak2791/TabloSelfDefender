@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QLabel>
+#include <QTranslator>
 
 namespace Ui {
 class MainWin;
@@ -47,9 +48,15 @@ private:
     QAction* actMatB;
     QMenu* menu;
 
+    QTranslator translator;
+
 private slots:
     void choiceCompetitions(void);
     void choiceMats(void);  //выбор ковра из меню
+
+protected slots:
+    void slotSelectEng(bool);
+    void slotSelectRus(bool);
 
 signals:
     void sigChoiceCompetitions(QString);
