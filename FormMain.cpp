@@ -151,9 +151,12 @@ bool TabFilter::eventFilter(QObject* po, QEvent* pe){
 }
 
 
-FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
+FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent),
+    ui(new Ui::FormMain)
 {
     setupUi(this);
+
+    RbutRus = rbutRus;
 
     mainwin = mw;
     connect(mainwin, SIGNAL(sigChoiceCompetitions(QString)), this, SLOT(choiceCompetitions(QString)));
@@ -597,6 +600,8 @@ FormMain::FormMain(MainWin* mw, QWidget *parent) : QWidget(parent)
 
     sett->RbRus->setChecked(true);
 
+    connect(RbutRus, SIGNAL(toggled(bool)), this, SLOT(slotTr(bool)));
+
 }
 
 void FormMain::CpuUsage(){
@@ -673,6 +678,21 @@ void FormMain::StopRecord(){
     btnPlayChoice->setEnabled(true);
 
     btnStopRecord->setEnabled(false);
+}
+
+void FormMain::slotTr(bool checked)
+{
+    qDebug()<<checked;
+    if(!checked){
+        if(translator.load((QApplication::applicationDirPath() + "/QtLanguage_en"))){
+            qApp->installTranslator(&translator);
+            retranslateUi(this);
+        }
+    }
+    else{
+        qApp->removeTranslator(&translator);
+        retranslateUi(this);
+    }
 }
 
 void FormMain::turnCamera(bool state){

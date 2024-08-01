@@ -43,7 +43,8 @@ private:
     /*                 1 попарно                            */
     //////////////////////////////////////////////////////////
 
-
+    Ui::FormMain* ui;
+    QTranslator translator;
                                     // (устанавливается при выборе или создании круга)
     int id_sportsmen;               // текущий спортсмен в режиме общего круга
     int id_red;                     // текущий спортсмен с красным поясом в парном режиме
@@ -77,6 +78,8 @@ private:
 //     QList<QString> lref5_blue;
 
      QPushButton* BtnChoice;
+
+     QRadioButton* RbutRus;
 
      QList<QStringList> listReferees;   //список судей
 
@@ -335,6 +338,8 @@ public slots:
 
     void StopRecord(void);
 
+
+
 private slots:
     //void editSity(void);
     void new_round(void);
@@ -356,6 +361,7 @@ private slots:
     void finishedCamera(void);
     void turnCamera(bool);
 
+    void slotTr(bool);
 
 
     void StartRecord(void);

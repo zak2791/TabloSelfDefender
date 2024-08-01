@@ -340,7 +340,7 @@
     <message>
         <location filename="FormMain.ui" line="93"/>
         <source>Судьи</source>
-        <translation>Referees</translation>
+        <translation type="unfinished">Referees</translation>
     </message>
     <message>
         <location filename="FormMain.ui" line="127"/>
@@ -390,7 +390,7 @@
     <message>
         <location filename="FormMain.ui" line="449"/>
         <source>Общая сумма</source>
-        <translation type="unfinished">Total rate</translation>
+        <translation>Total rate</translation>
     </message>
     <message>
         <location filename="FormMain.ui" line="524"/>

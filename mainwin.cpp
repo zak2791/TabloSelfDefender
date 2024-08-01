@@ -102,6 +102,7 @@ void MainWin::slotSelectEng(bool b)
         if(translator.load((QApplication::applicationDirPath() + "/QtLanguage_en"))){
             qApp->installTranslator(&translator);
             ui->retranslateUi(this);
+            //emit sigTranslate(true);
         }
     }
     else
@@ -115,6 +116,7 @@ void MainWin::slotSelectRus(bool b)
         qDebug()<<"rus";
         qApp->removeTranslator(&translator);
         ui->retranslateUi(this);
+        //emit sigTranslate(false);
     }
     else
         ui->actRus->setChecked(true);

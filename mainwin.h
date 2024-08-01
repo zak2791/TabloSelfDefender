@@ -61,6 +61,7 @@ protected slots:
 signals:
     void sigChoiceCompetitions(QString);
     void sigChoiceMats(QString);
+    void sigTranslate(bool);
 
 };
 

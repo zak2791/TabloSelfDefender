@@ -11,6 +11,8 @@ int main(int argc, char* argv[]){
 
     FormMain* form = new FormMain(mWin);
 
+    //QObject::connect(mWin, SIGNAL(sigTranslate(bool)), form, SLOT(slotTranslate(bool)));
+
     QObject::connect(mWin->AddOne,              SIGNAL(triggered()), form, SLOT(addOneSportsmen()));        //добавить спортсмена
     QObject::connect(mWin->AddFromBuffer,       SIGNAL(triggered()), form, SLOT(addSportsmenFromBuffer())); //добавить спортсменов
                                                                                                             //из буфера обмена
